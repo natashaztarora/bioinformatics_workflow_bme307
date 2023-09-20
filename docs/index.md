@@ -1,6 +1,6 @@
 # Welcome to the Bioinformatics Analysis of Microbiome Data
 
-## 1. INTRODUCTION
+## 1. INTRODUCTION (test)
 We will be working with NGS data generated from 3 groups of mice: IL-10<sup>-/-</sup> (deficient), MUC2<sup>-/-</sup> (deficient), and wild-type mice.
 
 ### 1.1 Data type:
