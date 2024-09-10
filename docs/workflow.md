@@ -2,7 +2,13 @@
 
 ## PRELIMINARY READ PROCESSING
 
-In our pipeline we will be working with reads that have already been demultiplexed. You will need to download the following starting folder for your analyses: Practical_materials_uploads. For each sample, there are two fastq files (R1 and R2). R1 corresponds to all the forward reads and R2 to all the reverse reads.
+In our pipeline we will be working with reads that have already been demultiplexed. You will need to download the following starting folder for your analyses: Practical_materials_uploads. The folder is structured as follows.
+
+### Folder Structure
+
+![Image title](folder_structure.png){ align=left }
+
+For each sample, there are two fastq files (R1 and R2). R1 corresponds to all the forward reads and R2 to all the reverse reads.
 
 We will first look at the fastq files, then check the quality of the reads with FastQC and MultiQC, and then conduct read processing in QIIME2 (denoising and OTU clustering). Follow the steps below:
 

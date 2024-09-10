@@ -51,10 +51,17 @@ Please follow the instructions provided according to the operating system (OS) y
 docker run hello-world
 ```
 
-Once the docker is installed and running you can run qiime2 and fastqc via the following commands: 
+Download desired QIIME 2 Distribution Image
+```bash
+docker pull quay.io/qiime2/amplicon:2024.5
+```
+
+
+Once the docker is installed and running you can run qiime2 via the following command: 
 
 ```bash
-docker run --rm -v ${pwd}:/data/ -w /data/ -it quay.io/qiime2/core:2023.5
+
+docker run -t -i -v $(pwd):/data quay.io/qiime2/amplicon:2024.5 qiime
 ```
 
 
@@ -76,13 +83,13 @@ conda list
 - Run the following commands to install QIIME2
 
 ```bash
-wget https://data.qiime2.org/distro/core/qiime2-2023.5-py38-osx-conda.yml
-conda env create -n qiime2-2023.5 --file qiime2-2023.5-py38-osx-conda.yml
+conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-osx-conda.yml
 ```
+
 - activate QIIME2 environment
 
 ```bash
-conda activate qiime2-2023.5
+conda activate qiime2-amplicon-2024.5
 ```
 
 <!-- ```bash
