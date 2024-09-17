@@ -61,7 +61,7 @@ Once the docker is installed and running you can run qiime2 via the following co
 
 ```bash
 
-docker run -t -i -v $(pwd):/data quay.io/qiime2/amplicon:2024.5 qiime
+docker run -t -i -v ${pwd}:/data quay.io/qiime2/amplicon:2024.5 qiime
 ```
 
 
