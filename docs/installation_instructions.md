@@ -116,11 +116,6 @@ docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
 
 ---
 
-Perfect 👍 let’s make that section clear and chip-specific, with the symlink option and a final check (`fastqc -h`).
-Here’s the adjusted **FastQC section** you can drop straight into your instructions:
-
----
-
 ### 3. FastQC
 
 1. Download the `.dmg`: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.dmg).
