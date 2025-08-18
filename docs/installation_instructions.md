@@ -116,19 +116,61 @@ docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
 
 ---
 
+Perfect 👍 let’s make that section clear and chip-specific, with the symlink option and a final check (`fastqc -h`).
+Here’s the adjusted **FastQC section** you can drop straight into your instructions:
+
+---
+
 ### 3. FastQC
 
 1. Download the `.dmg`: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.dmg).
 2. If macOS blocks the app, install [Java JDK 21 for Mac](https://www.oracle.com/java/technologies/downloads/#jdk21-mac).
 
-If it still doesn’t launch:
+If FastQC still doesn’t launch:
 
-* Download [source code](https://github.com/s-andrews/FastQC/archive/refs/tags/v0.12.1.zip).
-* Unzip → open Terminal → navigate to folder → run:
+* Download the [source code](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip).
+* Unzip → open Terminal → navigate to the unzipped folder → run:
 
-  ```bash
-  ./fastqc
-  ```
+```bash
+./fastqc
+```
+
+---
+
+#### 🔗 Make FastQC executable from anywhere
+
+After unzipping, create a **symbolic link** so `fastqc` works globally.
+
+**Intel Macs (x86\_64):**
+
+```bash
+sudo ln -s ~/Downloads/FastQC/fastqc /usr/local/bin/fastqc
+sudo chmod +x /usr/local/bin/fastqc
+```
+
+**Apple Silicon Macs (M1–M4, arm64):**
+
+```bash
+sudo ln -s ~/Downloads/FastQC/fastqc /opt/homebrew/bin/fastqc
+sudo chmod +x /opt/homebrew/bin/fastqc
+```
+
+*(adjust the path if your FastQC folder is elsewhere)*
+
+---
+
+#### Test the installation
+
+Run:
+
+```bash
+fastqc -h
+```
+
+If installed correctly, this will print the FastQC help menu.
+
+---
+
 
 ---
 
