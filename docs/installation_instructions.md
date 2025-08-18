@@ -1,189 +1,185 @@
-# Installation instructions
+# Installation Instructions
 
+All students must bring their own laptop and install the required software **before the start of the practicals**.
 
-We ask all students to bring their own laptop and to install the required software before the beginning of the practicals. We will provide a troubleshooting session on Tuesday (19.9.2023), after the lecture, for those who need to resolve installation issues.
+We will provide a **troubleshooting session on Tuesday (16.9.2025)** after the lecture for those who encounter installation issues.
 
-For the course, we will be using the following software:
+## Required Software
 
 1. [Docker](https://www.docker.com/)
-* [QIIME2](https://qiime2.org/) <!--  R to visually explore the sequencing data and to conduct statistical analysis -->
-* [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
- 
-Please follow the instructions provided according to the operating system (OS) you are using. Feel free to email us with questions if you encounter installations issues bioinformatics.bme307@gmail.com. See you soon! 
+2. [QIIME2](https://qiime2.org/)
+3. [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+4. [R + RStudio](https://rstudio-education.github.io/hopr/starting.html)
 
-## For Windows Users:
+If you have questions, please email us at **[bioinformatics.bme307@gmail.com](mailto:bioinformatics.bme307@gmail.com)**.
 
-### 1. Docker + QIIME2 
+---
 
-!!! warning "Is "Virtualization" enabled?"
-    - Press Ctrl + Alt + Del
-    - Select Task Manager
-    - Click the Performance tab
-    - Click CPU
-    - Is "Virtualization:" enabled? 
-    - If not, you can follow the instructions on how to enable virtualization in BIOS [here](https://2nwiki.2n.cz/pages/viewpage.action?pageId=75202968). 
-    
-    The instructions may vary depending on the laptop you are using. The link includes instructions for Acer, Assus, Dell, HP, Lenovo, Sony, and Toshiba.
+## 💻 Windows Users (recommended: Docker-based QIIME2)
 
+### 1. Docker + QIIME2
 
- - Install Docker Desktop on Windows from [here](https://docs.docker.com/desktop/install/windows-install/)
- - Run the .exe file. 
+!!! warning "Check if Virtualization is enabled"
+\- Press **Ctrl + Alt + Del → Task Manager → Performance → CPU**
+\- Check if **Virtualization: Enabled**
+\- If not, follow [these BIOS instructions](https://wiki.2n.com/faqac/en/virtualizace-vt-x-amd-v-povoleni-virtualizace-na-vasem-pocitaci-pro-spusteni-2n-access-commander-100572533.html) (steps differ by brand: Acer, Asus, Dell, HP, Lenovo, Sony, Toshiba).
 
-!!! warning "If you see the following error message"
-    **“Docker Desktop requires Windows 10 Pro/Enterprise (15063+) or Windows 10 Home (19018+).”**
-    
-    - Update Windows by clicking on the "Update now" button [here](https://www.microsoft.com/en-us/software-download/windows10) 
-    - Try installing docker again
-    - Run the "D.exe file. 
+1. Install Docker Desktop for Windows: [Download here](https://docs.docker.com/desktop/install/windows-install/)
 
-- When prompted, ensure the Enable WSL 2 Features option is selected on the Configuration page
+   * Run the `.exe` file and select **Enable WSL 2 Features** when prompted.
 
-!!! warning "WSL2 error"
-    - If you encounter issues with WSL2, install "Linux kernel update package" from [here](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+2. If you see:
+   **“Docker Desktop requires Windows …”**
 
--   Start docker 
-> **_NOTE:_** search for Docker Desktip in the start menu. 
+   * Update Windows [here](https://www.microsoft.com/en-us/software-download/windows10) and reinstall Docker.
 
--   When the whale icon in the status bar stays steady, Docker Desktop is up-and running, and is accessible from the Windows PowerShell
--   Open Windows PowerShell and run the following command to ensure that docker is working correctly
+3. If you encounter **WSL2 errors**, install the [Linux kernel update package](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi).
+
+4. Start Docker Desktop.
+
+   * The whale 🐳 icon in the status bar should stay steady.
+
+5. Test Docker with:
+
+   ```bash
+   docker run hello-world
+   ```
+
+6. Download QIIME2:
+
+   ```bash
+   docker pull quay.io/qiime2/amplicon:2025.7
+   ```
+
+7. Test QIIME2:
+
+   ```bash
+   docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
+   ```
+
+---
+
+### 2. FastQC
+
+1. Download FastQC for Windows: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+2. Extract the `.zip` file.
+3. Run `fastqc.exe`.
+
+   * If Java errors occur, install [Java JDK 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows).
+
+---
+
+### 3. R + RStudio
+
+1. Install [R for Windows](http://cran.r-project.org/bin/windows/base/release.htm).
+2. Install [RStudio for Windows](https://posit.co/download/rstudio-desktop/).
+3. Open RStudio to confirm installation works.
+
+---
+
+## 🍎 Mac Users (Intel & Apple Silicon M1–M4)
+
+### 1. Install Conda
+
+* Recommended: [Miniconda](https://docs.anaconda.com/miniconda/install/#macos-terminal-installer)
+* Open Terminal and verify:
+
+  ```bash
+  conda --version
+  ```
+
+---
+
+### 2. QIIME2 (Conda install)
+
+```bash
+conda update conda
+conda env create --name qiime2-amplicon-2025.7 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+```
+
+Activate QIIME2:
+
+```bash
+conda activate qiime2-amplicon-2025.7
+qiime info
+```
+
+!!! note "Apple Silicon (M1–M4) users"
+If you encounter issues, run Terminal in **Rosetta 2 mode** or use the Docker alternative below.
+
+#### Alternative: QIIME2 via Docker
+
+```bash
+docker pull quay.io/qiime2/amplicon:2025.7
+docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
+```
+
+---
+
+### 3. FastQC
+
+1. Download the `.dmg`: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.dmg).
+2. If macOS blocks the app, install [Java JDK 21 for Mac](https://www.oracle.com/java/technologies/downloads/#jdk21-mac).
+
+If it still doesn’t launch:
+
+* Download [source code](https://github.com/s-andrews/FastQC/archive/refs/tags/v0.12.1.zip).
+* Unzip → open Terminal → navigate to folder → run:
+
+  ```bash
+  ./fastqc
+  ```
+
+---
+
+### 4. R + RStudio
+
+1. Install [R for macOS](https://cran.r-project.org/bin/macosx/).
+2. Install [RStudio for macOS](https://posit.co/download/rstudio-desktop/).
+3. Open RStudio to confirm installation.
+
+---
+
+## 🐧 Linux Users
+
+### 1. Docker (recommended for simplicity)
+
+Install Docker:
+
+```bash
+sudo apt-get update
+sudo apt-get install docker.io
+```
+
+Test Docker:
 
 ```bash
 docker run hello-world
 ```
 
-Download desired QIIME 2 Distribution Image
-```bash
-docker pull quay.io/qiime2/amplicon:2024.5
-```
-
-
-Once the docker is installed and running you can run qiime2 via the following command: 
+Download and test QIIME2:
 
 ```bash
-
-docker run -t -i -v ${pwd}:/data quay.io/qiime2/amplicon:2024.5 qiime
+docker pull quay.io/qiime2/amplicon:2025.7
+docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
 ```
 
-
-## For Mac Users:
-
-### 1. Anaconda
- 
-- Install Anaconda for Mac from [here](https://repo.anaconda.com/archive/Anaconda3-2023.07-2-MacOSX-x86_64.pkg)
-- Double click the .pkg file.
-- Test your installation. 
-- Run the following command in the Terminal 
-
-```bash
-conda list
-```
-
-### 2. QIIME2 
-
-- Run the following commands to install QIIME2
-
-```bash
-conda env create -n qiime2-amplicon-2024.5 --file https://data.qiime2.org/distro/amplicon/qiime2-amplicon-2024.5-py39-osx-conda.yml
-```
-
-- activate QIIME2 environment
-
-```bash
-conda activate qiime2-amplicon-2024.5
-```
-
-<!-- ```bash
-docker  pull  quay.io/qiime2/core:2023.5
-``` -->
-
-- Run the following command to test the installation
-
-```bash
-qiime --help
-```
+---
 
 ### 2. FastQC
 
-Download and install the following [file](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.dmg). 
-
-!!! warning "Do you have issues starting the tool due to verification?"
-    - Install Java Development Kit from [here](https://www.oracle.com/java/technologies/downloads/#jdk21-mac) and try again. 
-
-If installing Java Development Kit did not work, download the FastQC source code from [here](https://github.com/s-andrews/FastQC/archive/refs/tags/v0.12.1.zip). Unzip the file and from the terminal window, navigate to the unzipped folder on your mac. Subsequently, run the following command: 
-
 ```bash
-./fastqc
+sudo apt-get install fastqc
 ```
 
+Or download from [FastQC site](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 
+---
 
+### 3. R + RStudio
 
+```bash
+sudo apt-get install r-base
+```
 
-<!-- ### 2. R and RStudio
--   [Download R for Windows here](http://cran.r-project.org/bin/windows/base/release.htm)
--   Run the .exe file that was downloaded in the step above.
--   [Download RStudio for Windows here](https://download1.rstudio.org/desktop/windows/RStudio-1.4.1717.exe)
--   Double click the file to install it
-Once R and RStudio are installed, open RStudio to make sure that you do not get any error messages. 
-
-
-$ docker run --rm presut/usearch usearch
-
-  
-
-
-
--   If everything is running as it should, after some additional installations you will see the following output lines in the Terminal usearch v11.0.667_i86linux32, 4.0Gb RAM (13.0Gb total), 8 cores
-    
-
-(C) Copyright 2013-18 Robert C. Edgar, all rights reserved.
-
-[https://drive5.com/usearch](https://drive5.com/usearch)
-
-License: personal use only
-
-## 2.  Homebrew
-
--   For MacOS Catalina, macOS Mojave, and MacOS Big Sur:
-    
-
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
--   For macOS High Sierra, Sierra, El Capitan, and earlier:
-    
-
-  
-
-$ /usr/bin/ruby -e "$(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/master/install)](https://raw.githubusercontent.com/Homebrew/install/master/install)"
-- For any further installations, type:
-$ brew install “name of software”
-
-Eg: Typing the following command will install R on your laptop.
-
-$ brew install R
-
-
-## 3.  R and RStudio
-
--   Go to [CRAN](http://cran.r-project.org/) and click on Download R for (Mac) OS X OR copy and paste the following link on your browser: [https://cran.r-project.org/](https://cran.r-project.org/)
-    
--   Select the .pkg file for the version of OS X that you have and the file will be download.
-    
--   Double click on the file that was downloaded and R will be installed.
-    
--   [Download R-Studio for Mac here](https://download1.rstudio.org/desktop/macos/RStudio-1.4.1717.dmg)
-    
-
-OR copy and paste the following link on your browser:
-
-[https://rstudio.com/products/rstudio/download/#download](https://rstudio.com/products/rstudio/download/#download)
-
--   Once it is downloaded, double click the file to install it.
-    
-
-Once R and RStudio are installed, open RStudio to make sure it works and you do not get any error messages.  
-
-$ ## For Linux Users:
-
-  
---> 
+Download RStudio: [Linux RStudio](https://posit.co/download/rstudio-desktop/).
