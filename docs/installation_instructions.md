@@ -20,9 +20,9 @@ If you have questions, please email us at **[bioinformatics.bme307@gmail.com](ma
 ### 1. Docker + QIIME2
 
 !!! warning "Check if Virtualization is enabled"
-\- Press **Ctrl + Alt + Del → Task Manager → Performance → CPU**
-\- Check if **Virtualization: Enabled**
-\- If not, follow [these BIOS instructions](https://wiki.2n.com/faqac/en/virtualizace-vt-x-amd-v-povoleni-virtualizace-na-vasem-pocitaci-pro-spusteni-2n-access-commander-100572533.html) (steps differ by brand: Acer, Asus, Dell, HP, Lenovo, Sony, Toshiba).
+    - Press **Ctrl + Alt + Del → Task Manager → Performance → CPU**
+    - Check if **Virtualization: Enabled**
+    - If not, follow [these BIOS instructions](https://wiki.2n.com/faqac/en/virtualizace-vt-x-amd-v-povoleni-virtualizace-na-vasem-pocitaci-pro-spusteni-2n-access-commander-100572533.html) (steps differ by brand: Acer, Asus, Dell, HP, Lenovo, Sony, Toshiba).
 
 1. Install Docker Desktop for Windows: [Download here](https://docs.docker.com/desktop/install/windows-install/)
 
