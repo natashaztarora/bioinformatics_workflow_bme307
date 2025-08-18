@@ -225,7 +225,7 @@ We now assign taxonomy to the unique/representative sequences found across all s
 
 ```bash 
 qiime feature-classifier classify-sklearn \
-    --i-classifier Taxonomy_classifier/silva-138-ssu-nr99-99-V4V5-classifier.qza \
+    --i-classifier Taxonomy_classifier/silva-138.1-V4V5-classifier_skl1.4.2.qza \
     --i-reads QIIME2_files/rep-seqs.qza \
     --o-classification QIIME2_files/taxonomy.qza
 ```
