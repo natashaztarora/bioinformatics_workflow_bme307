@@ -90,29 +90,41 @@ If you have questions, please email us at **[bioinformatics.bme307@gmail.com](ma
 
 ---
 
-### 2. QIIME2 (Conda install)
+### 2. QIIME2
+
+#### Intel Macs (x86\_64)
 
 ```bash
 conda update conda
-conda env create --name qiime2-amplicon-2025.7 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+conda env create --name qiime2-amplicon-2025.7 \
+  --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+conda activate qiime2-amplicon-2025.7
 ```
 
-Activate QIIME2:
+---
+
+#### Apple Silicon Macs (M1–M4, arm64)
+
+Use the `osx-64` builds via Rosetta:
 
 ```bash
+CONDA_SUBDIR=osx-64 conda env create \
+  --name qiime2-amplicon-2025.7 \
+  --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+
 conda activate qiime2-amplicon-2025.7
+conda config --env --set subdir osx-64
+```
+
+---
+
+#### ✅ Test installation
+
+```bash
 qiime info
 ```
 
-!!! note "Apple Silicon (M1–M4) users"
-If you encounter issues, run Terminal in **Rosetta 2 mode** or use the Docker alternative below.
-
-#### Alternative: QIIME2 via Docker
-
-```bash
-docker pull quay.io/qiime2/amplicon:2025.7
-docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
-```
+If successful, this will print information about the QIIME2 version.
 
 ---
 
