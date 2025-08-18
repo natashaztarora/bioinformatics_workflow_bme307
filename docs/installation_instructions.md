@@ -118,7 +118,7 @@ conda config --env --set subdir osx-64
 
 ---
 
-#### ✅ Test installation
+#### Test installation
 
 ```bash
 qiime info

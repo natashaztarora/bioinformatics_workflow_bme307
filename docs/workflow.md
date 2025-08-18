@@ -66,13 +66,13 @@ As a first step, activate QIIME with the following command (before doing so, nav
 === "Mac"
 
     ``` bash
-    conda activate qiime2-2023.5
+    conda activate qiime2-amplicon-2025.7
     ```
 
 === "Windows"
 
     ``` bash
-    docker run --rm -v ${pwd}:/data/ -w /data/ -it quay.io/qiime2/core:2023.5
+    docker run --rm -v ${PWD}:/data/ -w /data/ -it quay.io/qiime2/amplicon:2025.7 
     ```
 
 #### 3.2. Import raw data
@@ -274,8 +274,8 @@ qiime feature-table filter-seqs \
 
 ```bash
 qiime feature-table summarize \
---i-table QIIME2_files/filtered-table.qza \ 
---o-visualization QIIME2_files/filtered-table.qzv \ 
+--i-table QIIME2_files_2025_August_18/filtered-table.qza \
+--o-visualization QIIME2_files_2025_August_18/filtered-table.qzv \
 --m-sample-metadata-file Metadata/metadata.tsv
 ```
 
