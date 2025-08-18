@@ -274,8 +274,8 @@ qiime feature-table filter-seqs \
 
 ```bash
 qiime feature-table summarize \
---i-table QIIME2_files_2025_August_18/filtered-table.qza \
---o-visualization QIIME2_files_2025_August_18/filtered-table.qzv \
+--i-table QIIME2_files/filtered-table.qza \
+--o-visualization QIIME2_files/filtered-table.qzv \
 --m-sample-metadata-file Metadata/metadata.tsv
 ```
 
