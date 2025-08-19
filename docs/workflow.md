@@ -228,6 +228,7 @@ qiime feature-classifier classify-sklearn \
     --i-classifier Taxonomy_classifier/silva-138.1-V4V5-classifier_skl1.4.2.qza \
     --i-reads QIIME2_files/rep-seqs.qza \
     --o-classification QIIME2_files/taxonomy.qza
+    
 ```
 
 ##### 3.5.1 Tabulate the taxonomy with the following command:
