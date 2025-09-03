@@ -2,18 +2,18 @@
 
 ### 1. Package Installation and Library Loading
 
-#### 1. Install BiocManager
+#### Install BiocManager
 ```r
 install.packages("BiocManager")
 ````
 
-#### 2. Install Bioconductor packages
+#### Install Bioconductor packages
 
 ```r
 BiocManager::install(c("phyloseq", "Biostrings", "S4Vectors", "IRanges", "XVector"))
 ```
 
-#### 3. Install CRAN packages
+#### Install CRAN packages
 
 ```r
 install.packages(c("vegan", "ape", "data.table", "Rcpp", "forcats", "tidyverse"))
@@ -26,7 +26,7 @@ library(phyloseq)
 packageVersion("phyloseq")
 ```
 
-#### 4. Install **qiime2R**
+#### Install **qiime2R**
 
 ```r
 install.packages("remotes")
@@ -36,7 +36,7 @@ remotes::install_url(
 )
 ```
 
-#### 5. Install **phyloseq-extended**
+#### Install **phyloseq-extended**
 
 ```r
 install.packages("remotes")   # only needed once, can skip if already installed
@@ -61,7 +61,7 @@ library(phyloseq.extended)
 packageVersion("phyloseq.extended")
 ```
 
-#### 6. Load libraries
+#### Load libraries
 
 ```r
 library(qiime2R)
@@ -73,13 +73,14 @@ library(data.table)
 library(phyloseq.extended)
 ```
 
-#### 7. Version check
+#### Version check
 
 ```r
 pkgs <- c("phyloseq", "qiime2R", "microbiome", "vegan", "ape", "tidyverse")
 sapply(pkgs, \(p) as.character(packageVersion(p)))
 ```
 
+---
 
 ### 2. Import QIIME2 files to phyloseq
 
@@ -102,7 +103,6 @@ pseq <- qza_to_phyloseq(
 pseq
 ```
 
-
 ???+ info "Expected Output"
     ```
     phyloseq-class experiment-level object 
@@ -116,4 +116,75 @@ pseq
 # Save and reload phyloseq object
 save(pseq, file = "pseq.RData")
 load("pseq.RData")
+```
+
+Absolutely 👍 I’ll draft a clean **Markdown/Quarto section** for your website that mirrors your script but presents it as an instructional tutorial with runnable code chunks and nicely formatted outputs.
+
+Here’s a template:
+
+---
+
+### 3. Explore the `phyloseq` Object
+
+In this section we explore different `phyloseq` accessors to get familiar with the contents of our object.
+
+#### Inspect the three core tables
+
+```{r}
+head(otu_table(pseq))     # abundance matrix
+head(tax_table(pseq))     # taxonomy
+head(sample_data(pseq))   # metadata
+````
+
+#### Basic information
+
+```{r}
+ntaxa(pseq)               # number of taxa
+nsamples(pseq)            # number of samples
+sample_names(pseq)        # sample IDs
+head(taxa_names(pseq))    # taxon (ASV) IDs
+```
+
+#### Relabel the ASVs with numbers
+
+```{r}
+original_ids <- taxa_names(pseq)
+asv_labels <- paste0("ASV", seq_len(ntaxa(pseq)))
+taxa_names(pseq) <- asv_labels
+tax_table(pseq) <- cbind(tax_table(pseq), OriginalID = original_ids)
+
+head(taxa_names(pseq))
+```
+
+#### More accessors
+
+```{r}
+sample_sums(pseq)                     # total reads per sample
+head(taxa_sums(pseq))                 # total reads per taxon
+sample_sums(pseq)[sample_names(pseq)=="IL10-2"]  # depth of one sample
+rank_names(pseq)                      # available taxonomic ranks
+sample_variables(pseq)                # metadata variables
+get_variable(pseq, "type")            # values of a metadata variable
+```
+
+#### Extract sample-specific information
+
+```{r}
+# Counts for one sample (if taxa are rows, samples are columns)
+otu_table(pseq)[, "WT4"]
+
+# Metadata for one sample
+sample_data(pseq)["WT4", ]
+
+# Prune the object to only WT4
+prune_samples("WT4", pseq)
+```
+
+#### Taxonomy queries
+
+```{r}
+get_taxa_unique(pseq, "Phylum")
+get_taxa_unique(pseq, "Family")
+get_taxa_unique(pseq, "Class")
+get_taxa_unique(pseq, "Genus")
 ```
