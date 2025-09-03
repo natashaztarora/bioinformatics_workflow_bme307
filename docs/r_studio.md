@@ -102,38 +102,15 @@ pseq <- qza_to_phyloseq(
 pseq
 ```
 
-???+ note "Expected Output"
-    phyloseq-class experiment-level object
-    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
-    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
-    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
-    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
-
-???+ abstract "Expected Output"
-    phyloseq-class experiment-level object
-    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
-    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
-    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
-    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
 ???+ info "Expected Output"
-    phyloseq-class experiment-level object
-    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
+    ```
+    phyloseq-class experiment-level object 
+    otu_table()   OTU Table:         [ 502 taxa and 18 samples ] 
     sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
     tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
     phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
-
-???+ tip "tip"
-    Help on aplha diversity: qiime diversity alpha-rarefaction –help
-
-!!!+ quote "Expected Output"
-    phyloseq-class experiment-level object
-    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
-    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
-    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
-    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
-
-
+    ```
 
 ```r
 # Save and reload phyloseq object
