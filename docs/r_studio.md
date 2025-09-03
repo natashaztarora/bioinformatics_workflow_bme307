@@ -1,19 +1,19 @@
 # R studio
 
-## Package Installation and Library Loading
+### 1. Package Installation and Library Loading
 
-### 1. Install BiocManager
+#### 1. Install BiocManager
 ```r
 install.packages("BiocManager")
 ````
 
-### 2. Install Bioconductor packages
+#### 2. Install Bioconductor packages
 
 ```r
 BiocManager::install(c("phyloseq", "Biostrings", "S4Vectors", "IRanges", "XVector"))
 ```
 
-### 3. Install CRAN packages
+#### 3. Install CRAN packages
 
 ```r
 install.packages(c("vegan", "ape", "data.table", "Rcpp", "forcats", "tidyverse"))
@@ -26,7 +26,7 @@ library(phyloseq)
 packageVersion("phyloseq")
 ```
 
-### 4. Install **qiime2R**
+#### 4. Install **qiime2R**
 
 ```r
 install.packages("remotes")
@@ -36,7 +36,7 @@ remotes::install_url(
 )
 ```
 
-### 5. Install **phyloseq-extended**
+#### 5. Install **phyloseq-extended**
 
 ```r
 install.packages("remotes")   # only needed once, can skip if already installed
@@ -44,7 +44,7 @@ library(remotes)
 remotes::install_github("mahendra-mariadassou/phyloseq-extended", ref = "dev")
 ```
 
-### Alternative installation (only if `install_github()` fails with HTTP error 401)
+#### Alternative installation (only if `install_github()` fails with HTTP error 401)
 
 ```r
 # install.packages("gitcreds")   # if not already installed
@@ -61,7 +61,7 @@ library(phyloseq.extended)
 packageVersion("phyloseq.extended")
 ```
 
-### 6. Load libraries
+#### 6. Load libraries
 
 ```r
 library(qiime2R)
@@ -73,7 +73,7 @@ library(data.table)
 library(phyloseq.extended)
 ```
 
-### 7. Version check
+#### 7. Version check
 
 ```r
 pkgs <- c("phyloseq", "qiime2R", "microbiome", "vegan", "ape", "tidyverse")
@@ -81,7 +81,7 @@ sapply(pkgs, \(p) as.character(packageVersion(p)))
 ```
 
 
-## Import QIIME2 files to phyloseq
+### 2. Import QIIME2 files to phyloseq
 
 ```r
 # Define path to QIIME2 files
@@ -100,15 +100,40 @@ pseq <- qza_to_phyloseq(
 
 # Display phyloseq object
 pseq
+```
+note, abstract, info, tip, success, question, warning, failure, danger, bug, example, quote
+!!!+ note
+    phyloseq-class experiment-level object
+    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
+    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
+    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
+    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
-!!! note
-phyloseq-class experiment-level object
-otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
-sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
-tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
-phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
+!!!+ abstract
+    phyloseq-class experiment-level object
+    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
+    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
+    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
+    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
+
+!!!+ info
+    phyloseq-class experiment-level object
+    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
+    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
+    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
+    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
+
+!!!+ quote
+    phyloseq-class experiment-level object
+    otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
+    sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
+    tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
+    phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
 
+
+```r
 # Save and reload phyloseq object
 save(pseq, file = "pseq.RData")
 load("pseq.RData")
+```
