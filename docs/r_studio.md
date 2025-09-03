@@ -101,29 +101,32 @@ pseq <- qza_to_phyloseq(
 # Display phyloseq object
 pseq
 ```
-note, abstract, info, tip, success, question, warning, failure, danger, bug, example, quote
-!!!+ note
+
+???+ note "Expected Output"
     phyloseq-class experiment-level object
     otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
     sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
     tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
     phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
-!!!+ abstract
+???+ abstract "Expected Output"
     phyloseq-class experiment-level object
     otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
     sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
     tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
     phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
-!!!+ info
+???+ info "Expected Output"
     phyloseq-class experiment-level object
     otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
     sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
     tax_table()   Taxonomy Table:    [ 502 taxa by 7 taxonomic ranks ]
     phy_tree()    Phylogenetic Tree: [ 502 tips and 500 internal nodes ]
 
-!!!+ quote
+???+ tip "tip"
+    Help on aplha diversity: qiime diversity alpha-rarefaction –help
+
+!!!+ quote "Expected Output"
     phyloseq-class experiment-level object
     otu_table()   OTU Table:         [ 502 taxa and 18 samples ]
     sample_data() Sample Data:       [ 18 samples by 2 sample variables ]
