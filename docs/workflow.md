@@ -76,6 +76,15 @@ As a first step, activate QIIME with the following command (before doing so, nav
     ```
 
 #### 3.2. Import raw data
+
+**Before you start**:
+Open your terminal and navigate into the folder where the raw data is stored (**`Practical_material_uploads`**) using the `cd` (change directory) command:
+
+```bash
+cd /path/to/Practical_material_uploads
+```
+This ensures you are in the correct working directory before running the `qiime tools import` command.
+
 Next, you will import the raw data (fastq files) by running qiime *tools import*. Notice that with this tool, each of the parameters you can provide starts with two dashes. Here you will be specifying the following parameters:
 
 * type: whether your data is single-end or paired-end
@@ -281,9 +290,13 @@ qiime feature-table summarize \
 ```
 
 ???+ question "Question(s)"
-    1. What are the last command being used for?
+    1. What are the last commands being used for?
+ 
+**!!! NOTE !!!**: From this point onwards, the remaining commands in QIIME2 are optional.  
+We will now continue the analysis in **RStudio**. Please refer to the file: [`r_studio.md`](r_studio.md).
 
-#### 3.7 Generate taxonomic barplots
+
+#### 3.7 Generate taxonomic barplots 
 
 In order to visualise the relative abundance of the taxa in each sample, we use *taxa barplot*
 
