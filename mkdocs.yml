@@ -5,6 +5,7 @@ nav:
   - Installation instructions: installation_instructions.md
   - Workflow: workflow.md
   - QIIME2 primer: qiime2_pipeline.md
+  - R studio: r_studio.md
   - Useful commands: commands.md
 #  - About: about.md
 
