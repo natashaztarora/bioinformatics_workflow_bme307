@@ -2,7 +2,7 @@
 
 ### 1. Package Installation and Library Loading
 
-#### Install BiocManager
+#### Install BiocManager {: data-toc-label="" }
 ```r
 install.packages("BiocManager")
 ````
