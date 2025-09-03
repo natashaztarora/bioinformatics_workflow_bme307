@@ -2,18 +2,18 @@
 
 ### 1. Package Installation and Library Loading
 
-#### Install BiocManager
+#### Install BiocManager {.toc-ignore}
 ```r
 install.packages("BiocManager")
 ````
 
-#### Install Bioconductor packages
+#### Install Bioconductor packages {.toc-ignore}
 
 ```r
 BiocManager::install(c("phyloseq", "Biostrings", "S4Vectors", "IRanges", "XVector"))
 ```
 
-#### Install CRAN packages
+#### Install CRAN packages {.toc-ignore}
 
 ```r
 install.packages(c("vegan", "ape", "data.table", "Rcpp", "forcats", "tidyverse"))
@@ -26,7 +26,7 @@ library(phyloseq)
 packageVersion("phyloseq")
 ```
 
-#### Install **qiime2R**
+#### Install **qiime2R** {.toc-ignore}
 
 ```r
 install.packages("remotes")
@@ -36,7 +36,7 @@ remotes::install_url(
 )
 ```
 
-#### Install **phyloseq-extended**
+#### Install **phyloseq-extended** {.toc-ignore}
 
 ```r
 install.packages("remotes")   # only needed once, can skip if already installed
@@ -44,7 +44,7 @@ library(remotes)
 remotes::install_github("mahendra-mariadassou/phyloseq-extended", ref = "dev")
 ```
 
-#### Alternative installation (only if `install_github()` fails with HTTP error 401)
+#### Alternative installation (only if `install_github()` fails with HTTP error 401) {.toc-ignore}
 
 ```r
 # install.packages("gitcreds")   # if not already installed
@@ -61,7 +61,7 @@ library(phyloseq.extended)
 packageVersion("phyloseq.extended")
 ```
 
-#### Load libraries
+#### Load libraries {.toc-ignore}
 
 ```r
 library(qiime2R)
@@ -73,7 +73,7 @@ library(data.table)
 library(phyloseq.extended)
 ```
 
-#### Version check
+#### Version check {.toc-ignore}
 
 ```r
 pkgs <- c("phyloseq", "qiime2R", "microbiome", "vegan", "ape", "tidyverse")
@@ -82,7 +82,7 @@ sapply(pkgs, \(p) as.character(packageVersion(p)))
 
 ---
 
-### 2. Import QIIME2 files to phyloseq
+### 2. Import QIIME2 files to phyloseq 
 
 ```r
 # Define path to QIIME2 files
@@ -128,7 +128,7 @@ Here’s a template:
 
 In this section we explore different `phyloseq` accessors to get familiar with the contents of our object.
 
-#### Inspect the three core tables
+#### Inspect the three core tables {.toc-ignore}
 
 ```{r}
 head(otu_table(pseq))     # abundance matrix
@@ -136,7 +136,7 @@ head(tax_table(pseq))     # taxonomy
 head(sample_data(pseq))   # metadata
 ````
 
-#### Basic information
+#### Basic information {.toc-ignore}
 
 ```{r}
 ntaxa(pseq)               # number of taxa
@@ -145,7 +145,7 @@ sample_names(pseq)        # sample IDs
 head(taxa_names(pseq))    # taxon (ASV) IDs
 ```
 
-#### Relabel the ASVs with numbers
+#### Relabel the ASVs with numbers {.toc-ignore}
 
 ```{r}
 original_ids <- taxa_names(pseq)
@@ -167,7 +167,7 @@ sample_variables(pseq)                # metadata variables
 get_variable(pseq, "type")            # values of a metadata variable
 ```
 
-#### Extract sample-specific information
+#### Extract sample-specific information {.toc-ignore}
 
 ```{r}
 # Counts for one sample (if taxa are rows, samples are columns)
@@ -180,7 +180,7 @@ sample_data(pseq)["WT4", ]
 prune_samples("WT4", pseq)
 ```
 
-#### Taxonomy queries
+#### Taxonomy queries {.toc-ignore}
 
 ```{r}
 get_taxa_unique(pseq, "Phylum")
