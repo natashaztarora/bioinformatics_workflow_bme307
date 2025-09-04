@@ -3,17 +3,18 @@
 ### 1. Package Installation and Library Loading
 
 #### Install BiocManager {: data-toc-label="" }
+
 ```r
 install.packages("BiocManager")
-````
+```
 
-#### Install Bioconductor packages
+#### Install Bioconductor packages {: data-toc-label="" }
 
 ```r
 BiocManager::install(c("phyloseq", "Biostrings", "S4Vectors", "IRanges", "XVector"))
 ```
 
-#### Install CRAN packages 
+#### Install CRAN packages {: data-toc-label="" }
 
 ```r
 install.packages(c("vegan", "ape", "data.table", "Rcpp", "forcats", "tidyverse"))
@@ -26,7 +27,7 @@ library(phyloseq)
 packageVersion("phyloseq")
 ```
 
-#### Install **qiime2R** 
+#### Install **qiime2R**  {: data-toc-label="" }
 
 ```r
 install.packages("remotes")
@@ -36,7 +37,7 @@ remotes::install_url(
 )
 ```
 
-#### Install **phyloseq-extended** 
+#### Install **phyloseq-extended**  {: data-toc-label="" }
 
 ```r
 install.packages("remotes")   # only needed once, can skip if already installed
@@ -44,7 +45,7 @@ library(remotes)
 remotes::install_github("mahendra-mariadassou/phyloseq-extended", ref = "dev")
 ```
 
-#### Alternative installation (only if `install_github()` fails with HTTP error 401) 
+#### Alternative installation (only if `install_github()` fails with HTTP error 401)  {: data-toc-label="" }
 
 ```r
 # install.packages("gitcreds")   # if not already installed
@@ -61,7 +62,7 @@ library(phyloseq.extended)
 packageVersion("phyloseq.extended")
 ```
 
-#### Load libraries 
+#### Load libraries {: data-toc-label="" }
 
 ```r
 library(qiime2R)
@@ -73,7 +74,7 @@ library(data.table)
 library(phyloseq.extended)
 ```
 
-#### Version check 
+#### Version check {: data-toc-label="" }
 
 ```r
 pkgs <- c("phyloseq", "qiime2R", "microbiome", "vegan", "ape", "tidyverse")
@@ -124,7 +125,7 @@ load("pseq.RData")
 
 In this section we explore different `phyloseq` accessors to get familiar with the contents of our object.
 
-#### Inspect the three core tables
+#### Inspect the three core tables {: data-toc-label="" }
 
 ```r
 head(otu_table(pseq))     # abundance matrix
@@ -132,7 +133,7 @@ head(tax_table(pseq))     # taxonomy
 head(sample_data(pseq))   # metadata
 ```
 
-#### Basic information 
+#### Basic information  {: data-toc-label="" }
 
 ```r
 ntaxa(pseq)               # number of taxa
@@ -141,7 +142,7 @@ sample_names(pseq)        # sample IDs
 head(taxa_names(pseq))    # taxon (ASV) IDs
 ```
 
-#### Relabel the ASVs with numbers
+#### Relabel the ASVs with numbers {: data-toc-label="" }
 
 ```r
 original_ids <- taxa_names(pseq)
@@ -152,7 +153,7 @@ tax_table(pseq) <- cbind(tax_table(pseq), OriginalID = original_ids)
 head(taxa_names(pseq))
 ```
 
-#### More accessors
+#### More accessors {: data-toc-label="" }
 
 ```r
 sample_sums(pseq)                     # total reads per sample
@@ -163,7 +164,7 @@ sample_variables(pseq)                # metadata variables
 get_variable(pseq, "type")            # values of a metadata variable
 ```
 
-#### Extract sample-specific information 
+#### Extract sample-specific information  {: data-toc-label="" }
 
 ```r
 # Counts for one sample (if taxa are rows, samples are columns)
@@ -176,7 +177,7 @@ sample_data(pseq)["WT4", ]
 prune_samples("WT4", pseq)
 ```
 
-#### Taxonomy queries 
+#### Taxonomy queries {: data-toc-label="" }
 
 ```r
 get_taxa_unique(pseq, "Phylum")
