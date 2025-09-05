@@ -185,3 +185,106 @@ get_taxa_unique(pseq, "Family")
 get_taxa_unique(pseq, "Class")
 get_taxa_unique(pseq, "Genus")
 ```
+
+---
+
+
+### 4. Read depth
+
+#### Show distribution of read counts
+```r
+# total reads per sample
+ss <- sample_sums(pseq)
+
+hist(
+  ss,
+  breaks = 30,
+  xaxt = "n",
+  main = "Distribution of total reads per sample",
+  xlab = "Reads per sample"
+)
+axis(1, at = pretty(ss))
+```
+
+```r
+# Convert sample_data to a plain data.frame
+meta <- as.data.frame(sample_data(pseq))
+
+# Assuming your metadata has a column named 'type'
+pseq_sum <- data.frame(
+  sampleID    = sample_names(pseq),
+  read_depth  = ss,
+  type        = meta$type,
+  row.names   = sample_names(pseq),
+  check.names = FALSE
+)
+
+# Peek at the first few rows
+head(pseq_sum)
+```
+
+
+```r
+# Order samples by depth for a clearer plot
+pseq_sum$sampleID <- factor(
+  pseq_sum$sampleID,
+  levels = pseq_sum$sampleID[order(pseq_sum$read_depth, decreasing = TRUE)]
+)
+
+read_depth_sum <- ggplot(pseq_sum, aes(x = sampleID, y = read_depth, fill = type)) +
+  geom_col() +
+  labs(
+    title = "Total number of reads",
+    x = "Samples (ordered by depth)",
+    y = "Number of reads"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
+  )
+
+read_depth_sum
+```
+
+### 7. Rarefaction curve and alpha diversity
+
+#### Rarefaction curves with `vegan`
+
+```r
+library(phyloseq)
+library(vegan)
+
+# 1) Get counts as a plain matrix with SAMPLES IN ROWS (what vegan expects)
+mat <- as(otu_table(pseq), "matrix")
+if (taxa_are_rows(pseq)) mat <- t(mat)
+
+# Optional: drop all-zero samples (rare but safer)
+mat <- mat[rowSums(mat) > 0, , drop = FALSE]
+```
+
+```r
+# 2) Quick rarefaction curves
+hist(rowSums(mat), main = "Library sizes", xlab = "Reads per sample")
+
+rarecurve(
+  mat,
+  step = 1000,
+  label = TRUE,
+  cex = 0.5
+)
+```
+
+```r
+# 3) Standardize 'sample' to the minimum library size and time it
+raremax <- min(rowSums(mat))
+raremax
+
+system.time(
+  rarecurve(
+    mat,
+    step = 1000,
+    sample = raremax,
+    label = FALSE
+  )
+)
+```
+
