@@ -245,7 +245,7 @@ read_depth_sum <- ggplot(pseq_sum, aes(x = sampleID, y = read_depth, fill = type
 read_depth_sum
 ```
 
-### 7. Rarefaction curve and alpha diversity
+### 5. Rarefaction curve and alpha diversity
 
 #### Rarefaction curves with `vegan`
 
@@ -288,3 +288,30 @@ system.time(
 )
 ```
 
+```r
+# install once (uncomment if needed)
+# remotes::install_github("jbisanz/phyloseq-extended")
+
+library(phyloseq.extended)
+
+ggrare(
+  pseq,
+  step = 1000,
+  color = "type",
+  se = TRUE
+)
+```
+
+
+```r
+# Plot Observed Richness
+ObsR_plot <- plot_richness(
+  pseq,
+  x = "type",
+  color = "type",
+  measures = c("Observed", "Shannon")
+) + 
+  geom_boxplot()
+
+ObsR_plot  
+```
