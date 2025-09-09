@@ -256,6 +256,24 @@ qiime metadata tabulate \
     === "Advanced"
         1. Choose one of the features (ASVs), can you find its nucleotide sequence in another file? Once you have done so, check the taxonomic output obtained using blast, which implements a different algorithm. You can do so [here:](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome). Is the taxonomic assingment the same or different?
 
+
+**!!! NOTE !!!**: From this point onwards, the remaining commands in QIIME2 are optional.  
+We will now continue the analysis in **RStudio**. Please refer to the file: [`r_studio.md`](r_studio.md).
+
+!!! note "📌 Important"
+    From this point onwards, the remaining commands in QIIME2 are **optional**.  
+    We will now continue the analysis in **RStudio**.  
+    Please refer to the file: [r_studio.md](r_studio.md).
+
+!!! danger "⚠️ NOTE"
+    <span style="font-size:1.3em; font-weight:bold;">
+    From this point onwards, the remaining commands in QIIME2 are OPTIONAL.  
+    </span>  
+
+    We will now continue the analysis in **RStudio**.  
+    Please refer to the file: [r_studio.md](r_studio.md).
+
+
 #### 3.6 Filter non-bacterial sequences
 
 Our library preparation and sequencing targets the prokaryotic 16S rRNA gene, but we may end up obtaining reads that are not prokaryotic eg from chloroplasts or mitochondria, and with reads that originate from archaea, which we are not looking at in this study. By using *taxa filter-table* we can specify what taxa we want to retain and what taxa we want to exclude in the ASV abundance table. With “mode” we are specifying that we want the search terms not to be case sensitive e.g. Eukaryota/eukaryota.
@@ -291,9 +309,6 @@ qiime feature-table summarize \
 
 ???+ question "Question(s)"
     1. What are the last commands being used for?
- 
-**!!! NOTE !!!**: From this point onwards, the remaining commands in QIIME2 are optional.  
-We will now continue the analysis in **RStudio**. Please refer to the file: [`r_studio.md`](r_studio.md).
 
 
 #### 3.7 Generate taxonomic barplots 
