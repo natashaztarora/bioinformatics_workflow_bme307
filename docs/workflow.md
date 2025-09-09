@@ -257,21 +257,15 @@ qiime metadata tabulate \
         1. Choose one of the features (ASVs), can you find its nucleotide sequence in another file? Once you have done so, check the taxonomic output obtained using blast, which implements a different algorithm. You can do so [here:](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&PAGE_TYPE=BlastSearch&LINK_LOC=blasthome). Is the taxonomic assingment the same or different?
 
 
-**!!! NOTE !!!**: From this point onwards, the remaining commands in QIIME2 are optional.  
-We will now continue the analysis in **RStudio**. Please refer to the file: [`r_studio.md`](r_studio.md).
-
-!!! note "📌 Important"
-    From this point onwards, the remaining commands in QIIME2 are **optional**.  
-    We will now continue the analysis in **RStudio**.  
-    Please refer to the file: [r_studio.md](r_studio.md).
 
 !!! danger "⚠️ NOTE"
     <span style="font-size:1.3em; font-weight:bold;">
     From this point onwards, the remaining commands in QIIME2 are OPTIONAL.  
-    </span>  
-
     We will now continue the analysis in **RStudio**.  
     Please refer to the file: [r_studio.md](r_studio.md).
+    </span>  
+
+
 
 
 #### 3.6 Filter non-bacterial sequences
