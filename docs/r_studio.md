@@ -316,9 +316,9 @@ ObsR_plot <- plot_richness(
 ObsR_plot   # just print it
 ```
 
-## 6. Normalize the data
+### 6. Normalize the data
 
-Normalize read counts to **relative abundance** so samples are comparable.
+#### Normalize read counts to **relative abundance** so samples are comparable.
 
 ```r
 library(phyloseq)
@@ -331,4 +331,90 @@ head(otu_table(pseq_normal))
 
 # Sanity check: each sample should sum to ~1
 summary(sample_sums(pseq_normal))
+```
+
+### 9. Taxonomic composition
+
+#### Check unassigned/missing taxonomy
+
+```r
+library(phyloseq)
+library(dplyr)
+
+stopifnot(!is.null(tax_table(pseq_normal)))  # ensure taxonomy is present
+
+check_taxonomy_quality <- function(ps) {
+  tt <- as(tax_table(ps), "matrix")
+  # ensure character
+  tt <- apply(tt, 2, function(x) as.character(x))
+  # label vector to detect common “unknowns”
+  is_unassigned <- function(x) {
+    y <- tolower(trimws(x))
+    y %in% c("unassigned", "unknown", "uncultured", "incertae sedis", "incertae_sedis")
+  }
+  out <- apply(tt, 2, function(col) {
+    n_total <- length(col)
+    n_na    <- sum(is.na(col))
+    n_blank <- sum(trimws(col) == "", na.rm = TRUE)
+    n_unas  <- sum(is_unassigned(col), na.rm = TRUE)
+    c(Total = n_total, Missing = n_na, Blank = n_blank, Unassigned = n_unas)
+  })
+  as.data.frame(t(out))
+}
+
+check_taxonomy_quality(pseq_normal)
+```
+
+```r
+library(phyloseq)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Parameters
+rank  <- "Genus"   # e.g., "Phylum", "Class", "Order", "Family", "Genus"
+topN  <- 15        # keep top-N taxa globally; rest collapsed into "Other"
+
+# 1) Agglomerate to chosen rank
+stopifnot(rank %in% rank_names(pseq_normal))
+ps_glom <- tax_glom(pseq_normal, taxrank = rank, NArm = TRUE)
+
+# 2) Melt to tidy long format
+df <- psmelt(ps_glom) %>%
+  mutate(
+    Taxon = dplyr::coalesce(!!sym(rank), "Unassigned")
+  )
+
+# 3) Identify global top-N taxa by mean relative abundance
+top_taxa <- df %>%
+  group_by(Taxon) %>%
+  summarise(mean_abund = mean(Abundance), .groups = "drop") %>%
+  arrange(desc(mean_abund)) %>%
+  slice_head(n = topN) %>%
+  pull(Taxon)
+
+# 4) Collapse others to "Other" and re-sum within sample
+df_bar <- df %>%
+  mutate(Taxon_collapsed = ifelse(Taxon %in% top_taxa, Taxon, "Other")) %>%
+  group_by(Sample, Taxon_collapsed) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop") %>%
+  left_join(
+    as(sample_data(ps_glom), "data.frame") %>% tibble::rownames_to_column("Sample"),
+    by = "Sample"
+  )
+
+# 5) Plot
+TopTaxa <- ggplot(df_bar, aes(x = Sample, y = Abundance, fill = Taxon_collapsed)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = "Sample",
+    y = "Relative abundance",
+    fill = rank,
+    title = paste0("Taxonomic composition (", rank, ", top ", topN, ")")
+  ) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+TopTaxa
 ```
