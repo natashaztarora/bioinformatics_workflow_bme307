@@ -370,6 +370,8 @@ library(phyloseq)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(RColorBrewer)
+display.brewer.all()
 
 # Parameters
 rank  <- "Genus"   # e.g., "Phylum", "Class", "Order", "Family", "Genus"
@@ -416,5 +418,6 @@ TopTaxa <- ggplot(df_bar, aes(x = Sample, y = Abundance, fill = Taxon_collapsed)
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
-TopTaxa
+TopTaxa  + scale_fill_manual(values=colorRampPalette(brewer.pal(12,"Paired"))(16))
+
 ```
