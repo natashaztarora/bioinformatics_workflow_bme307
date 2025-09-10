@@ -265,6 +265,8 @@ mat <- mat[rowSums(mat) > 0, , drop = FALSE]
 # 2) Quick rarefaction curves
 hist(rowSums(mat), main = "Library sizes", xlab = "Reads per sample")
 
+raremax <- min(rowSums(mat))
+
 rarecurve(
   mat,
   step = 1000,
@@ -274,17 +276,14 @@ rarecurve(
 ```
 
 ```r
-# 3) Standardize 'sample' to the minimum library size and time it
-raremax <- min(rowSums(mat))
-raremax
+# 3) use phyloseq.extended to plot the rarefaction curves
+library(phyloseq.extended)
 
-system.time(
-  rarecurve(
-    mat,
-    step = 1000,
-    sample = raremax,
-    label = FALSE
-  )
+phyloseq.extended::ggrare(
+  pseq,
+  step = 1000,
+  color = "type",
+  se = TRUE
 )
 ```
 
@@ -304,7 +303,8 @@ ggrare(
 
 
 ```r
-# Plot Observed Richness
+# 4) Plot Observed Richness
+
 ObsR_plot <- plot_richness(
   pseq,
   x = "type",
@@ -313,5 +313,22 @@ ObsR_plot <- plot_richness(
 ) + 
   geom_boxplot()
 
-ObsR_plot  
+ObsR_plot   # just print it
+```
+
+## 6. Normalize the data
+
+Normalize read counts to **relative abundance** so samples are comparable.
+
+```r
+library(phyloseq)
+
+# Normalize to proportions within each sample
+pseq_normal <- transform_sample_counts(pseq_nonzero, function(x) x / sum(x))
+
+# Inspect the normalized object
+head(otu_table(pseq_normal))
+
+# Sanity check: each sample should sum to ~1
+summary(sample_sums(pseq_normal))
 ```

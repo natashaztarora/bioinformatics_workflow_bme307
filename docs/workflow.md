@@ -261,8 +261,7 @@ qiime metadata tabulate \
 !!! danger "⚠️ NOTE"
     <span style="font-size:1.3em; font-weight:bold;">
     From this point onwards, the remaining commands in QIIME2 are OPTIONAL.  
-    We will now continue the analysis in **RStudio**.  
-    Please refer to the file: [r_studio.md](r_studio.md).
+    We will now continue the analysis in **RStudio**. Please refer to the file: [r_studio.md](r_studio.md).
     </span>  
 
 
