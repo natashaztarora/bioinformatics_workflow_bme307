@@ -191,7 +191,7 @@ get_taxa_unique(pseq, "Genus")
 
 ### 4. Read depth
 
-#### Show distribution of read counts {: data-toc-skip }
+#### Show distribution of read counts {: data-toc-skip="" }
 ```r
 # total reads per sample
 ss <- sample_sums(pseq)
