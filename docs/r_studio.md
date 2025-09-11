@@ -1,5 +1,7 @@
 # R studio
 
+## On Thursday
+
 ### 1. Package Installation and Library Loading
 
 #### Install BiocManager 
