@@ -191,7 +191,7 @@ get_taxa_unique(pseq, "Genus")
 
 ### 4. Read depth
 
-#### Show distribution of read counts
+#### Show distribution of read counts {: data-toc-label="" }
 ```r
 # total reads per sample
 ss <- sample_sums(pseq)
@@ -333,7 +333,7 @@ head(otu_table(pseq_normal))
 summary(sample_sums(pseq_normal))
 ```
 
-### 9. Taxonomic composition
+### 7. Taxonomic composition
 
 #### Check unassigned/missing taxonomy
 
