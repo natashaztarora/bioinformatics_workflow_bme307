@@ -2,19 +2,19 @@
 
 ### 1. Package Installation and Library Loading
 
-#### Install BiocManager {: data-toc-label="" }
+#### Install BiocManager 
 
 ```r
 install.packages("BiocManager")
 ```
 
-#### Install Bioconductor packages {: data-toc-label="" }
+#### Install Bioconductor packages 
 
 ```r
 BiocManager::install(c("phyloseq", "Biostrings", "S4Vectors", "IRanges", "XVector"))
 ```
 
-#### Install CRAN packages {: data-toc-label="" }
+#### Install CRAN packages 
 
 ```r
 install.packages(c("vegan", "ape", "data.table", "Rcpp", "forcats", "tidyverse"))
@@ -27,7 +27,7 @@ library(phyloseq)
 packageVersion("phyloseq")
 ```
 
-#### Install **qiime2R**  {: data-toc-label="" }
+#### Install **qiime2R**  
 
 ```r
 install.packages("remotes")
@@ -37,7 +37,7 @@ remotes::install_url(
 )
 ```
 
-#### Install **phyloseq-extended**  {: data-toc-label="" }
+#### Install **phyloseq-extended**  
 
 ```r
 install.packages("remotes")   # only needed once, can skip if already installed
@@ -45,7 +45,7 @@ library(remotes)
 remotes::install_github("mahendra-mariadassou/phyloseq-extended", ref = "dev")
 ```
 
-#### Alternative installation (only if `install_github()` fails with HTTP error 401)  {: data-toc-label="" }
+#### Alternative installation (only if `install_github()` fails with HTTP error 401)  
 
 ```r
 # install.packages("gitcreds")   # if not already installed
@@ -62,7 +62,7 @@ library(phyloseq.extended)
 packageVersion("phyloseq.extended")
 ```
 
-#### Load libraries {: data-toc-label="" }
+#### Load libraries 
 
 ```r
 library(qiime2R)
@@ -74,7 +74,7 @@ library(data.table)
 library(phyloseq.extended)
 ```
 
-#### Version check {: data-toc-label="" }
+#### Version check 
 
 ```r
 pkgs <- c("phyloseq", "qiime2R", "microbiome", "vegan", "ape", "tidyverse")
@@ -125,7 +125,7 @@ load("pseq.RData")
 
 In this section we explore different `phyloseq` accessors to get familiar with the contents of our object.
 
-#### Inspect the three core tables {: data-toc-label="" }
+#### Inspect the three core tables 
 
 ```r
 head(otu_table(pseq))     # abundance matrix
@@ -133,7 +133,7 @@ head(tax_table(pseq))     # taxonomy
 head(sample_data(pseq))   # metadata
 ```
 
-#### Basic information  {: data-toc-label="" }
+#### Basic information  
 
 ```r
 ntaxa(pseq)               # number of taxa
@@ -142,7 +142,7 @@ sample_names(pseq)        # sample IDs
 head(taxa_names(pseq))    # taxon (ASV) IDs
 ```
 
-#### Relabel the ASVs with numbers {: data-toc-label="" }
+#### Relabel the ASVs with numbers 
 
 ```r
 original_ids <- taxa_names(pseq)
@@ -153,7 +153,7 @@ tax_table(pseq) <- cbind(tax_table(pseq), OriginalID = original_ids)
 head(taxa_names(pseq))
 ```
 
-#### More accessors {: data-toc-label="" }
+#### More accessors
 
 ```r
 sample_sums(pseq)                     # total reads per sample
@@ -164,7 +164,7 @@ sample_variables(pseq)                # metadata variables
 get_variable(pseq, "type")            # values of a metadata variable
 ```
 
-#### Extract sample-specific information  {: data-toc-label="" }
+#### Extract sample-specific information 
 
 ```r
 # Counts for one sample (if taxa are rows, samples are columns)
@@ -177,7 +177,7 @@ sample_data(pseq)["WT4", ]
 prune_samples("WT4", pseq)
 ```
 
-#### Taxonomy queries {: data-toc-label="" }
+#### Taxonomy queries 
 
 ```r
 get_taxa_unique(pseq, "Phylum")
@@ -191,7 +191,7 @@ get_taxa_unique(pseq, "Genus")
 
 ### 4. Read depth
 
-#### Show distribution of read counts {: .no-toc }
+#### Show distribution of read counts 
 ```r
 # total reads per sample
 ss <- sample_sums(pseq)
@@ -373,20 +373,27 @@ library(ggplot2)
 library(RColorBrewer)
 display.brewer.all()
 
+
 # Parameters
 rank  <- "Genus"   # e.g., "Phylum", "Class", "Order", "Family", "Genus"
 topN  <- 15        # keep top-N taxa globally; rest collapsed into "Other"
+```
 
+```r
 # 1) Agglomerate to chosen rank
 stopifnot(rank %in% rank_names(pseq_normal))
 ps_glom <- tax_glom(pseq_normal, taxrank = rank, NArm = TRUE)
+```
 
+```r
 # 2) Melt to tidy long format
 df <- psmelt(ps_glom) %>%
   mutate(
     Taxon = dplyr::coalesce(!!sym(rank), "Unassigned")
   )
+```
 
+```r
 # 3) Identify global top-N taxa by mean relative abundance
 top_taxa <- df %>%
   group_by(Taxon) %>%
@@ -394,7 +401,9 @@ top_taxa <- df %>%
   arrange(desc(mean_abund)) %>%
   slice_head(n = topN) %>%
   pull(Taxon)
+```
 
+```r
 # 4) Collapse others to "Other" and re-sum within sample
 df_bar <- df %>%
   mutate(Taxon_collapsed = ifelse(Taxon %in% top_taxa, Taxon, "Other")) %>%
@@ -404,7 +413,9 @@ df_bar <- df %>%
     as(sample_data(ps_glom), "data.frame") %>% tibble::rownames_to_column("Sample"),
     by = "Sample"
   )
+```
 
+```r
 # 5) Plot
 TopTaxa <- ggplot(df_bar, aes(x = Sample, y = Abundance, fill = Taxon_collapsed)) +
   geom_col() +
@@ -419,5 +430,133 @@ TopTaxa <- ggplot(df_bar, aes(x = Sample, y = Abundance, fill = Taxon_collapsed)
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 TopTaxa  + scale_fill_manual(values=colorRampPalette(brewer.pal(12,"Paired"))(16))
+```
 
+## On Friday
+
+### 1. Set working directory
+
+```r
+# Tip: prefer relative paths (here::here()) in shared scripts. Keeping your path for Friday:
+setwd("/Users/peterresutik/Documents/Postdoc/Teaching/2025_Fall/Practical_materials_uploads/QIIME2_files_2025_August_18")
+
+# Clean workspace (do this before loading objects)
+rm(list = ls())
+
+# Quick checks
+getwd()
+list.files()
+```
+
+### 2. Load libraries and data
+
+```r
+suppressPackageStartupMessages({
+  library(phyloseq)
+  # plot_scree() is available via phyloseq; if you rely on extras, keep this:
+  # library(phyloseq.extended)
+  library(vegan)
+  library(ggplot2)
+  # library(data.table) # not used below; uncomment if you need it
+})
+
+# Load the phyloseq object created earlier
+load("pseq.RData")  # loads 'pseq'
+
+# (Optional but handy) ensure a "SampleID" column exists for labeling in plots
+if (!"SampleID" %in% sample_variables(pseq)) {
+  sd <- as.data.frame(sample_data(pseq))
+  sd$SampleID <- rownames(sd)
+  sample_data(pseq) <- sd
+}
+```
+
+### 3. Normalization
+
+```r
+# Relative abundance normalization (compositional)
+# (Good for Bray-Curtis and many visuals; UniFrac can be run on raw or rarefied.)
+keep <- sample_sums(pseq) > 0
+pseq <- prune_samples(keep, pseq)
+
+pseq_normal <- transform_sample_counts(pseq, function(x) x / sum(x))
+
+# Quick sanity checks
+head(otu_table(pseq_normal))
+summary(sample_sums(pseq_normal))  # ~1 for all samples
+
+# (Optional) Rarefy to an even depth for UniFrac comparability
+# min_depth <- min(sample_sums(pseq))
+# set.seed(1)
+# pseq_rare <- rarefy_even_depth(pseq, sample.size = min_depth, rngseed = 1,
+#                                replace = FALSE, verbose = FALSE)
+```
+
+### 4. Beta diversity - PCoA
+
+```r
+# Show available distance methods
+unlist(distanceMethodList)
+
+# --- A) Weighted UniFrac ---
+# Ensure a rooted tree exists for UniFrac
+if (is.null(phy_tree(pseq_normal, errorIfNULL = FALSE))) {
+  message("No phylogenetic tree found; skipping UniFrac. (Bray-Curtis will still work.)")
+} else {
+  # If you chose to rarefy for UniFrac, swap pseq_normal -> pseq_rare below
+  Dist_wUF <- distance(pseq_normal, method = "wunifrac")  # exact spelling!
+  ord_wUF  <- ordinate(pseq_normal, method = "PCoA", distance = Dist_wUF)
+
+  plot_scree(ord_wUF, "Scree Plot: weighted UniFrac")
+
+  PoC_wUni <- plot_ordination(pseq_normal, ord_wUF, color = "type", label = "SampleID") +
+    ggtitle("Weighted UniFrac") +
+    theme_bw()
+  PoC_wUni
+}
+
+# --- B) Bray-Curtis ---
+Dist_Bray <- distance(pseq_normal, method = "bray")
+ord_Bray  <- ordinate(pseq_normal, method = "PCoA", distance = Dist_Bray)
+
+plot_scree(ord_Bray, "Scree Plot: Bray-Curtis")
+
+PoC_Bray <- plot_ordination(pseq_normal, ord_Bray, color = "type", label = "SampleID") +
+  ggtitle("Bray-Curtis") +
+  theme_bw()
+PoC_Bray
+```
+
+### 5. Significance tests
+
+```r
+# Metadata frame aligned to samples
+sampledf <- as.data.frame(sample_data(pseq_normal))
+# Ensure row orders match the distance objects (they should via phyloseq)
+stopifnot(identical(rownames(sampledf), rownames(as.matrix(Dist_Bray))))
+
+# PERMANOVA (Bray-Curtis)
+set.seed(1)
+perm_bray <- adonis2(Dist_Bray ~ type, data = sampledf, permutations = 999)
+perm_bray
+
+# If you computed weighted UniFrac:
+if (exists("Dist_wUF")) {
+  set.seed(1)
+  perm_wuf <- adonis2(Dist_wUF ~ type, data = sampledf, permutations = 999)
+  perm_wuf
+}
+
+# Dispersion test (are group dispersions homogeneous?)
+# Use the same distance you PERMANOVA’ed (here Bray-Curtis)
+beta_bray <- betadisper(Dist_Bray, sampledf$type)
+permutest(beta_bray)
+plot(beta_bray)  # visualize group dispersions
+
+# (Optional) If you did UniFrac too:
+if (exists("Dist_wUF")) {
+  beta_wuf <- betadisper(Dist_wUF, sampledf$type)
+  permutest(beta_wuf)
+  plot(beta_wuf)
+}
 ```
