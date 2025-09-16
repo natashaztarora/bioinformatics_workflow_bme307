@@ -6,7 +6,7 @@ We will provide a **troubleshooting session on Tuesday (16.9.2025)** after the l
 
 ## Required Software
 
-1. [Docker](https://www.docker.com/)
+1. [Docker](https://www.docker.com/) (Only Windows users)
 2. [QIIME2](https://qiime2.org/)
 3. [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 4. [R + RStudio](https://rstudio-education.github.io/hopr/starting.html)

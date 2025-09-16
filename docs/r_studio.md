@@ -290,21 +290,6 @@ phyloseq.extended::ggrare(
 ```
 
 ```r
-# install once (uncomment if needed)
-# remotes::install_github("jbisanz/phyloseq-extended")
-
-library(phyloseq.extended)
-
-ggrare(
-  pseq,
-  step = 1000,
-  color = "type",
-  se = TRUE
-)
-```
-
-
-```r
 # 4) Plot Observed Richness
 
 ObsR_plot <- plot_richness(
@@ -326,7 +311,7 @@ ObsR_plot   # just print it
 library(phyloseq)
 
 # Normalize to proportions within each sample
-pseq_normal <- transform_sample_counts(pseq_nonzero, function(x) x / sum(x))
+pseq_normal <- transform_sample_counts(pseq, function(x) x / sum(x))
 
 # Inspect the normalized object
 head(otu_table(pseq_normal))
@@ -450,34 +435,18 @@ getwd()
 list.files()
 ```
 
-### 2. Load libraries and data
+### 2. Load data
 
 ```r
-suppressPackageStartupMessages({
-  library(phyloseq)
-  # plot_scree() is available via phyloseq; if you rely on extras, keep this:
-  # library(phyloseq.extended)
-  library(vegan)
-  library(ggplot2)
-  # library(data.table) # not used below; uncomment if you need it
-})
-
 # Load the phyloseq object created earlier
 load("pseq.RData")  # loads 'pseq'
 
-# (Optional but handy) ensure a "SampleID" column exists for labeling in plots
-if (!"SampleID" %in% sample_variables(pseq)) {
-  sd <- as.data.frame(sample_data(pseq))
-  sd$SampleID <- rownames(sd)
-  sample_data(pseq) <- sd
-}
 ```
 
 ### 3. Normalization
 
 ```r
 # Relative abundance normalization (compositional)
-# (Good for Bray-Curtis and many visuals; UniFrac can be run on raw or rarefied.)
 keep <- sample_sums(pseq) > 0
 pseq <- prune_samples(keep, pseq)
 
@@ -501,21 +470,16 @@ summary(sample_sums(pseq_normal))  # ~1 for all samples
 unlist(distanceMethodList)
 
 # --- A) Weighted UniFrac ---
-# Ensure a rooted tree exists for UniFrac
-if (is.null(phy_tree(pseq_normal, errorIfNULL = FALSE))) {
-  message("No phylogenetic tree found; skipping UniFrac. (Bray-Curtis will still work.)")
-} else {
-  # If you chose to rarefy for UniFrac, swap pseq_normal -> pseq_rare below
-  Dist_wUF <- distance(pseq_normal, method = "wunifrac")  # exact spelling!
-  ord_wUF  <- ordinate(pseq_normal, method = "PCoA", distance = Dist_wUF)
+Dist_wUF <- distance(pseq_normal, method = "wunifrac")  # exact spelling!
+ord_wUF  <- ordinate(pseq_normal, method = "PCoA", distance = Dist_wUF)
 
-  plot_scree(ord_wUF, "Scree Plot: weighted UniFrac")
+plot_scree(ord_wUF, "Scree Plot: weighted UniFrac")
 
-  PoC_wUni <- plot_ordination(pseq_normal, ord_wUF, color = "type", label = "SampleID") +
-    ggtitle("Weighted UniFrac") +
-    theme_bw()
-  PoC_wUni
-}
+PoC_wUni <- plot_ordination(pseq_normal, ord_wUF, color = "type", label = "SampleID") +
+ggtitle("Weighted UniFrac") +
+theme_bw()
+PoC_wUni
+
 
 # --- B) Bray-Curtis ---
 Dist_Bray <- distance(pseq_normal, method = "bray")
@@ -532,33 +496,18 @@ PoC_Bray
 ### 5. Significance tests
 
 ```r
-# Metadata frame aligned to samples
-sampledf <- as.data.frame(sample_data(pseq_normal))
-# Ensure row orders match the distance objects (they should via phyloseq)
-stopifnot(identical(rownames(sampledf), rownames(as.matrix(Dist_Bray))))
+#Test significance with permanova analyses
+#First we generate a dataframe with the metadata
+sampledf<- data.frame(sample_data(pseq_normal))
+sampledf
 
-# PERMANOVA (Bray-Curtis)
-set.seed(1)
-perm_bray <- adonis2(Dist_Bray ~ type, data = sampledf, permutations = 999)
-perm_bray
+#Next we calculate significance for unweighted Unifrac
+pseq_p_wUF <- adonis2(Dist_wUF ~type, data = sampledf)
+pseq_p_wUF
 
-# If you computed weighted UniFrac:
-if (exists("Dist_wUF")) {
-  set.seed(1)
-  perm_wuf <- adonis2(Dist_wUF ~ type, data = sampledf, permutations = 999)
-  perm_wuf
-}
+#We can also test for differences in dispersion 
+#for unweighted unifrac
+betawUF <- betadisper(Dist_wUF, sampledf$type)
+permutest(betawUF)
 
-# Dispersion test (are group dispersions homogeneous?)
-# Use the same distance you PERMANOVA’ed (here Bray-Curtis)
-beta_bray <- betadisper(Dist_Bray, sampledf$type)
-permutest(beta_bray)
-plot(beta_bray)  # visualize group dispersions
-
-# (Optional) If you did UniFrac too:
-if (exists("Dist_wUF")) {
-  beta_wuf <- betadisper(Dist_wUF, sampledf$type)
-  permutest(beta_wuf)
-  plot(beta_wuf)
-}
 ```
