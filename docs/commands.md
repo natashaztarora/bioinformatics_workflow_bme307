@@ -88,7 +88,7 @@ includes Ubuntu distribution and QIIME2.
 ``` bash
 docker run --rm -v ${pwd}:/data/ -w /data/ -it quay.io/qiime2/amplicon:2025.7
 ```
-TEST
+
 After running this command, you should be in the container. This is indicated by the following text in your terminal (qiime2-2023.5). Once you list the files in the
 current working directory the files on your local computer should be reflected in the printed list. 
 
