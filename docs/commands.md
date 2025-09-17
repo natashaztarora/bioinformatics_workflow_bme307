@@ -86,7 +86,7 @@ By running the following command, you create a docker container from an image th
 includes Ubuntu distribution and QIIME2.
 
 ``` bash
-docker run --rm -v ${pwd}:/data/ -w /data/ -it quay.io/qiime2/core:2023.5
+docker run --rm -v ${pwd}:/data/ -w /data/ -it quay.io/qiime2/amplicon:2025.7
 ```
 
 After running this command, you should be in the container. This is indicated by the following text in your terminal (qiime2-2023.5). Once you list the files in the
