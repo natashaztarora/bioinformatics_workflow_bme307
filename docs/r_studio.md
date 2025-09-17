@@ -1,5 +1,12 @@
 # R studio
 
+We will be using the R package [Phyloseq](https://joey711.github.io/phyloseq/index.html) to
+examine the microbiome data. As specified on their website, Phyloseq is a tool to “import,
+store, analyze, and graphically display complex phylogenetic sequencing data”. 
+
+Set your working directories, install the necessary packages, and load the libraries. In case
+you are not familiar with R packages, a detailed beginner’s guide is available [here](https://www.datacamp.com/community/tutorials/r-packages-guide)
+
 ## On Thursday
 
 ### 1. Package Installation and Library Loading
@@ -87,6 +94,11 @@ sapply(pkgs, \(p) as.character(packageVersion(p)))
 
 ### 2. Import QIIME2 files to phyloseq 
 
+After importing the necessary files, you can build a phyloseq object for manipulation with
+phyloseq functions. Once you have built it, enter the name of the object (pseq) to see what
+it looks like.
+
+
 ```r
 # Define path to QIIME2 files
 files_path <- "/Path/to/Practical_materials_uploads/QIIME2_files"
@@ -125,7 +137,8 @@ load("pseq.RData")
 
 ### 3. Explore the `phyloseq` Object
 
-In this section we explore different `phyloseq` accessors to get familiar with the contents of our object.
+In this section we explore different phyloseq accessors to get familiar with the contents of our object. In case you want to get more info, you can enter “?phyloseq”
+to find out more.
 
 #### Inspect the three core tables 
 
@@ -188,10 +201,21 @@ get_taxa_unique(pseq, "Class")
 get_taxa_unique(pseq, "Genus")
 ```
 
+???+ question "Question(s)"
+    1. How many samples are there?
+    2. How many ASVs are there in total?
+    3. When you look at sample_sums, what sample has the highest number of reads, and what sample has the lowest number?
+    4. Explore the number of unique phyla, orders, families, and genera: how many taxa are there in each taxonomic rank? Do you observe any unclassified taxa?
+
 ---
 
 
 ### 4. Read depth
+
+Let’s investigate the read depths for each sample. We will plot the read depth for each sample and visualise. To do so you need to make a dataframe called pseq_sum
+containing the relevant information (sample ID, read depth and type). 
+
+
 
 #### Show distribution of read counts 
 ```r
@@ -247,7 +271,15 @@ read_depth_sum <- ggplot(pseq_sum, aes(x = sampleID, y = read_depth, fill = type
 read_depth_sum
 ```
 
+???+ question "Question(s)"
+    1. Is there a difference in read depth across the different groups of mice (WT, IL10, MUC2)?
+
+
 ### 5. Rarefaction curve and alpha diversity
+
+Use ?rarecurve to find out how to generate a simple rarefaction curve. You can also use ggrare
+to make a visually more appealing rarefaction curve. In the rarefaction curve, check how the observed number of ASVs changes with read depth, to find out if the samples are comparable.
+
 
 #### Rarefaction curves with `vegan`
 
@@ -288,6 +320,13 @@ phyloseq.extended::ggrare(
   se = TRUE
 )
 ```
+???+ question "Question(s)"
+    1. Are the read depths in the samples adequate? 
+    2. Are they representative of the true diversity in the mice?
+
+Next, let’s look at several alpha diversity values. Generate the plots for “Observed_richness”, which
+is based on the number of different ASVs, and “Shannon”, which takes into account evenness in addition to ASVs.
+
 
 ```r
 # 4) Plot Observed Richness
@@ -302,8 +341,12 @@ ObsR_plot <- plot_richness(
 
 ObsR_plot   # just print it
 ```
+???+ question "Question(s)"
+    1. Do you observe differences between the mouse groups (WT, MUC2, IL-10) based on these plots?
 
 ### 6. Normalize the data
+
+As you have observed, read depth differs across samples. To compare bacterial community composition across the samples, we normalise the data: we compute the relative abundance for each ASV in each sample (ASV read counts/total reads in each sample). Now we have proportions that we can compare. 
 
 #### Normalize read counts to **relative abundance** so samples are comparable.
 
@@ -321,6 +364,8 @@ summary(sample_sums(pseq_normal))
 ```
 
 ### 7. Taxonomic composition
+
+We will generate plots to visualise the bacterial community composition of the samples. Notice the y-axis which is relative abundance. You can choose which taxonomic rank (eg class, order, family, genus, species) and also whether you want to select a subset eg the 10 most abundant. 
 
 #### Check unassigned/missing taxonomy
 
@@ -419,7 +464,13 @@ TopTaxa <- ggplot(df_bar, aes(x = Sample, y = Abundance, fill = Taxon_collapsed)
 TopTaxa  + scale_fill_manual(values=colorRampPalette(brewer.pal(12,"Paired"))(16))
 ```
 
+???+ question "Question(s)"
+    1. Visualise the taxa at the level of the different taxonomic ranks (eg phylum, class, order, family, genus). You will need to go back and check the number of taxa at each rank. What patterns do you observe for the different mouse groups at each of the taxonomic ranks?
+    2. Now subset to visualise the top 10 most abundant taxa, choosing several taxonomic ranks. What patterns do you observe? Bonus: what happens if you select another number instead of 10?
+
 ## On Friday
+
+With beta diversity analyses we focus on the similarities and differences among samples. To visually explore the data, we use principal coordinates analyses (PCoA) plots, utilizing different distance metrics such as weighted Unifrac and Bray Curtis.
 
 ### 1. Set working directory
 
@@ -511,3 +562,15 @@ betawUF <- betadisper(Dist_wUF, sampledf$type)
 permutest(betawUF)
 
 ```
+
+???+ question "Question(s)"
+    1. Do you observe differences across the mouse groups? Are there outliers in your plot? If so, what could explain these outliers?
+    2. Can the clustering patterns be explained by the mouse type (eg WT, IL10 and MUC2)? Run the permanova tests (with adonis) to find out.
+    3. Are there differences in dispersion among the groups? Run the dispersion tests (with betadisper) to find out.
+
+
+
+
+
+
+
