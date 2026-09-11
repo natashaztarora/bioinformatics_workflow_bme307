@@ -6,16 +6,23 @@
 As described on the QIIME2 portal :
 
 ???+ quote "What is QIIME 2?"
-    QIIME 2 is a powerful, extensible, and decentralized microbiome analysis package with a focus on data and analysis transparency. QIIME 2 enables researchers to start an analysis with raw DNA sequence data and finish with publication-quality figures and statistical results.  
+    QIIME 2 is a powerful, extensible, and decentralized microbiome analysis package with a focus on data and analysis transparency. In this course, it is used to process the 16S rRNA sequencing reads before the downstream analysis.  
+
+!!! important "For this course"
+    You do **not** need to install or run QIIME 2 during the practical.  
+    The QIIME 2 processing has already been performed for you. During the practical, we will explain what each processing step does and inspect the corresponding output files.
+
 
 ## QIIME2 Overview
+
+The figure below gives an overview of the main types of analyses that can be performed in QIIME 2.
 
 From https://docs.qiime2.org/2023.7/tutorials/overview/:
 ![Image title](QIIME2_overview.png){ align=left }
 
-## QIIME2 Artifacts
+## QIIME2 Artifacts and visualizations 
 
-In QIIME2, we use “artifacts” instead of data files (e.g. FASTA files): these contain not only data but also additional information on the generation of the file itself. Therefore, before we start working with QIIME2, we need to import our data as a QIIME2 artifact. 
+In QIIME2 uses two file types that you will encounter throughout the practical: these contain not only data but also additional information on the generation of the file itself. Therefore, before we start working with QIIME2, we need to import our data as a QIIME2 artifact. 
 
 Additional info: As described on the QIIME2 website (https://docs.qiime2.org/2023.7/concepts/): 
 
