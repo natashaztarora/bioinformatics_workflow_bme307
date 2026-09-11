@@ -3,10 +3,10 @@ site_url: https://example.com/
 nav:
   - Home: index.md
   - Installation instructions: installation_instructions.md
-  - Workflow: workflow.md
-  - R studio: r_studio.md
-  - QIIME2 primer: qiime2_pipeline.md
   - Useful commands: commands.md
+  - QIIME2 primer: qiime2_pipeline.md
+  - 1. QIIME2 Workflow: workflow.md
+  - 2. R workflow: r_studio.md
 #  - About: about.md
 
 # plugins:

@@ -2,233 +2,177 @@
 
 All students must bring their own laptop and install the required software **before the start of the practicals**.
 
-We will provide a **troubleshooting session on Tuesday (16.9.2025)** after the lecture for those who encounter installation issues.
+We will provide a **troubleshooting session on Tuesday (15.09.2026)** after the lecture for those who encounter installation issues.
 
 ## Required Software
 
-1. [Docker](https://www.docker.com/) (Only Windows users)
-2. [QIIME2](https://qiime2.org/)
-3. [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-4. [R + RStudio](https://rstudio-education.github.io/hopr/starting.html)
+1. [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) — to inspect the quality of raw sequencing reads.
+2. [R](https://rstudio-education.github.io/hopr/starting.html) — the programming language we will use for downstream microbiome analysis.
+3. [R Studio](https://posit.co/products/open-source/rstudio) — the interface we will use to work with R.
 
-If you have questions, please email us at **[bioinformatics.bme307@gmail.com](mailto:bioinformatics.bme307@gmail.com)**.
-
----
-
-## 💻 Windows Users (recommended: Docker-based QIIME2)
-
-### 1. Docker + QIIME2
-
-!!! warning "Check if Virtualization is enabled"
-    - Press **Ctrl + Alt + Del → Task Manager → Performance → CPU**
-    - Check if **Virtualization: Enabled**
-    - If not, follow [these BIOS instructions](https://wiki.2n.com/faqac/en/virtualizace-vt-x-amd-v-povoleni-virtualizace-na-vasem-pocitaci-pro-spusteni-2n-access-commander-100572533.html) (steps differ by brand: Acer, Asus, Dell, HP, Lenovo, Sony, Toshiba).
-
-1. Install Docker Desktop for Windows: [Download here](https://docs.docker.com/desktop/install/windows-install/)
-
-   * Run the `.exe` file and select **Enable WSL 2 Features** when prompted.
-
-2. If you see:
-   **“Docker Desktop requires Windows …”**
-
-   * Update Windows [here](https://www.microsoft.com/en-us/software-download/windows10) and reinstall Docker.
-
-3. If you encounter **WSL2 errors**, install the [Linux kernel update package](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi).
-
-4. Start Docker Desktop.
-
-   * The whale 🐳 icon in the status bar should stay steady.
-
-5. Test Docker with:
-
-   ```bash
-   docker run hello-world
-   ```
-
-6. Download QIIME2:
-
-   ```bash
-   docker pull quay.io/qiime2/amplicon:2025.7
-   ```
-
-7. Test QIIME2:
-
-   ```bash
-   docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
-   ```
+If you encounter installation problems, please contact the course instructors before the practical at **[bioinformatics.bme307@gmail.com](mailto:bioinformatics.bme307@gmail.com)**.
 
 ---
 
-### 2. FastQC
+## 💻 Windows Users 
 
-1. Download FastQC for Windows: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
-2. Extract the `.zip` file.
-3. Run `fastqc.exe`.
+### 1. FastQC
 
-   * If Java errors occur, install [Java JDK 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows).
+1. Go to the [FastQC download page](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+2. Download the **Windows/Linux zip file** for the current FastQC release.
+3. Extract the downloaded `.zip` file.
+4. Open the extracted FastQC folder.
+5. Start FastQC using the Windows launcher included in the folder.
 
----
+!!! note
+    FastQC requires Java. If FastQC does not start correctly, please contact the course instructors.
 
-### 3. R + RStudio
+### 2. R 
 
-1. Install [R for Windows](http://cran.r-project.org/bin/windows/base/release.htm).
-2. Install [RStudio for Windows](https://posit.co/download/rstudio-desktop/).
-3. Open RStudio to confirm installation works.
+1. Go to [CRAN](https://cran.r-project.org/).
+2. Click **Download R for Windows**.
+3. Click **base** and then download the current R installer.
+4. Open the downloaded installer and keep the default installation options.
 
----
+### 3. RStudio Desktop
 
-## 🍎 Mac Users (Intel & Apple Silicon M1–M4)
+1. Go to the [RStudio Desktop download page](https://posit.co/download/rstudio-desktop/).
+2. Download the **free RStudio Desktop** installer for Windows.
+3. Run the installer using the default options.
+4. Open RStudio.
 
-### 1. Install Conda
+To check that R is working, type the following in the **Console** and press Enter:
 
-* Recommended: [Miniconda](https://docs.anaconda.com/miniconda/install/#macos-terminal-installer)
-* Open Terminal and verify:
+```r
+1 + 1
+```
 
-  ```bash
-  conda --version
-  ```
+You should see:
 
----
-
-### 2. QIIME2
-
-#### Intel Macs (x86\_64)
-
-```bash
-conda update conda
-conda env create --name qiime2-amplicon-2025.7 \
-  --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
-conda activate qiime2-amplicon-2025.7
+```text
+[1] 2
 ```
 
 ---
 
-#### Apple Silicon Macs (M1–M4, arm64)
+## 🍎 Mac Users 
 
-Use the `osx-64` builds via Rosetta:
+### 1. FastQC
 
-```bash
-CONDA_SUBDIR=osx-64 conda env create \
-  --name qiime2-amplicon-2025.7 \
-  --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.7/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+1. Go to the [FastQC download page](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+2. Download the **Mac DMG image** for the current FastQC release.
+3. Open the downloaded `.dmg` file and install FastQC.
+4. Open FastQC once to check that it launches correctly.
 
-conda activate qiime2-amplicon-2025.7
-conda config --env --set subdir osx-64
+!!! note
+    If macOS blocks the application the first time you open it, go to **System Settings → Privacy & Security** and allow the application to open.
+
+### 2. R
+
+1. Go to [CRAN](https://cran.r-project.org/).
+2. Click **Download R for macOS**.
+3. Download the installer that matches your Mac:
+    - **Apple Silicon (`arm64`)** for M1/M2/M3/M4/M5 Macs.
+    - **Intel (`x86_64`)** for older Intel Macs.
+4. Open the `.pkg` file and follow the installation instructions.
+
+If you are unsure which Mac you have, click **Apple menu → About This Mac** and look at **Chip** or **Processor**.
+
+### 3. RStudio Desktop
+
+1. Go to the [RStudio Desktop download page](https://posit.co/download/rstudio-desktop/).
+2. Download the **free RStudio Desktop** version for macOS.
+3. Open the `.dmg` file and drag RStudio into **Applications**.
+4. Open RStudio.
+
+To check that R is working, type the following in the **Console** and press Enter:
+
+```r
+1 + 1
 ```
 
----
+You should see:
 
-#### Test installation
-
-```bash
-qiime info
+```text
+[1] 2
 ```
-
-If successful, this will print information about the QIIME2 version.
-
----
-
-### 3. FastQC
-
-1. Download the `.dmg`: [FastQC v0.12.1](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.dmg).
-2. If macOS blocks the app, install [Java JDK 21 for Mac](https://www.oracle.com/java/technologies/downloads/#jdk21-mac).
-
-If FastQC still doesn’t launch:
-
-* Download the [source code](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip).
-* Unzip → open Terminal → navigate to the unzipped folder → run:
-
-```bash
-./fastqc
-```
-
----
-
-#### 🔗 Make FastQC executable from anywhere
-
-After unzipping, create a **symbolic link** so `fastqc` works globally.
-
-**Intel Macs (x86\_64):**
-
-```bash
-sudo ln -s ~/Downloads/FastQC/fastqc /usr/local/bin/fastqc
-sudo chmod +x /usr/local/bin/fastqc
-```
-
-**Apple Silicon Macs (M1–M4, arm64):**
-
-```bash
-sudo ln -s ~/Downloads/FastQC/fastqc /opt/homebrew/bin/fastqc
-sudo chmod +x /opt/homebrew/bin/fastqc
-```
-
-*(adjust the path if your FastQC folder is elsewhere)*
-
----
-
-#### Test the installation
-
-Run:
-
-```bash
-fastqc -h
-```
-
-If installed correctly, this will print the FastQC help menu.
-
----
-
-
----
-
-### 4. R + RStudio
-
-1. Install [R for macOS](https://cran.r-project.org/bin/macosx/).
-2. Install [RStudio for macOS](https://posit.co/download/rstudio-desktop/).
-3. Open RStudio to confirm installation.
 
 ---
 
 ## 🐧 Linux Users
 
-### 1. Docker (recommended for simplicity)
+The instructions below are for **Ubuntu/Debian-based distributions**. If you use another Linux distribution, please use the corresponding packages for your system.
 
-Install Docker:
+### 1. FastQC
+
+Open a terminal and run:
 
 ```bash
-sudo apt-get update
-sudo apt-get install docker.io
+sudo apt update
+sudo apt install fastqc
 ```
 
-Test Docker:
+Check the installation with:
 
 ```bash
-docker run hello-world
+fastqc --version
 ```
 
-Download and test QIIME2:
+### 2. R
+
+Install R with:
 
 ```bash
-docker pull quay.io/qiime2/amplicon:2025.7
-docker run -v ${PWD}:/data -it quay.io/qiime2/amplicon:2025.7 qiime info
+sudo apt update
+sudo apt install r-base
+```
+
+Check the installation with:
+
+```bash
+R --version
+```
+
+### 3. RStudio Desktop
+
+1. Go to the [RStudio Desktop download page](https://posit.co/download/rstudio-desktop/).
+2. Download the **free RStudio Desktop** package corresponding to your Linux distribution.
+3. Install the downloaded package following the instructions on the download page.
+4. Open RStudio.
+
+In the RStudio **Console**, run:
+
+```r
+1 + 1
+```
+
+You should see:
+
+```text
+[1] 2
 ```
 
 ---
 
-### 2. FastQC
+## Optional: QIIME 2
 
-```bash
-sudo apt-get install fastqc
-```
+??? info "QIIME 2 installation (optional — not required for the course)"
+    **QIIME 2 is not required for the practical.**
 
-Or download from [FastQC site](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
+    During the course, the QIIME 2 processing steps will be explained, but the processing itself will already have been run for you. You will receive the files needed to continue the analysis in RStudio.
+
+    If you would like to reproduce the complete workflow independently after the course, follow the official installation instructions for the current QIIME 2 Amplicon distribution:
+
+    [QIIME 2 installation guide](https://amplicon-docs.qiime2.org/en/latest/how-to-guides/install.html)
 
 ---
 
-### 3. R + RStudio
+## Before the practical: quick checklist
 
-```bash
-sudo apt-get install r-base
-```
+Please make sure that:
 
-Download RStudio: [Linux RStudio](https://posit.co/download/rstudio-desktop/).
+- [ ] FastQC opens successfully.
+- [ ] R is installed.
+- [ ] RStudio Desktop opens successfully.
+- [ ] Running `1 + 1` in the RStudio Console returns `[1] 2`.
+- [ ] You understand that **QIIME 2 does not need to be installed for the course**.
