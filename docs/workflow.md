@@ -21,7 +21,7 @@ FASTQ reads → quality control → primer trimming → denoising → ASVs
 
 ----
 
-# 1. Inspecting the FASTQ files
+## 1. Inspecting the FASTQ files
 
 The analysis begins with the sequencing output. Each mouse has an **R1 file** containing forward reads and an **R2 file** containing reverse reads. The two reads cover the same amplified DNA fragment from opposite directions and will later be joined.
 
@@ -58,7 +58,7 @@ The image above represents a single read; each FASTQ file contains many thousand
 
 ---
 
-# 2. Quality Control: check sequence quality with FastQC and MultiQC
+## 2. Quality Control: check sequence quality with FastQC and MultiQC
 
 Sequencers do not read every nucleotide with equal confidence. Sequence quality can vary along a read and commonly declines towards the end, particularly for reverse reads.
 
@@ -146,7 +146,7 @@ Sequencers do not read every nucleotide with equal confidence. Sequence quality 
 
 ---
 
-# 3. Read processing with QIIME 2
+## 3. Read processing with QIIME 2
 
 The next steps in the workflow have already been performed in **QIIME 2 (2026.7)**. These include importing the FASTQ files, primer trimming, denoising, forward and reverse read merging, chimera removal, taxonomic classification, filtering of non-target sequences and phylogenetic tree reconstruction.
 
@@ -154,7 +154,7 @@ These processing steps generate the main microbiome analysis outputs, including 
 
 You will **not run these QIIME 2 commands during the practical**. Instead, we will explain how each step was performed and inspect the corresponding output files. The commands are provided in collapsible boxes so that the analysis remains transparent and reproducible, and so that you can reproduce the workflow independently if you wish.
 
-## 3.1 Importing the reads
+### 3.1 Importing the reads
 
 As introduced in the **QIIME 2 primer**, QIIME 2 stores data in structured files called **artifacts (`.qza`)**. Interactive visualizations are stored as **`.qzv` files** and can be opened using [QIIME 2 View](https://view.qiime2.org/).
 
@@ -203,7 +203,7 @@ Importing does **not** alter the nucleotide sequences and does **not** combine t
 
 ---
 
-## 3.2 Primer trimming with Cutadapt
+### 3.2 Primer trimming with Cutadapt
 
 The bacterial 16S rRNA gene is longer than the region sequenced in this experiment. During PCR, short synthetic DNA sequences called **primers** bind on either side of the V4–V5 region and allow this region to be amplified.
 
@@ -280,7 +280,7 @@ Letters such as `Y` and `M` are **IUPAC ambiguity codes**, allowing a primer pos
 ---
 
 
-## 3.3 Denoising with DADA2
+### 3.3 Denoising with DADA2
 
 Even high-quality sequencing reads contain errors. If every observed sequence were treated as a genuine biological sequence, sequencing errors would artificially inflate the apparent diversity.
 
@@ -386,7 +386,7 @@ After DADA2, three outputs are particularly important:
 
 ---
 
-## 3.4 Taxonomic classification
+### 3.4 Taxonomic classification
 
 An ASV sequence such as `ACGT...` does not by itself provide a familiar microbial name. **Taxonomic classification** connects each representative ASV sequence to taxonomic ranks such as domain, phylum, class, order, family and genus.
 
@@ -445,7 +445,7 @@ The classifier predicts the taxonomy of each representative ASV sequence and rep
 
 ---
 
-## 3.5 Filtering non-bacterial sequences
+### 3.5 Filtering non-bacterial sequences
 
 The experiment targets the prokaryotic 16S rRNA gene, but the amplified reads are not necessarily exclusively from the bacterial gut community of interest.
 
@@ -495,7 +495,7 @@ Filtering must be consistent across connected data objects. If an ASV is removed
 
 ---
 
-## 3.6 Building a rooted phylogenetic tree
+### 3.6 Building a rooted phylogenetic tree
 
 A **phylogenetic tree** models the evolutionary relationships among the representative ASV sequences. Each terminal tip represents one ASV, while the branching structure and branch lengths represent inferred sequence relationships.
 
