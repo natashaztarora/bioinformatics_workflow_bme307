@@ -12,7 +12,7 @@ The workflow follows the data from raw sequencing reads to the files that will l
 ```text
 FASTQ reads → quality control → primer trimming → denoising → ASVs
             → taxonomic classification → non-target filtering
-            → phylogenetic tree reconstruction → phyloseq object generation for R
+            → phylogenetic tree reconstruction → files for phyloseq object generation in R
 ```
 
 ## Folder structure
@@ -29,7 +29,7 @@ Each FASTQ read is stored as an entry with four lines:
 
 1. The first line contains a **sequence identifier**, including information about the sequencing run and the cluster. It usually begins with an `@`;
 2. The second line contains the **nucleotide calls of the sequence** (A, C, G, T and occasionally N);
-3. The third line comprises plus (+) sign, which acts as a separator;
+3. The third line comprises plus a (+) sign, which acts as a separator;
 4. The fourth line, which is important for the next step, provides information on the quality of each of the base calls. These are Phred +33 encoded, using ASCII characters to represent the numerical quality scores.
 
 An example of one entry of a FASTQ file:
