@@ -1,0 +1,1442 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/workflow/">
+      
+      
+        <link rel="prev" href="../qiime2_pipeline/">
+      
+      
+        <link rel="next" href="../r_studio/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>1. QIIME2 Workflow - BME 307 - Microbes in Health and Disease</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-qiime2-workflow-from-fastq-reads-to-microbiome-analysis-objects" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="BME 307 - Microbes in Health and Disease" class="md-header__button md-logo" aria-label="BME 307 - Microbes in Health and Disease" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BME 307 - Microbes in Health and Disease
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              1. QIIME2 Workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label="Swith to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Swith to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation_instructions/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation instructions
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../commands/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Useful commands
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../qiime2_pipeline/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  QIIME2 primer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  1. QIIME2 Workflow
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../r_studio/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  2. R workflow
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="BME 307 - Microbes in Health and Disease" class="md-nav__button md-logo" aria-label="BME 307 - Microbes in Health and Disease" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BME 307 - Microbes in Health and Disease
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation_instructions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation instructions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Useful commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qiime2_pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QIIME2 primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. QIIME2 Workflow
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. QIIME2 Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#folder-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Folder structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-inspecting-the-fastq-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Inspecting the FASTQ files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quality-control-check-sequence-quality-with-fastqc-and-multiqc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Quality Control: check sequence quality with FastQC and MultiQC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-read-processing-with-qiime-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Read processing with QIIME 2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Read processing with QIIME 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-importing-the-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Importing the reads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-primer-trimming-with-cutadapt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Primer trimming with Cutadapt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-denoising-with-dada2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Denoising with DADA2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-taxonomic-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Taxonomic classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-filtering-non-bacterial-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Filtering non-bacterial sequences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-building-a-rooted-phylogenetic-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Building a rooted phylogenetic tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-from-qiime-2-to-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary: From QIIME 2 to R
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../r_studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. R workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#folder-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Folder structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-inspecting-the-fastq-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Inspecting the FASTQ files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quality-control-check-sequence-quality-with-fastqc-and-multiqc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Quality Control: check sequence quality with FastQC and MultiQC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-read-processing-with-qiime-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Read processing with QIIME 2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Read processing with QIIME 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-importing-the-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Importing the reads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-primer-trimming-with-cutadapt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Primer trimming with Cutadapt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-denoising-with-dada2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Denoising with DADA2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-taxonomic-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Taxonomic classification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-filtering-non-bacterial-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Filtering non-bacterial sequences
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-building-a-rooted-phylogenetic-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Building a rooted phylogenetic tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-from-qiime-2-to-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary: From QIIME 2 to R
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="1-qiime2-workflow-from-fastq-reads-to-microbiome-analysis-objects">1. QIIME2 Workflow: From FASTQ reads to microbiome analysis objects<a class="headerlink" href="#1-qiime2-workflow-from-fastq-reads-to-microbiome-analysis-objects" title="Permanent link">&para;</a></h1>
+<p>This practical follows 16S rRNA V4–V5 sequencing data from <strong>18 mice</strong>: six wild type, six IL-10 deficient and six MUC2 deficient. We will explore gut bacterial community composition across the three mouse models, investigating patterns of microbial diversity.</p>
+<p>The workflow follows the data from raw sequencing reads to the files that will later be combined and analyzed in RStudio.</p>
+<div class="admonition important">
+<p class="admonition-title">What will you run during the practical?</p>
+<p>You will inspect raw FASTQ files and run <strong>FastQC</strong> on selected files. The <strong>QIIME 2 processing has already been run for you</strong>. We will explain each QIIME 2 step and inspect its inputs and outputs, but you do not need to install or run QIIME 2 during the practical.</p>
+</div>
+<h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>FASTQ reads → quality control → primer trimming → denoising → ASVs
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>            → taxonomic classification → non-target filtering
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>            → phylogenetic tree reconstruction → files for phyloseq object generation in R
+</span></code></pre></div>
+<h2 id="folder-structure">Folder structure<a class="headerlink" href="#folder-structure" title="Permanent link">&para;</a></h2>
+<p><img alt="BME307 course material folder structure" src="../folder_structure_2026.png" /></p>
+<hr />
+<h2 id="1-inspecting-the-fastq-files">1. Inspecting the FASTQ files<a class="headerlink" href="#1-inspecting-the-fastq-files" title="Permanent link">&para;</a></h2>
+<p>The analysis begins with the sequencing output. Each mouse has an <strong>R1 file</strong> containing forward reads and an <strong>R2 file</strong> containing reverse reads. The two reads cover the same amplified DNA fragment from opposite directions and will later be joined.</p>
+<p>Each FASTQ read is stored as an entry with four lines:</p>
+<ol>
+<li>The first line contains a <strong>sequence identifier</strong>, including information about the sequencing run and the cluster. It usually begins with an <code>@</code>;</li>
+<li>The second line contains the <strong>nucleotide calls of the sequence</strong> (A, C, G, T and occasionally N);</li>
+<li>The third line comprises plus a (+) sign, which acts as a separator;</li>
+<li>The fourth line, which is important for the next step, provides information on the quality of each of the base calls. These are Phred +33 encoded, using ASCII characters to represent the numerical quality scores.</li>
+</ol>
+<p>An example of one entry of a FASTQ file:</p>
+<p><img alt="Example of a FASTQ entry" src="../fastq.png" /></p>
+<p>The image above represents a single read; each FASTQ file contains many thousands of these entries.</p>
+<details class="question" open="open">
+<summary>Exercise 1 — Explore the raw reads</summary>
+<p>Select <strong>two FASTQ files belonging to the same mouse</strong>: one forward-read file (<code>R1</code>) and its corresponding reverse-read file (<code>R2</code>).</p>
+<p>Copy these two files into a new folder called <code>Raw_data_unzipped</code> and unzip the copies. <strong>Keep the original <code>.fastq.gz</code> files unchanged.</strong></p>
+<p>On macOS, you can unzip a copied file from Terminal with:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>gzip<span class="w"> </span>-d<span class="w"> </span>NAME_OF_THE_FILE.fastq.gz
+</span></code></pre></div>
+<p>On Windows, you can extract the copied files using your usual archive/extraction tool.</p>
+<p>Explore the two uncompressed FASTQ files using the command-line commands introduced previously.</p>
+<ol>
+<li>Is the file format as expected?</li>
+<li>How many reads (entries) are there in each of these two files?</li>
+</ol>
+</details>
+<hr />
+<h2 id="2-quality-control-check-sequence-quality-with-fastqc-and-multiqc">2. Quality Control: check sequence quality with FastQC and MultiQC<a class="headerlink" href="#2-quality-control-check-sequence-quality-with-fastqc-and-multiqc" title="Permanent link">&para;</a></h2>
+<p>Sequencers do not read every nucleotide with equal confidence. Sequence quality can vary along a read and commonly declines towards the end, particularly for reverse reads.</p>
+<p><strong>FastQC</strong> evaluates each FASTQ file separately and summarizes features such as per-base sequence quality, read length, GC content and sequence duplication. A warning in FastQC is a diagnostic signal, not automatically a reason to discard a sample.</p>
+<p><strong>MultiQC</strong> combines the FastQC results from multiple samples into one report. This makes it easier to compare the 18 mice and the two read directions and to identify unusual samples.</p>
+<hr />
+<details class="question" open="open">
+<summary>Exercise 2A — FastQC</summary>
+<p>Run FastQC on the <strong>same R1 and R2 files that you selected and unzipped in Exercise 1</strong>.</p>
+<p>First, navigate in Terminal (macOS/Linux) or PowerShell (Windows) to the main <code>BME307_course_material</code> folder.</p>
+<p>Create a folder in which to save your FastQC results:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">macOS / Linux</label><label for="__tabbed_1_2">Windows (PowerShell)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>results/fastqc
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">results</span><span class="p">/</span><span class="n">fastqc</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now run FastQC on the two uncompressed FASTQ files in your <code>Raw_data_unzipped</code> folder:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">macOS / Linux</label><label for="__tabbed_2_2">Windows (PowerShell)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fastqc<span class="w"> </span>Raw_data_unzipped/*.fastq<span class="w"> </span>--outdir<span class="w"> </span>results/fastqc
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">fastqc</span> <span class="n">Raw_data_unzipped</span><span class="p">/*.</span><span class="n">fastq</span> <span class="p">-</span><span class="n">-outdir</span> <span class="n">results</span><span class="p">/</span><span class="n">fastqc</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>FastQC will generate two files for each FASTQ file:</p>
+<ul>
+<li>an <code>.html</code> report that can be opened in a web browser;</li>
+<li>a <code>.zip</code> file containing the underlying FastQC results.</li>
+</ul>
+<p>To inspect one of the FastQC reports, navigate to the output folder and open the corresponding HTML file:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">macOS</label><label for="__tabbed_3_2">Windows PowerShell</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">cd</span><span class="w"> </span>results/fastqc
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>open<span class="w"> </span>filename.html
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">cd </span><span class="n">results</span><span class="p">/</span><span class="n">fastqc</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">start </span><span class="n">filename</span><span class="p">.</span><span class="n">html</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Replace <code>filename.html</code> with the name of the FastQC report you want to open.</p>
+<p>Answer the following questions:</p>
+<ol>
+<li>Overall, which file has higher per-base quality scores, R1 or R2?</li>
+<li>In each file, at approximately which read position does base quality begin to decline?</li>
+</ol>
+</details>
+<hr />
+<details class="question" open="open">
+<summary>Exercise 2B — MultiQC</summary>
+<p>Rather than inspecting all 36 FastQC reports individually, we can use <strong>MultiQC</strong> to compare the complete dataset in a single report.</p>
+<p>A MultiQC report containing the FastQC results for <strong>all 36 FASTQ files</strong> has already been generated for you.</p>
+<p>Open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>quality_control/multiqc/multiqc_report.html
+</span></code></pre></div>
+<p>Work in pairs and compare the 18 mice across forward (R1) and reverse (R2) reads.</p>
+<ol>
+<li>Do forward (R1) and reverse (R2) reads have the same quality profile?</li>
+<li>Where does sequence quality begin to decline?</li>
+<li>Does any sample behave noticeably differently from the others? If so, which sample(s) and what do you observe?</li>
+</ol>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>FastQC warnings are diagnostic signals, not automatic reasons to discard data. When paired-end reads are later truncated during denoising, sequence quality is not the only consideration. Enough overlap between R1 and R2 must remain for the two reads to be merged.</p>
+</div>
+<hr />
+<h2 id="3-read-processing-with-qiime-2">3. Read processing with QIIME 2<a class="headerlink" href="#3-read-processing-with-qiime-2" title="Permanent link">&para;</a></h2>
+<p>The next steps in the workflow have already been performed in <strong>QIIME 2 (2026.7)</strong>. These include importing the FASTQ files, primer trimming, denoising, forward and reverse read merging, chimera removal, taxonomic classification, filtering of non-target sequences and phylogenetic tree reconstruction.</p>
+<p>These processing steps generate the main microbiome analysis outputs, including the <strong>ASV count table</strong>, <strong>taxonomic classification table</strong> and <strong>phylogenetic tree</strong>.</p>
+<p>You will <strong>not run these QIIME 2 commands during the practical</strong>. Instead, we will explain how each step was performed and inspect the corresponding output files. The commands are provided in collapsible boxes so that the analysis remains transparent and reproducible, and so that you can reproduce the workflow independently if you wish.</p>
+<h3 id="31-importing-the-reads">3.1 Importing the reads<a class="headerlink" href="#31-importing-the-reads" title="Permanent link">&para;</a></h3>
+<p>As introduced in the <strong>QIIME 2 primer</strong>, QIIME 2 stores data in structured files called <strong>artifacts (<code>.qza</code>)</strong>. Interactive visualizations are stored as <strong><code>.qzv</code> files</strong> and can be opened using <a href="https://view.qiime2.org/">QIIME 2 View</a>.</p>
+<p>Importing the raw FASTQ files packages the complete paired-end dataset into a QIIME 2 artifact and begins a provenance record of how the data were processed.</p>
+<p><strong>Input:</strong> demultiplexed paired-end FASTQ reads<br />
+<strong>Outputs:</strong> imported paired-end reads and a visualization of read counts and quality</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>qiime<span class="w"> </span>tools<span class="w"> </span>import<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--type<span class="w"> </span><span class="s1">'SampleData[PairedEndSequencesWithQuality]'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--input-path<span class="w"> </span>raw_data<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--input-format<span class="w"> </span>CasavaOneEightSingleLanePerSampleDirFmt<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>--output-path<span class="w"> </span>qiime2/01_import/01-demux-paired-end.qza
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>qiime<span class="w"> </span>demux<span class="w"> </span>summarize<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span>--i-data<span class="w"> </span>qiime2/01_import/01-demux-paired-end.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/01_import/01-demux-paired-end-summary.qzv
+</span></code></pre></div>
+</details>
+<details class="question" open="open">
+<summary>Exercise 3.1 — Inspect the imported reads</summary>
+<p>Open <strong>QIIME 2 View</strong>:<br />
+<a href="https://view.qiime2.org/">https://view.qiime2.org/</a></p>
+<p>Drag and drop the following file into QIIME 2 View:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>qiime2/01_import/01-demux-paired-end-summary.qzv
+</span></code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Basic — Check the “Overview” tab</label><label for="__tabbed_4_2">Advanced — Check the “Interactive” tab</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>How many forward and reverse reads are there overall?</li>
+<li>For the samples you examined with FastQC, how many forward reads and reverse reads are there?</li>
+<li>Do any samples stand out, for example by having a particularly high or low number of reads?</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>Look at the plots and the quality scores. What trends do you observe in terms of quality-score changes in the forward and reverse reads?</li>
+<li>Scroll down to the <strong>Demultiplexed sequence length summary</strong>. What is the read length? How much overlap do you expect between the forward and reverse reads?</li>
+</ol>
+</div>
+</div>
+</div>
+</details>
+<hr />
+<h3 id="32-primer-trimming-with-cutadapt">3.2 Primer trimming with Cutadapt<a class="headerlink" href="#32-primer-trimming-with-cutadapt" title="Permanent link">&para;</a></h3>
+<p>The bacterial 16S rRNA gene is longer than the region sequenced in this experiment. During PCR, short synthetic DNA sequences called <strong>primers</strong> bind on either side of the V4–V5 region and allow this region to be amplified.</p>
+<p>Primer sequences are therefore technical components of the laboratory protocol, not biological variation among the mice. </p>
+<p>To remove them, we use the QIIME 2 <strong>Cutadapt</strong> plugin, which searches for the expected forward and reverse primer sequences and trims them from the reads where they are found.</p>
+<p>The primers used here are:</p>
+<ul>
+<li>Forward primer: <code>GTGYCAGCMGCCGCGGTAA</code></li>
+<li>Reverse primer: <code>CCGYCAATTYMTTTRAGTTT</code></li>
+</ul>
+<p>Letters such as <code>Y</code> and <code>M</code> are <strong>IUPAC ambiguity codes</strong>, allowing a primer position to match more than one nucleotide. </p>
+<p>We can discard reads in which the expected primer is not detected because they may be incomplete, incorrectly oriented or unrelated to the intended amplicon.</p>
+<p><strong>Input:</strong> imported paired-end reads<br />
+<strong>Outputs:</strong> primer-trimmed reads, trimming statistics and a summary visualization</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>qiime<span class="w"> </span>cutadapt<span class="w"> </span>trim-paired<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--i-demultiplexed-sequences<span class="w"> </span>qiime2/01_import/01-demux-paired-end.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--p-front-f<span class="w"> </span>GTGYCAGCMGCCGCGGTAA<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span>--p-front-r<span class="w"> </span>CCGYCAATTYMTTTRAGTTT<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span>--p-match-adapter-wildcards<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span>--p-discard-untrimmed<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span>--p-cores<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span>--verbose<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span>--o-trimmed-sequences<span class="w"> </span>qiime2/02_cutadapt/02-demux-trimmed.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span>--o-stats<span class="w"> </span>qiime2/02_cutadapt/02-cutadapt-stats.qza
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>qiime<span class="w"> </span>demux<span class="w"> </span>summarize<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">  </span>--i-data<span class="w"> </span>qiime2/02_cutadapt/02-demux-trimmed.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/02_cutadapt/02-demux-trimmed-summary.qzv
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>qiime<span class="w"> </span>cutadapt<span class="w"> </span>tabulate<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">  </span>--i-data<span class="w"> </span>qiime2/02_cutadapt/02-cutadapt-stats.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/02_cutadapt/02-cutadapt-stats.qzv
+</span></code></pre></div>
+</details>
+<details class="question" open="open">
+<summary>Exercise 3.2 — Inspect primer trimming</summary>
+<p>Open <strong>QIIME 2 View</strong> and drag in:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>qiime2/02_cutadapt/02-demux-trimmed-summary.qzv
+</span></code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Basic — Check the “Overview” tab</label><label for="__tabbed_5_2">Advanced — Check the “Interactive” tab</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ol>
+<li>
+<p>What are wobble bases? What does <code>--p-match-adapter-wildcards</code> do?<br />
+   Tip: consult the <a href="https://cutadapt.readthedocs.io/en/stable/">Cutadapt documentation</a>.</p>
+</li>
+<li>
+<p>What does <code>--p-discard-untrimmed</code> do? What kinds of reads might not get trimmed?</p>
+</li>
+<li>
+<p>For the same samples that you examined with FastQC, how many forward and reverse reads remain after primer trimming?</p>
+</li>
+</ol>
+</div>
+<div class="tabbed-block">
+<ol>
+<li>What are the read lengths after primer trimming?</li>
+<li>What were the lengths of the forward and reverse primer sequences?</li>
+<li>Does the change in read length correspond to what you would expect after removing the primers?</li>
+</ol>
+</div>
+</div>
+</div>
+<p>If you would like to inspect the detailed Cutadapt trimming statistics, you can also open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>qiime2/02_cutadapt/02-cutadapt-stats.qzv
+</span></code></pre></div>
+<p>Examine the trimming statistics for the forward and reverse reads.</p>
+<ol>
+<li>Were the expected primers detected in most forward and reverse reads? </li>
+</ol>
+</details>
+<hr />
+<h3 id="33-denoising-with-dada2">3.3 Denoising with DADA2<a class="headerlink" href="#33-denoising-with-dada2" title="Permanent link">&para;</a></h3>
+<p>Even high-quality sequencing reads contain errors. If every observed sequence were treated as a genuine biological sequence, sequencing errors would artificially inflate the apparent diversity.</p>
+<p><strong>DADA2</strong> models sequencing errors and infers the biological sequences most likely to have been present. These exact inferred sequences are called <strong>amplicon sequence variants (ASVs)</strong> and may differ by as little as one nucleotide.</p>
+<p>The main DADA2 operations are:</p>
+<ol>
+<li><strong>Filtering and truncation:</strong> low-quality reads are removed and, optionally, reads are shortened to a selected length.</li>
+<li><strong>Error learning and denoising:</strong> repeated error patterns are learned from the data and used to distinguish likely sequencing errors from biological variants.</li>
+<li><strong>Dereplication:</strong> identical reads are grouped together and represented as unique sequences with their corresponding abundances.</li>
+<li><strong>Paired-read merging:</strong> compatible forward and reverse reads are joined using their overlapping region.</li>
+<li><strong>Chimera removal:</strong> artificial sequences formed from two templates during PCR are identified and removed.</li>
+</ol>
+<p>The truncation length must balance quality and overlap. Here, both forward and reverse reads were truncated to <strong>225 bases</strong>. The truncation length was selected based on the quality profiles while retaining sufficient overlap for paired-read merging.</p>
+<p><strong>Input:</strong> primer-trimmed reads<br />
+<strong>Outputs:</strong> ASV count table, representative ASV sequences and denoising statistics</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>qiime<span class="w"> </span>dada2<span class="w"> </span>denoise-paired<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>--i-demultiplexed-seqs<span class="w"> </span>qiime2/02_cutadapt/02-demux-trimmed.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>--p-trunc-len-f<span class="w"> </span><span class="m">225</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>--p-trunc-len-r<span class="w"> </span><span class="m">225</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span>--p-n-threads<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span>--o-table<span class="w"> </span>qiime2/03_dada2/03-table.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span>--o-representative-sequences<span class="w"> </span>qiime2/03_dada2/03-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span>--o-denoising-stats<span class="w"> </span>qiime2/03_dada2/03-denoising-stats.qza
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>qiime<span class="w"> </span>metadata<span class="w"> </span>tabulate<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">  </span>--m-input-file<span class="w"> </span>qiime2/03_dada2/03-denoising-stats.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/03_dada2/03-denoising-stats.qzv
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>qiime<span class="w"> </span>feature-table<span class="w"> </span>summarize<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">  </span>--i-table<span class="w"> </span>qiime2/03_dada2/03-table.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">  </span>--m-sample-metadata-file<span class="w"> </span>metadata/metadata.tsv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/03_dada2/03-table.qzv
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>qiime<span class="w"> </span>feature-table<span class="w"> </span>tabulate-seqs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">  </span>--i-data<span class="w"> </span>qiime2/03_dada2/03-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/03_dada2/03-rep-seqs.qzv
+</span></code></pre></div>
+</details>
+<p>After DADA2, three outputs are particularly important:</p>
+<ul>
+<li>an <strong>ASV count table</strong>, containing the unique sequences and their abundance in each mouse;</li>
+<li><strong>representative sequences</strong>, a fasta file containing one DNA sequence for each ASV unique sequence;</li>
+<li><strong>denoising statistics</strong>, showing how many reads remain through the different DADA2 processing stages.</li>
+</ul>
+<details class="question" open="open">
+<summary>Exercise 3.3 — Inspect the DADA2 outputs</summary>
+<p><strong>1. Inspect the ASV count table</strong></p>
+<p>Open the following file in <strong>QIIME 2 View</strong>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>qiime2/03_dada2/03-table.qzv
+</span></code></pre></div>
+<p>In the <strong>Overview</strong> tab:</p>
+<ol>
+<li>What does the <strong>number of features</strong> represent? How many ASVs were detected across the 18 samples?</li>
+<li>What does <strong>total frequency</strong> represent?</li>
+<li>Get together in pairs and calculate the <strong>percentage of reads retained after denoising for each sample</strong>, using the read counts after denoising from:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>qiime2/03_dada2/03-table.qzv
+</span></code></pre></div>
+<p>And the read counts before denoising from:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>qiime2/02_cutadapt/02-demux-trimmed-summary.qzv
+</span></code></pre></div>
+<p>Calculate:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>percentage retained = (reads after denoising / reads before denoising) × 100
+</span></code></pre></div>
+<p><strong>2. Inspect the representative ASV sequences</strong></p>
+<p>Open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>qiime2/03_dada2/03-rep-seqs.qzv
+</span></code></pre></div>
+<p>Examine the <strong>Sequence Length Statistics</strong> and the <strong>Sequence Table</strong>.</p>
+<ol>
+<li>What does one representative sequence represent?</li>
+<li>After denoising with DADA2, we have obtained a set of amplicon sequence variants (ASVs). Why are the lengths of these sequences different from the lengths of the reads in the original FASTQ files?</li>
+</ol>
+<p><strong>3. Inspect the denoising statistics</strong></p>
+<p>Finally, open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>qiime2/03_dada2/03-denoising-stats.qzv
+</span></code></pre></div>
+<p>This file shows how many reads remain at the different stages of DADA2 processing.</p>
+<ol>
+<li>What stages are shown in this file? During which DADA2 stage are most reads lost?</li>
+</ol>
+</details>
+<hr />
+<h3 id="34-taxonomic-classification">3.4 Taxonomic classification<a class="headerlink" href="#34-taxonomic-classification" title="Permanent link">&para;</a></h3>
+<p>An ASV sequence such as <code>ACGT...</code> does not by itself provide a familiar microbial name. <strong>Taxonomic classification</strong> connects each representative ASV sequence to taxonomic ranks such as domain, phylum, class, order, family and genus.</p>
+<p>We perform this step using a <strong>classifier</strong>, which is a prediction model trained on sequences with known taxonomic labels from a reference database.</p>
+<p>The classifier used here was built from <strong>SILVA 138.1</strong> reference sequences and trained specifically on the V4–V5 region targeted in this experiment. </p>
+<p>The classifier predicts the taxonomy of each representative ASV sequence and reports the most specific taxonomic assignment it can support, together with a confidence value. Classification may stop at a broader rank when the V4–V5 sequence cannot distinguish closely related taxa or when the reference database does not support a more specific assignment.</p>
+<p><strong>Inputs:</strong> representative ASV sequences and the trained classifier<br />
+<strong>Outputs:</strong> taxonomic classification artifact and visualization</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>qiime<span class="w"> </span>feature-classifier<span class="w"> </span>classify-sklearn<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span>--i-classifier<span class="w"> </span>reference/silva-138.1-ssu-nr99-v4v5-classifier-qiime2-2026.7.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>--i-reads<span class="w"> </span>qiime2/03_dada2/03-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span>--o-classification<span class="w"> </span>qiime2/04_taxonomy_filtering/04-taxonomy.qza
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>qiime<span class="w"> </span>metadata<span class="w"> </span>tabulate<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span>--m-input-file<span class="w"> </span>qiime2/04_taxonomy_filtering/04-taxonomy.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/04_taxonomy_filtering/04-taxonomy.qzv
+</span></code></pre></div>
+</details>
+<details class="question" open="open">
+<summary>Exercise 3.4 — Inspect the taxonomic classification</summary>
+<p>Open the following file in <strong>QIIME 2 View</strong>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>qiime2/04_taxonomy_filtering/04-taxonomy.qzv
+</span></code></pre></div>
+<ol>
+<li>Which taxonomic ranks are reported?</li>
+<li>Are all ASVs classified to genus level?</li>
+<li>Can you identify any non-target sequences (non-bacterial)? If so, what are they?</li>
+</ol>
+<p><strong>Advanced</strong></p>
+<ol>
+<li>Choose one ASV from the taxonomy table and note its <strong>Feature ID</strong>.</li>
+</ol>
+<p>Open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>qiime2/03_dada2/03-rep-seqs.qzv
+</span></code></pre></div>
+<p>Find the same Feature ID and copy its nucleotide sequence.</p>
+<p>Use <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&amp;PAGE_TYPE=BlastSearch&amp;LINK_LOC=blasthome">NCBI BLAST</a> to search the sequence using <code>blastn</code>.</p>
+<p>Compare the BLAST result with the taxonomic classification obtained in QIIME 2.</p>
+<ul>
+<li>Is the taxonomic assignment the same or different?</li>
+<li>At what taxonomic rank do the two methods agree?</li>
+</ul>
+</details>
+<hr />
+<h3 id="35-filtering-non-bacterial-sequences">3.5 Filtering non-bacterial sequences<a class="headerlink" href="#35-filtering-non-bacterial-sequences" title="Permanent link">&para;</a></h3>
+<p>The experiment targets the prokaryotic 16S rRNA gene, but the amplified reads are not necessarily exclusively from the bacterial gut community of interest.</p>
+<p>Mitochondria and chloroplasts evolved from bacterial ancestors and retain related ribosomal genes, so broad 16S primers can also amplify them. Other non-bacterial sequences may also arise through non-specific amplification or limitations in taxonomic classification.</p>
+<p>These sequences can represent genuine DNA observations, but they do not answer our question about the <strong>bacterial gut community</strong>. We therefore retain ASVs classified within Bacteria while excluding chloroplast and mitochondrial assignments.</p>
+<p>Filtering must be consistent across connected data objects. If an ASV is removed from the ASV count table, its representative sequence must also be removed so that downstream files contain matching ASV identifiers.</p>
+<p><strong>Inputs:</strong> unfiltered ASV count table, representative sequences and taxonomy<br />
+<strong>Outputs:</strong> filtered bacterial ASV count table and matching representative sequences</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>qiime<span class="w"> </span>taxa<span class="w"> </span>filter-table<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span>--i-table<span class="w"> </span>qiime2/03_dada2/03-table.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span>--i-taxonomy<span class="w"> </span>qiime2/04_taxonomy_filtering/04-taxonomy.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span>--p-include<span class="w"> </span><span class="s1">'d__Bacteria'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">  </span>--p-exclude<span class="w"> </span><span class="s1">'Chloroplast,Mitochondria'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">  </span>--p-mode<span class="w"> </span>contains<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">  </span>--o-filtered-table<span class="w"> </span>qiime2/04_taxonomy_filtering/04-table-filtered.qza
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>qiime<span class="w"> </span>feature-table<span class="w"> </span>filter-seqs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">  </span>--i-data<span class="w"> </span>qiime2/03_dada2/03-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">  </span>--i-table<span class="w"> </span>qiime2/04_taxonomy_filtering/04-table-filtered.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">  </span>--o-filtered-data<span class="w"> </span>qiime2/04_taxonomy_filtering/04-rep-seqs-filtered.qza
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>qiime<span class="w"> </span>feature-table<span class="w"> </span>summarize<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">  </span>--i-table<span class="w"> </span>qiime2/04_taxonomy_filtering/04-table-filtered.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">  </span>--m-sample-metadata-file<span class="w"> </span>metadata/metadata.tsv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="w">  </span>--o-visualization<span class="w"> </span>qiime2/04_taxonomy_filtering/04-table-filtered.qzv
+</span></code></pre></div>
+</details>
+<details class="question" open="open">
+<summary>Exercise 3.5 — Inspect the filtered ASV count table</summary>
+<p>Open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>qiime2/04_taxonomy_filtering/04-table-filtered.qzv
+</span></code></pre></div>
+<ol>
+<li>How many ASVs remain after filtering?</li>
+<li>How many reads remain?</li>
+</ol>
+<p><strong>Checkpoint:</strong> the filtered dataset contains <strong>497 ASVs, 18 mice and 953,756 reads</strong>.</p>
+</details>
+<hr />
+<h3 id="36-building-a-rooted-phylogenetic-tree">3.6 Building a rooted phylogenetic tree<a class="headerlink" href="#36-building-a-rooted-phylogenetic-tree" title="Permanent link">&para;</a></h3>
+<p>A <strong>phylogenetic tree</strong> models the evolutionary relationships among the representative ASV sequences. Each terminal tip represents one ASV, while the branching structure and branch lengths represent inferred sequence relationships.</p>
+<p>QIIME 2 performs four main operations:</p>
+<ol>
+<li><strong>Alignment:</strong> MAFFT aligns homologous nucleotide positions across the ASV sequences.</li>
+<li><strong>Masking:</strong> highly variable or uninformative alignment positions are removed.</li>
+<li><strong>Tree inference:</strong> FastTree estimates an unrooted phylogenetic tree from the aligned sequences.</li>
+<li><strong>Rooting:</strong> midpoint rooting gives the tree a consistent root from which relationships can be interpreted.</li>
+</ol>
+<p>The rooted tree provides information that taxonomic labels alone do not: it describes the amount of evolutionary history shared among ASVs. This information is required later for phylogenetic diversity measures such as <strong>Faith's phylogenetic diversity</strong> and <strong>UniFrac</strong> distances.</p>
+<p>The tree is inferred from the sequenced 16S marker region; it is not a complete reconstruction of microbial evolution.</p>
+<p><strong>Input:</strong> filtered representative ASV sequences<br />
+<strong>Outputs:</strong> aligned sequences, masked alignment, unrooted tree and rooted tree</p>
+<details class="info">
+<summary>Show the QIIME 2 commands</summary>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>qiime<span class="w"> </span>phylogeny<span class="w"> </span>align-to-tree-mafft-fasttree<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span>--i-sequences<span class="w"> </span>qiime2/04_taxonomy_filtering/04-rep-seqs-filtered.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span>--p-n-threads<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span>--o-alignment<span class="w"> </span>qiime2/05_phylogeny/05-aligned-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span>--o-masked-alignment<span class="w"> </span>qiime2/05_phylogeny/05-masked-aligned-rep-seqs.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span>--o-tree<span class="w"> </span>qiime2/05_phylogeny/05-unrooted-tree.qza<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--o-rooted-tree<span class="w"> </span>qiime2/05_phylogeny/05-rooted-tree.qza
+</span></code></pre></div>
+</details>
+<details class="question" open="open">
+<summary>Exercise 3.6 — Explore the phylogenetic tree</summary>
+<p>The rooted phylogenetic tree has been exported from QIIME 2 in <strong>Newick (<code>.nwk</code>) format</strong> so that it can be visualised using a phylogenetic tree viewer.</p>
+<p>Open:</p>
+<p><code>qiime2/05_phylogeny/tree.nwk</code></p>
+<p>Go to <a href="https://itol.embl.de/">iTOL (Interactive Tree Of Life)</a> and upload the <code>.nwk</code> file to visualise the tree.</p>
+<p>Explore the tree and discuss:</p>
+<ol>
+<li>What does one terminal tip of the tree represent?</li>
+<li>Why must the tree-tip labels match the ASV identifiers in the ASV count table?</li>
+<li>Name one downstream diversity analysis that uses phylogenetic branch lengths.</li>
+</ol>
+</details>
+<hr />
+<h2 id="summary-from-qiime-2-to-r">Summary: From QIIME 2 to R<a class="headerlink" href="#summary-from-qiime-2-to-r" title="Permanent link">&para;</a></h2>
+<p>We have now followed the sequencing data from the original FASTQ reads to a set of processed outputs that describe the bacterial communities in our samples.</p>
+<p>The main components that we will need for downstream microbiome analysis are:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Filtered ASV count table ──────┐
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>                               │
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>Taxonomic assignments ─────────┤
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>                               ├──→ phyloseq object → analysis in R
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>Sample metadata ───────────────┤
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>                               │
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>Rooted phylogenetic tree ──────┘
+</span></code></pre></div>
+<p>Each of these components contributes different information:</p>
+<ul>
+<li>The <strong>filtered ASV count table</strong> contains the number of reads assigned to each bacterial ASV in each mouse.</li>
+<li>The <strong>taxonomic assignments</strong> describe the bacterial taxonomy associated with each ASV.</li>
+<li>The <strong>sample metadata</strong> contain information about the mice and their experimental groups.</li>
+<li>The <strong>rooted phylogenetic tree</strong> describes the phylogenetic relationships among the ASVs and will be required for phylogeny-aware diversity metrics such as UniFrac and Faith's phylogenetic diversity.</li>
+</ul>
+<p>In preparation for the R practical, these components have been combined into a <strong>phyloseq object</strong>. The object will be provided to you so that we can focus on exploring the microbial communities, visualising the data and performing statistical analyses in R.</p>
+<div class="admonition info">
+<p class="admonition-title">What happens next?</p>
+<p>In the <strong>R workflow</strong>, we will use the phyloseq object to investigate:</p>
+<ul>
+<li>sequencing depth;</li>
+<li>taxonomic composition;</li>
+<li>alpha diversity within individual mice;</li>
+<li>beta diversity between mice;</li>
+<li>and whether the observed differences among the three mouse groups are statistically supported.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.instant", "content.action.edit", "content.action.view", "navigation.expand", "navigation.sections", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "toc.follow", "search.suggest", "search.higlihgt", "content.tabs.link", "content.code.annotation", "navigation.path", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
