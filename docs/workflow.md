@@ -1,8 +1,8 @@
 # 1. QIIME2 Workflow: From FASTQ reads to microbiome analysis objects
 
-This practical follows 16S rRNA V4–V5 sequencing data from **18 mice**: six wild type, six IL-10 deficient and six MUC2 deficient. We ask whether host genotype is associated with gut microbiome composition and diversity.
+This practical follows 16S rRNA V4–V5 sequencing data from **18 mice**: six wild type, six IL-10 deficient and six MUC2 deficient. We will explore gut bacterial community composition across the three mouse models, investigating patterns of microbial diversity.
 
-The workflow follows the data from raw sequencing reads to the files that will later be combined and analysed in RStudio.
+The workflow follows the data from raw sequencing reads to the files that will later be combined and analyzed in RStudio.
 
 !!! important "What will you run during the practical?"
     You will inspect raw FASTQ files and run **FastQC** on selected files. The **QIIME 2 processing has already been run for you**. We will explain each QIIME 2 step and inspect its inputs and outputs, but you do not need to install or run QIIME 2 during the practical.
@@ -66,9 +66,6 @@ Sequencers do not read every nucleotide with equal confidence. Sequence quality 
 
 **MultiQC** combines the FastQC results from multiple samples into one report. This makes it easier to compare the 18 mice and the two read directions and to identify unusual samples.
 
-**Input:** 36 compressed FASTQ files (18 R1/R2 pairs)  
-**Outputs:** individual FastQC reports and one pre-generated MultiQC report
-
 ---
 
 ???+ question "Exercise 2A — FastQC"
@@ -110,11 +107,23 @@ Sequencers do not read every nucleotide with equal confidence. Sequence quality 
     - an `.html` report that can be opened in a web browser;
     - a `.zip` file containing the underlying FastQC results.
 
-    Open the **two `.html` FastQC reports** in:
+    To inspect one of the FastQC reports, navigate to the output folder and open the corresponding HTML file:
 
-    ```text
-    results/fastqc/
-    ```
+    === "macOS"
+
+        ```bash
+        cd results/fastqc
+        open filename.html
+        ```
+
+    === "Windows PowerShell"
+
+        ```powershell
+        cd results/fastqc
+        start filename.html
+        ```
+
+    Replace `filename.html` with the name of the FastQC report you want to open.
 
     Answer the following questions:
 
@@ -133,9 +142,10 @@ Sequencers do not read every nucleotide with equal confidence. Sequence quality 
 
     ```text
     quality_control/multiqc/multiqc_report.html
+
     ```
 
-    Work in pairs and compare the 18 mice and both read directions.
+    Work in pairs and compare the 18 mice across forward (R1) and reverse (R2) reads.
 
     1. Do forward (R1) and reverse (R2) reads have the same quality profile?
     2. Where does sequence quality begin to decline?
@@ -159,8 +169,6 @@ You will **not run these QIIME 2 commands during the practical**. Instead, we wi
 As introduced in the **QIIME 2 primer**, QIIME 2 stores data in structured files called **artifacts (`.qza`)**. Interactive visualizations are stored as **`.qzv` files** and can be opened using [QIIME 2 View](https://view.qiime2.org/).
 
 Importing the raw FASTQ files packages the complete paired-end dataset into a QIIME 2 artifact and begins a provenance record of how the data were processed.
-
-Importing does **not** alter the nucleotide sequences and does **not** combine the 18 mice into one sample. The sample identities and their corresponding R1 and R2 reads remain distinct within the artifact.
 
 **Input:** demultiplexed paired-end FASTQ reads  
 **Outputs:** imported paired-end reads and a visualization of read counts and quality
@@ -207,7 +215,7 @@ Importing does **not** alter the nucleotide sequences and does **not** combine t
 
 The bacterial 16S rRNA gene is longer than the region sequenced in this experiment. During PCR, short synthetic DNA sequences called **primers** bind on either side of the V4–V5 region and allow this region to be amplified.
 
-Primer sequences are therefore technical components of the laboratory protocol, not biological variation among the mice. If retained, they can interfere with read merging, sequence comparison and taxonomic classification.
+Primer sequences are therefore technical components of the laboratory protocol, not biological variation among the mice. 
 
 To remove them, we use the QIIME 2 **Cutadapt** plugin, which searches for the expected forward and reverse primer sequences and trims them from the reads where they are found.
 
@@ -216,7 +224,9 @@ The primers used here are:
 - Forward primer: `GTGYCAGCMGCCGCGGTAA`
 - Reverse primer: `CCGYCAATTYMTTTRAGTTT`
 
-Letters such as `Y` and `M` are **IUPAC ambiguity codes**, allowing a primer position to match more than one nucleotide. We can discard reads in which the expected primer is not detected because they may be incomplete, incorrectly oriented or unrelated to the intended amplicon.
+Letters such as `Y` and `M` are **IUPAC ambiguity codes**, allowing a primer position to match more than one nucleotide. 
+
+We can discard reads in which the expected primer is not detected because they may be incomplete, incorrectly oriented or unrelated to the intended amplicon.
 
 **Input:** imported paired-end reads  
 **Outputs:** primer-trimmed reads, trimming statistics and a summary visualization
@@ -345,8 +355,13 @@ After DADA2, three outputs are particularly important:
 
     1. What does the **number of features** represent? How many ASVs were detected across the 18 samples?
     2. What does **total frequency** represent?
-    3. The ASV count table contains samples as columns and ASVs as rows. What does one value in this table represent?
-    4. Get together in pairs and calculate the **percentage of reads retained after denoising for each sample**. To obtain the number of reads before denoising, compare with:
+    3. Get together in pairs and calculate the **percentage of reads retained after denoising for each sample**, using the read counts after denoising from:
+
+       ```text
+       qiime2/03_dada2/03-table.qzv
+       ```
+
+       And the read counts before denoising from:
 
        ```text
        qiime2/02_cutadapt/02-demux-trimmed-summary.qzv
@@ -368,8 +383,8 @@ After DADA2, three outputs are particularly important:
 
     Examine the **Sequence Length Statistics** and the **Sequence Table**.
 
-    5. What does one representative sequence represent?
-    6. After denoising with DADA2, we have obtained a set of amplicon sequence variants (ASVs). Why are the lengths of these sequences different from the lengths of the reads in the original FASTQ files?
+    4. What does one representative sequence represent?
+    5. After denoising with DADA2, we have obtained a set of amplicon sequence variants (ASVs). Why are the lengths of these sequences different from the lengths of the reads in the original FASTQ files?
 
     **3. Inspect the denoising statistics**
 
@@ -381,7 +396,7 @@ After DADA2, three outputs are particularly important:
 
     This file shows how many reads remain at the different stages of DADA2 processing.
 
-    7. What stages are shown in this file? During which DADA2 stage are most reads lost?
+    6. What stages are shown in this file? During which DADA2 stage are most reads lost?
 
 
 ---
@@ -525,19 +540,55 @@ The tree is inferred from the sequenced 16S marker region; it is not a complete 
       --o-rooted-tree qiime2/05_phylogeny/05-rooted-tree.qza
     ```
 
-???+ question "Exercise 3.6 — Connect the tree to downstream analysis"
+???+ question "Exercise 3.6 — Explore the phylogenetic tree"
 
-    The rooted tree is stored as:
+    The rooted phylogenetic tree has been exported from QIIME 2 in **Newick (`.nwk`) format** so that it can be visualised using a phylogenetic tree viewer.
 
-    ```text
-    qiime2/05_phylogeny/05-rooted-tree.qza
-    ```
+    Open:
+
+    `qiime2/05_phylogeny/tree.nwk`
+
+    Go to [iTOL (Interactive Tree Of Life)](https://itol.embl.de/) and upload the `.nwk` file to visualise the tree.
+
+    Explore the tree and discuss:
 
     1. What does one terminal tip of the tree represent?
     2. Why must the tree-tip labels match the ASV identifiers in the ASV count table?
     3. Name one downstream diversity analysis that uses phylogenetic branch lengths.
 
-!!! note
-    The rooted tree is required for Faith's phylogenetic diversity and UniFrac distances. It is not required for observed richness, Shannon diversity, Bray–Curtis or Jaccard distances.
-
 ---
+
+## Summary: From QIIME 2 to R
+
+We have now followed the sequencing data from the original FASTQ reads to a set of processed outputs that describe the bacterial communities in our samples.
+
+The main components that we will need for downstream microbiome analysis are:
+
+```text
+Filtered ASV count table ──────┐
+                               │
+Taxonomic assignments ─────────┤
+                               ├──→ phyloseq object → analysis in R
+Sample metadata ───────────────┤
+                               │
+Rooted phylogenetic tree ──────┘
+```
+
+Each of these components contributes different information:
+
+- The **filtered ASV count table** contains the number of reads assigned to each bacterial ASV in each mouse.
+- The **taxonomic assignments** describe the bacterial taxonomy associated with each ASV.
+- The **sample metadata** contain information about the mice and their experimental groups.
+- The **rooted phylogenetic tree** describes the phylogenetic relationships among the ASVs and will be required for phylogeny-aware diversity metrics such as UniFrac and Faith's phylogenetic diversity.
+
+In preparation for the R practical, these components have been combined into a **phyloseq object**. The object will be provided to you so that we can focus on exploring the microbial communities, visualising the data and performing statistical analyses in R.
+
+!!! info "What happens next?"
+
+    In the **R workflow**, we will use the phyloseq object to investigate:
+
+    - sequencing depth;
+    - taxonomic composition;
+    - alpha diversity within individual mice;
+    - beta diversity between mice;
+    - and whether the observed differences among the three mouse groups are statistically supported.
