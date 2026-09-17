@@ -287,7 +287,7 @@ Each taxon is now represented as a **proportion of the reads within that sample*
 ### 4.3 Visualize the bacterial composition
 
 ```r
-plot_bar(ps_phylum_rel, x = "sample-id", fill = "Phylum") +
+plot_bar(ps_phylum_rel, x = "sample_id", fill = "Phylum") +
     labs(
         x = "Mouse",
         y = "Relative abundance",
@@ -548,12 +548,13 @@ alpha <- estimate_richness(
 Add sample identifiers and metadata:
 
 ```r
-alpha$sample <- rownames(alpha)
+alpha$sample <- sample_names(ps_rarefied)
 
 metadata <- data.frame(sample_data(ps_rarefied))
-metadata$sample <- rownames(metadata)
 
-alpha <- left_join(alpha, metadata, by = "sample")
+alpha$type <- metadata$type
+
+table(alpha$type, useNA = "ifany")
 ```
 
 
@@ -576,7 +577,7 @@ faith <- picante::pd(
     include.root = TRUE
 )
 
-alpha$Faith_PD <- faith[alpha$sample, "PD"]
+alpha$Faith_PD <- faith$PD
 ```
 
 
