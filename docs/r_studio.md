@@ -248,6 +248,94 @@ ggplot(depth_df, aes(x = sample, y = reads, fill = group)) +
     - Does having more sequencing reads necessarily mean that the original sample contained more bacteria?
 
 
+!!! example "Homework — Is sequencing depth different among the three mouse groups?"
+
+    We visualized sequencing depth across the 18 mice.
+
+    Now consider a statistical question:
+
+    > **Is there evidence that sequencing depth differs among WT, IL-10-deficient and MUC2-deficient mice?**
+
+    Before choosing a statistical test, think about the structure of the data:
+
+    - The response variable, **sequencing depth**, is numerical.
+    - We have **three groups**.
+    - The mice are **independent observations**.
+    - There are only **six mice per group**.
+
+    ### Parametric or non-parametric?
+
+    A common parametric test for comparing three independent groups is a **one-way ANOVA**.
+
+    ANOVA assumes that the model residuals are approximately normally distributed and, in its classical form, that the groups have similar variances.
+
+    A common non-parametric alternative is the **Kruskal-Wallis test**.
+
+    Kruskal-Wallis is based on the ranks of the observations rather than assuming normally distributed residuals.
+
+    With only six mice per group, it is important not to decide whether data are "normal" from a single test alone. We should also examine the raw data and their distribution.
+
+    First visualize the sequencing depths by group:
+
+    ```r
+    ggplot(depth_df, aes(x = group, y = reads)) +
+        geom_boxplot() +
+        geom_jitter(width = 0.1) +
+        theme_minimal()
+    ```
+
+    If we wanted to investigate whether ANOVA assumptions are reasonable, we could fit the model:
+
+    ```r
+    depth_aov <- aov(reads ~ group, data = depth_df)
+    ```
+
+    and inspect its residuals:
+
+    ```r
+    qqnorm(residuals(depth_aov))
+    qqline(residuals(depth_aov))
+
+    shapiro.test(residuals(depth_aov))
+    ```
+
+    For this small dataset, we will use the **Kruskal-Wallis test**:
+
+    ```r
+    kruskal.test(reads ~ group, data = depth_df)
+    ```
+
+    **Questions**
+
+    1. What is the null hypothesis?
+    2. What is the p-value?
+    3. Is there evidence that sequencing depth differs among the three groups?
+    4. Why might sequencing depth be important to check before comparing microbiome diversity?
+
+
+??? info "Homework answer — Choosing and interpreting the test"
+
+    We have one numerical variable measured in **three independent groups**.
+
+    Two common choices are:
+
+    | Test | Type | Typical use |
+    | --- | --- | --- |
+    | One-way ANOVA | Parametric | Compare means among 3+ independent groups when model assumptions are reasonable |
+    | Kruskal-Wallis | Non-parametric / rank-based | Compare 3+ independent groups without assuming normally distributed residuals |
+
+    For this practical, the **Kruskal-Wallis test** provides a simple and robust approach because we have only six mice per group.
+
+    ```r
+    kruskal.test(reads ~ group, data = depth_df)
+    ```
+
+    The null hypothesis is that the groups have the same underlying distribution of sequencing-depth ranks.
+
+    A **p-value below the chosen significance threshold**, commonly 0.05, provides evidence against that null hypothesis.
+
+    A non-significant result does **not** prove that sequencing depths are identical. It means that we do not have sufficient evidence of a group difference with these data and this test.
+
 ---
 
 ## 4. Taxonomic composition
@@ -350,6 +438,279 @@ rank_names(ps)
 
     First make sure you understand the analysis. **Then** improve the appearance of the figure.
 
+
+!!! question "Try it — Explore different taxonomic ranks"
+
+    Repeat the taxonomic composition analysis using other available taxonomic ranks.
+
+    For example, try:
+
+    - Domain
+    - Class
+    - Order
+    - Family
+    - Genus
+
+    As you move towards more specific taxonomic ranks, look carefully at the legend.
+
+    **What happens to the number of different taxonomic groups?**
+
+
+!!! tip "Too many taxa to visualize?"
+
+    At lower taxonomic ranks, especially **Family** and **Genus**, there may be too many taxa to display clearly.
+
+    One option is to show only the **15 most abundant taxa** and combine everything else into a category called **Other**.
+
+    ??? example "Show code: Keep the top 15 genera and group the rest as Other"
+
+        First, agglomerate ASVs that share the same Genus assignment:
+
+        ```r
+        ps_genus <- tax_glom(
+            ps,
+            taxrank = "Genus",
+            NArm = FALSE
+        )
+        ```
+
+        !!! note "What does `NArm = FALSE` mean?"
+
+            `NArm` controls what happens to ASVs that **do not have an assignment at the selected taxonomic rank**.
+
+            - `NArm = TRUE` removes taxa for which the selected rank is `NA`.
+            - `NArm = FALSE` keeps them.
+
+            We use `NArm = FALSE` here because we do not want to silently discard sequences simply because they could not be classified to Genus level.
+
+            This is especially important at lower taxonomic ranks, where some ASVs may not have sufficiently confident assignments.
+
+        Convert counts to relative abundance:
+
+        ```r
+        ps_genus_rel <- transform_sample_counts(
+            ps_genus,
+            function(x) x / sum(x)
+        )
+        ```
+
+        Identify the 15 most abundant genus-level groups across the complete dataset:
+
+        ```r
+        top15 <- names(
+            sort(taxa_sums(ps_genus_rel), decreasing = TRUE)
+        )[1:15]
+        ```
+
+        Save their complete taxonomic classification **before** changing any labels:
+
+        ```r
+        top15_taxonomy <- as.data.frame(
+            tax_table(ps_genus_rel)[top15, ]
+        )
+
+        top15_taxonomy
+        ```
+
+        This table allows you to inspect the complete lineage of each of the 15 most abundant groups:
+
+        **Domain → Phylum → Class → Order → Family → Genus**
+
+        Now rename everything outside the top 15 as `"Other"`:
+
+        ```r
+        tax_table(ps_genus_rel)[
+            !(taxa_names(ps_genus_rel) %in% top15),
+            "Genus"
+        ] <- "Other"
+        ```
+
+        Combine all groups labelled `"Other"`:
+
+        ```r
+        ps_genus_top15 <- tax_glom(
+            ps_genus_rel,
+            taxrank = "Genus",
+            NArm = FALSE
+        )
+        ```
+
+        Finally, plot the result:
+
+        ```r
+        plot_bar(
+            ps_genus_top15,
+            x = "sample_id",
+            fill = "Genus"
+        ) +
+            labs(
+                x = "Mouse",
+                y = "Relative abundance",
+                fill = "Genus"
+            ) +
+            theme_minimal() +
+            theme(
+                axis.text.x = element_text(angle = 45, hjust = 1)
+            )
+        ```
+
+        The legend now shows the **15 most abundant genus-level groups plus "Other"**.
+
+        To inspect their full taxonomic lineages again:
+
+        ```r
+        top15_taxonomy
+        ```
+
+    Try changing `"Genus"` to another taxonomic rank. What happens as you move from Phylum → Class → Order → Family → Genus?
+
+
+
+!!! example "Homework — Taxonomic resolution"
+
+    **1. Look at your taxonomic composition plots at different ranks.**
+
+    Examine the legends from **Phylum → Class → Order → Family → Genus**.
+
+    Do all taxonomic assignments reach the same level of resolution?
+
+    **2. How many of our 497 ASVs are classified at each taxonomic rank?**
+
+    Determine how many ASVs have an assignment at:
+
+    - Phylum
+    - Class
+    - Order
+    - Family
+    - Genus
+
+    What happens as you move towards more specific taxonomic ranks?
+
+??? success "Homework answer — How well were our ASVs classified?"
+
+    There are two related but different questions we can ask:
+
+    1. **How many ASVs received an assignment at each taxonomic rank?**
+    2. **How many distinct taxonomic groups are represented at each rank?**
+
+    These are not the same thing. Many different ASVs can receive the same taxonomic assignment.
+
+    ```r
+    tax_df <- as.data.frame(tax_table(ps))
+
+    resolution <- data.frame(
+        rank = colnames(tax_df),
+
+        assigned_ASVs = sapply(
+            tax_df,
+            function(x) sum(!is.na(x) & x != "")
+        ),
+
+        distinct_groups = sapply(
+            tax_df,
+            function(x) length(unique(x[!is.na(x) & x != ""]))
+        )
+    )
+
+    resolution$total_ASVs <- ntaxa(ps)
+
+    resolution$percent_assigned <- round(
+        100 * resolution$assigned_ASVs / resolution$total_ASVs,
+        1
+    )
+
+    resolution
+    ```
+
+    For this dataset, the number of ASVs assigned at each rank is:
+
+    | Rank | Assigned ASVs | Total ASVs | % assigned |
+    | --- | ---: | ---: | ---: |
+    | Domain | 497 | 497 | 100.0 |
+    | Phylum | 496 | 497 | 99.8 |
+    | Class | 496 | 497 | 99.8 |
+    | Order | 494 | 497 | 99.4 |
+    | Family | 484 | 497 | 97.4 |
+    | Genus | 441 | 497 | 88.7 |
+
+    The `distinct_groups` column tells us something different: **how many different non-missing taxonomic labels occur at each rank**.
+
+    For example, although **441 ASVs have a Genus-level assignment**, they correspond to only **64 distinct non-missing Genus labels**.
+
+    Therefore:
+
+    **441 assigned ASVs ≠ 441 genera**
+
+    Multiple ASVs can have the same taxonomic classification. For example, several different ASVs may all be classified as *Blautia*.
+
+    This is also why `tax_glom(ps, taxrank = "Genus")` changes the structure of the dataset: ASVs sharing the same Genus assignment are combined into the same taxonomic group.
+
+    As we move towards more specific taxonomic ranks, fewer ASVs are usually classified.
+
+    This reflects the limited taxonomic resolution of short-read 16S sequencing and the information available in the reference database.
+
+    Note that a non-missing taxonomic label does not necessarily mean that the organism has been identified precisely. Labels such as `uncultured` may still occur.
+
+
+!!! warning "Always inspect your taxonomic assignments"
+
+    A non-missing taxonomic assignment does **not necessarily mean that we have a clean, informative biological name**.
+
+    After summarizing classification success, always inspect the actual taxonomic labels.
+
+    ??? example "Inspect the taxonomic assignments"
+
+        For example, look at every unique Genus-level assignment:
+
+        ```r
+        unique(tax_df$Genus)
+        ```
+
+        Count the distinct non-missing Genus-level labels:
+
+        ```r
+        length(
+            unique(
+                tax_df$Genus[!is.na(tax_df$Genus) & tax_df$Genus != ""]
+            )
+        )
+        ```
+
+        You can repeat this for other ranks:
+
+        ```r
+        unique(tax_df$Phylum)
+        unique(tax_df$Class)
+        unique(tax_df$Order)
+        unique(tax_df$Family)
+        unique(tax_df$Genus)
+        ```
+
+        Or count the number of distinct groups at every rank at once:
+
+        ```r
+        sapply(
+            tax_df,
+            function(x) length(unique(x[!is.na(x) & x != ""]))
+        )
+        ```
+
+    When inspecting the results, you may encounter labels such as:
+
+    - `NA`
+    - `"uncultured"`
+    - names ending in `_group`
+    - names based on uncultured or incompletely characterized lineages
+    - family-level names appearing in the Genus column
+    - database-specific placeholder names
+
+    These labels are important to notice.
+
+    For example, in our Genus column we find labels such as `"uncultured"`, `"Lachnospiraceae_NK4A136_group"`, `"Muribaculaceae"` and `"Rikenellaceae_RC9_gut_group"`.
+
+    Therefore, **"assigned at Genus level" does not automatically mean "identified as a well-characterized named genus."**
+
+    Taxonomic classification depends on the reference database, the sequenced 16S region, sequence similarity and the confidence of the classifier. Always inspect the actual assignments before interpreting the biological resolution of your dataset.
 
 ---
 
@@ -828,36 +1189,43 @@ plot_ordination(
 
 ---
 
-# 8. Statistical analysis
+## 8. Statistical analysis
 
 So far, we have deliberately focused on **exploring and visualizing the data**.
 
 Only now will we ask whether some of the patterns we observed are supported statistically.
 
 
-## 8.1 Alpha-diversity statistics
+### 8.1 Alpha-diversity statistics
 
 For alpha diversity, we are comparing diversity values among **three independent groups of mice**.
 
 We will use the **Kruskal-Wallis test**.
 
-### Observed ASVs
+#### Observed ASVs
 
 ```r
 kruskal.test(Observed ~ type, data = alpha)
 ```
 
-### Shannon diversity
+#### Shannon diversity
 
 ```r
 kruskal.test(Shannon ~ type, data = alpha)
 ```
 
-### Faith's PD
+#### Faith's PD
 
 ```r
 kruskal.test(Faith_PD ~ type, data = alpha)
 ```
+
+#### Pielou's evenness
+
+```r
+kruskal.test(Pielou ~ type, data = alpha)
+```
+
 
 The Kruskal-Wallis test asks whether there is evidence that the distributions differ among the three groups.
 
@@ -882,7 +1250,7 @@ pairwise.wilcox.test(
     - If an overall test suggests a difference, which pairwise comparisons would you investigate?
 
 
-## 8.2 Beta-diversity statistics: PERMANOVA
+### 8.2 Beta-diversity statistics: PERMANOVA
 
 For beta diversity, our data are represented by **distance matrices** rather than one diversity value per mouse.
 
@@ -894,7 +1262,7 @@ Create a metadata data frame:
 meta <- data.frame(sample_data(ps_rarefied))
 ```
 
-### Bray-Curtis
+#### Bray-Curtis
 
 ```r
 adonis2(
@@ -976,7 +1344,7 @@ Two useful values to examine are:
 
 ---
 
-# 9. Putting everything together
+## 9. Putting everything together
 
 You have now looked at the microbiome from several different perspectives:
 
@@ -1021,7 +1389,7 @@ You have now looked at the microbiome from several different perspectives:
 
 ---
 
-# 10. Important limitations
+## 10. Important limitations
 
 Before interpreting the experiment, consider some of its limitations.
 
@@ -1054,7 +1422,7 @@ Before interpreting the experiment, consider some of its limitations.
 
 ---
 
-# 11. Going further with your figures
+## 11. Going further with your figures
 
 For this practical, the plotting code has deliberately been kept simple so that the **biological analysis remains the main focus**.
 
