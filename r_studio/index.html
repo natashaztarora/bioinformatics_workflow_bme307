@@ -1,0 +1,2481 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://example.com/r_studio/">
+      
+      
+        <link rel="prev" href="../workflow/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>2. R workflow - BME 307 - Microbes in Health and Disease</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2-exploring-the-mouse-gut-microbiome-in-r" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="BME 307 - Microbes in Health and Disease" class="md-header__button md-logo" aria-label="BME 307 - Microbes in Health and Disease" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BME 307 - Microbes in Health and Disease
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. R workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label="Swith to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Swith to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation_instructions/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Installation instructions
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../commands/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Useful commands
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../qiime2_pipeline/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  QIIME2 primer
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../workflow/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  1. QIIME2 Workflow
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  2. R workflow
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="BME 307 - Microbes in Health and Disease" class="md-nav__button md-logo" aria-label="BME 307 - Microbes in Health and Disease" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    BME 307 - Microbes in Health and Disease
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation_instructions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation instructions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Useful commands
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qiime2_pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QIIME2 primer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. QIIME2 Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. R workflow
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. R workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-preparing-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Preparing R
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Preparing R">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-set-the-working-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Set the working directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-install-the-required-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Install the required packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-load-the-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Load the packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-load-the-microbiome-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Load the microbiome dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-exploratory-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Exploratory analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Exploratory analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-explore-the-phyloseq-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Explore the phyloseq object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-explore-read-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Explore read depth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-rarefaction-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Rarefaction curves
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#microbial-diversity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microbial diversity analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-alpha-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Alpha diversity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Alpha diversity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-observed-asvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Observed ASVs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pielous-evenness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pielou's evenness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-shannon-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Shannon diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-faiths-phylogenetic-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Faith's phylogenetic diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-optional-does-rarefaction-change-the-alpha-diversity-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Optional — Does rarefaction change the alpha-diversity results?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-statistical-analyses-for-alpha-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Statistical analyses for alpha diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-normalize-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Normalize the data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-taxonomic-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Taxonomic composition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Taxonomic composition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-group-asvs-at-the-phylum-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Group ASVs at the phylum level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-visualize-the-bacterial-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Visualize the bacterial composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-explore-other-taxonomic-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Explore other taxonomic levels
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-beta-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Beta diversity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Beta diversity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-calculate-the-distance-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Calculate the distance matrices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-visualize-bray-curtis-with-pcoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Visualize Bray-Curtis with PCoA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-visualize-the-other-beta-diversity-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Visualize the other beta-diversity metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-statistical-analysis-for-beta-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Statistical analysis for beta diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-putting-everything-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Putting everything together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-important-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Important limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-going-further-with-your-figures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Going further with your figures
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-preparing-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Preparing R
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Preparing R">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-set-the-working-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Set the working directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-install-the-required-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Install the required packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-load-the-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Load the packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-load-the-microbiome-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Load the microbiome dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-exploratory-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Exploratory analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Exploratory analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-explore-the-phyloseq-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Explore the phyloseq object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-explore-read-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Explore read depth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-rarefaction-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Rarefaction curves
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#microbial-diversity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microbial diversity analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-alpha-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Alpha diversity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Alpha diversity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-observed-asvs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Observed ASVs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-pielous-evenness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Pielou's evenness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-shannon-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Shannon diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-faiths-phylogenetic-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Faith's phylogenetic diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-optional-does-rarefaction-change-the-alpha-diversity-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Optional — Does rarefaction change the alpha-diversity results?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-statistical-analyses-for-alpha-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 Statistical analyses for alpha diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-normalize-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Normalize the data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-taxonomic-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Taxonomic composition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Taxonomic composition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-group-asvs-at-the-phylum-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Group ASVs at the phylum level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-visualize-the-bacterial-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Visualize the bacterial composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-explore-other-taxonomic-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Explore other taxonomic levels
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-beta-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Beta diversity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Beta diversity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-calculate-the-distance-matrices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Calculate the distance matrices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-visualize-bray-curtis-with-pcoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Visualize Bray-Curtis with PCoA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-visualize-the-other-beta-diversity-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Visualize the other beta-diversity metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-statistical-analysis-for-beta-diversity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Statistical analysis for beta diversity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-putting-everything-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Putting everything together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-important-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Important limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-going-further-with-your-figures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Going further with your figures
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<style>
+.md-typeset p {
+    text-align: justify;
+}
+</style>
+
+<h1 id="2-exploring-the-mouse-gut-microbiome-in-r">2. Exploring the Mouse Gut Microbiome in R<a class="headerlink" href="#2-exploring-the-mouse-gut-microbiome-in-r" title="Permanent link">&para;</a></h1>
+<p>In the previous part of the course, we processed the raw sequencing reads using <strong>QIIME 2</strong>. After quality control, primer trimming, denoising, taxonomic classification and removal of non-target sequences, we obtained a set of <strong>amplicon sequence variants (ASVs)</strong> representing the bacterial communities detected in our samples.</p>
+<p>We will now use <strong>R</strong> and the <a href="https://joey711.github.io/phyloseq/"><code>phyloseq</code></a> package to explore and compare these microbial communities.</p>
+<p>Our dataset contains gut microbiome samples from <strong>18 mice</strong>, divided into three groups:</p>
+<ul>
+<li>6 wild-type (<strong>WT</strong>) mice</li>
+<li>6 <strong>IL-10-deficient</strong> mice</li>
+<li>6 <strong>MUC2-deficient</strong> mice</li>
+</ul>
+<p>Our main biological question is:</p>
+<blockquote>
+<p><strong>Do we observe differences in gut microbial composition and diversity across the three groups of mice?</strong></p>
+</blockquote>
+<p>To investigate this question, we will explore the data from several complementary perspectives:</p>
+<ol>
+<li><strong>Sequencing depth and rarefaction curves</strong> — How deeply was each mouse sequenced, and is the sequencing depth sufficient to compare the samples?</li>
+<li><strong>Alpha diversity</strong> — How diverse is the microbial community within each mouse? How many ASVs are detected in each mouse? How evenly are reads distributed among those ASVs?</li>
+<li>
+<p><strong>Normalization</strong> — Convert read counts to relative abundance so that we can compare the relative composition of microbial communities across samples.</p>
+</li>
+<li>
+<p><strong>Taxonomic composition</strong> — Which bacterial groups are present, and what does their relative composition look like across the mice?</p>
+</li>
+<li>
+<p><strong>Beta diversity</strong> — How different are the microbial communities between mice and between experimental groups of mice?</p>
+</li>
+</ol>
+<p>Throughout the analysis, remember that there is an important distinction between:</p>
+<ul>
+<li><strong>Descriptive observations</strong> — patterns that we can see in our data and figures.</li>
+<li><strong>Statistical evidence</strong> — tests of whether observed differences are larger than expected under a null hypothesis.</li>
+<li><strong>Biological interpretation</strong> — what these results may mean biologically and what conclusions the experiment allows us to make.</li>
+</ul>
+<div class="admonition question">
+<p class="admonition-title">Exercise 1 — Before looking at the data</p>
+<p>In pairs, discuss what gut microbiome differences you might expect among <strong>wild-type, IL-10-deficient and MUC2-deficient mice</strong>.</p>
+<p>Write down <strong>one hypothesis</strong> before examining the data. We will return to your hypothesis at the end of the analysis.</p>
+</div>
+<hr />
+<h2 id="1-preparing-r">1. Preparing R<a class="headerlink" href="#1-preparing-r" title="Permanent link">&para;</a></h2>
+<h3 id="11-set-the-working-directory">1.1 Set the working directory<a class="headerlink" href="#11-set-the-working-directory" title="Permanent link">&para;</a></h3>
+<p>Open <strong>RStudio</strong> and make sure your working directory is the main <code>BME307_course_material</code> folder.</p>
+<p>You can check your current working directory with:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">getwd</span><span class="p">()</span>
+</span></code></pre></div>
+<p>And see the files and folders available there with:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list.files</span><span class="p">()</span>
+</span></code></pre></div>
+<p>You should see folders including:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>raw_data
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>metadata
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>quality_control
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>reference
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>qiime2
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>r_analysis
+</span></code></pre></div>
+<p>If necessary, set the working directory using:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">setwd</span><span class="p">(</span><span class="s">"PATH/TO/BME307_course_material"</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In RStudio, you can also use <strong>Session → Set Working Directory → Choose Directory...</strong></p>
+<p>Remember that file paths tell R where to find your data, just as they did when we worked in the command line.</p>
+</div>
+<h3 id="12-install-the-required-packages">1.2 Install the required packages<a class="headerlink" href="#12-install-the-required-packages" title="Permanent link">&para;</a></h3>
+<p>Before starting the analysis, we need to make sure that the required R packages are installed. Most of the packages used in this practical can be installed directly from CRAN. The <code>phyloseq</code> package - for microbiome data manipulation - is distributed through <em>Bioconductor</em>. First install <code>BiocManager</code> if necessary, and then install <code>phyloseq</code>:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">"tidyverse"</span><span class="p">,</span><span class="w"> </span><span class="s">"vegan"</span><span class="p">,</span><span class="w"> </span><span class="s">"ape"</span><span class="p">,</span><span class="w"> </span><span class="s">"picante"</span><span class="p">))</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nf">requireNamespace</span><span class="p">(</span><span class="s">"BiocManager"</span><span class="p">,</span><span class="w"> </span><span class="n">quietly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nf">install.packages</span><span class="p">(</span><span class="s">"BiocManager"</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">"phyloseq"</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Installing versus loading packages</p>
+<p>A package only needs to be <em>installed once</em> on your computer. However, it must be <em>loaded again every time you start a new R session</em>.</p>
+</div>
+<h3 id="13-load-the-packages">1.3 Load the packages<a class="headerlink" href="#13-load-the-packages" title="Permanent link">&para;</a></h3>
+<p>At the beginning of the analysis, load the packages that we will use:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">library</span><span class="p">(</span><span class="n">phyloseq</span><span class="p">)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nf">library</span><span class="p">(</span><span class="n">vegan</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nf">library</span><span class="p">(</span><span class="n">ape</span><span class="p">)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nf">library</span><span class="p">(</span><span class="n">picante</span><span class="p">)</span>
+</span></code></pre></div>
+<p>If these commands run without an error, the packages are installed and ready to use.</p>
+<hr />
+<h3 id="14-load-the-microbiome-dataset">1.4 Load the microbiome dataset<a class="headerlink" href="#14-load-the-microbiome-dataset" title="Permanent link">&para;</a></h3>
+<p>During the QIIME 2 workflow we generated the main components needed for microbiome analysis:</p>
+<ul>
+<li>an <strong>ASV read count table</strong> - referred to as the otu_table</li>
+<li>a <strong>taxonomic classification</strong> table - referred to as the tax_table</li>
+<li>a <strong>sample metadata</strong> table - referred to as the sample_data</li>
+<li>and a <strong>rooted phylogenetic tree</strong> - referred to as the phy_tree</li>
+</ul>
+<p>These components can be combined into a single R object using the <code>phyloseq</code> package.</p>
+<p>For this practical, we have already created this object for you.</p>
+<p>A phyloseq object allows us to keep the abundance data, taxonomic information, sample information and phylogenetic relationships together while we analyse the microbiome.</p>
+<p>Load the object:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">ps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">readRDS</span><span class="p">(</span><span class="s">"r_analysis/bme307_phyloseq_raw_counts.rds"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Now simply type:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">ps</span>
+</span></code></pre></div>
+<p>You should see a summary of the object.</p>
+<details class="info">
+<summary>Expected output</summary>
+<p>The phyloseq object contains:</p>
+<ul>
+<li><strong>18 samples</strong></li>
+<li><strong>497 bacterial ASVs</strong></li>
+<li>an ASV abundance table</li>
+<li>sample metadata</li>
+<li>taxonomic classifications</li>
+<li>a rooted phylogenetic tree</li>
+</ul>
+</details>
+<hr />
+<h2 id="2-exploratory-analysis">2. Exploratory analysis<a class="headerlink" href="#2-exploratory-analysis" title="Permanent link">&para;</a></h2>
+<h3 id="21-explore-the-phyloseq-object">2.1 Explore the phyloseq object<a class="headerlink" href="#21-explore-the-phyloseq-object" title="Permanent link">&para;</a></h3>
+<p>We can access the different components individually:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nf">otu_table</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nf">tax_table</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">phy_tree</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Because these objects can be large, it is often more useful to inspect only their first few rows:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">head</span><span class="p">(</span><span class="nf">otu_table</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">head</span><span class="p">(</span><span class="nf">tax_table</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nf">head</span><span class="p">(</span><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span></code></pre></div>
+<p>We can also ask simple questions about the dataset:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">nsamples</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">ntaxa</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nf">sample_names</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nf">rank_names</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span></code></pre></div>
+<details class="info">
+<summary>Other useful checks</summary>
+<p>These additional accessors can be useful when you want to inspect a specific part of the object. You do not need to memorize them.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Look at ASV names and total reads per ASV</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">head</span><span class="p">(</span><span class="nf">taxa_names</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nf">head</span><span class="p">(</span><span class="nf">taxa_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1"># List the variables stored in the sample metadata</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nf">sample_variables</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># Extract one metadata variable</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="nf">get_variable</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span><span class="w"> </span><span class="n">varName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"type"</span><span class="p">)</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="c1"># Inspect the read depth of one named sample</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">)[</span><span class="s">"WT4"</span><span class="p">]</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="c1"># Inspect the unique assignments at selected taxonomic ranks</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="nf">get_taxa_unique</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span><span class="w"> </span><span class="s">"Phylum"</span><span class="p">)</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="nf">get_taxa_unique</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span><span class="w"> </span><span class="s">"Genus"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Commands such as <code>head(map)</code> are not included because <code>map</code> is not a component of our current workflow. The metadata are already stored inside <code>sample_data(ps)</code>.</p>
+</details>
+<div class="admonition question">
+<p class="admonition-title">Exercise 2 — Get to know your dataset</p>
+<p>Use the commands above to answer the following questions:</p>
+<ol>
+<li>How many mice are included?</li>
+<li>How many ASVs are present?</li>
+<li>What are the four main components stored in the phyloseq object?</li>
+<li>What information is contained in the sample metadata?</li>
+<li>Which taxonomic ranks are available?</li>
+<li>Which mouse has the highest number of reads? Which has the lowest?</li>
+</ol>
+<p>Compare these numbers with the final output of the QIIME 2 workflow. Do they agree?</p>
+</div>
+<hr />
+<h3 id="22-explore-read-depth">2.2 Explore read depth<a class="headerlink" href="#22-explore-read-depth" title="Permanent link">&para;</a></h3>
+<p>The number of reads obtained from each sample after quality control and read processing is called its <strong>sequencing depth</strong>.</p>
+<p>Different samples rarely contain exactly the same number of reads. Before comparing microbial diversity between samples, it is therefore useful to examine how sequencing depth varies across our dataset.</p>
+<p>Remember that a mouse with more sequencing reads has had more opportunities for its microbial DNA sequences to be detected. <strong>It does not necessarily mean that the original sample contained more bacteria.</strong></p>
+<p>For example, a mouse with 80,000 reads should not be interpreted as containing twice as many bacteria as a mouse with 40,000 reads.</p>
+<p>Calculate the total number of reads per mouse:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span></code></pre></div>
+<p>We can turn this into a small data frame:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">depth_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sample_names</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">reads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span><span class="o">$</span><span class="n">type</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>And visualize it:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">depth_df</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reads</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nf">geom_col</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse"</span><span class="p">,</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Number of reads"</span><span class="p">,</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">        </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Group"</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">))</span>
+</span></code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Exercise 3 — Sequencing depth</p>
+<p>Look at the sequencing depth across the 18 mice.</p>
+<ul>
+<li>Is sequencing depth identical across all samples?</li>
+<li>Which sample has the highest and lowest sequencing depth?</li>
+<li>Why could differences in sequencing depth become a problem when comparing diversity between samples?</li>
+<li>Does having more sequencing reads necessarily mean that the original sample contained more bacteria?</li>
+</ul>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Homework — Is sequencing depth different among the three mouse groups?</p>
+<p>We visualized sequencing depth across the 18 mice.</p>
+<p>Now consider a statistical question:</p>
+<blockquote>
+<p><strong>Is there evidence that sequencing depth differs among WT, IL-10-deficient and MUC2-deficient mice?</strong></p>
+</blockquote>
+<p>Before choosing a statistical test, think about the structure of the data:</p>
+<ul>
+<li>The response variable, <strong>sequencing depth</strong>, is numerical.</li>
+<li>We have <strong>three groups</strong>.</li>
+<li>The mice are <strong>independent observations</strong>.</li>
+<li>There are only <strong>six mice per group</strong>.</li>
+</ul>
+<p>First visualize the sequencing depths by group:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">depth_df</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reads</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nf">geom_boxplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nf">geom_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span>
+</span></code></pre></div>
+<p><strong>Questions</strong></p>
+<ol>
+<li>What is the null hypothesis?</li>
+<li>Which statistical test could you use?</li>
+<li>What is the p-value?</li>
+<li>Is there evidence that sequencing depth differs among the three groups?</li>
+<li>Why might sequencing depth be important to check before comparing microbiome diversity?</li>
+</ol>
+<details class="info">
+<summary>Homework answer — Parametric or non-parametric?</summary>
+<p>A common parametric test for comparing three independent groups is a <strong>one-way ANOVA</strong>. ANOVA tests for differences among group means and assumes that the model residuals are approximately normally distributed and, in its classical form, that the groups have similar variances.</p>
+<p>Fit the model and inspect its residuals:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">depth_aov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">aov</span><span class="p">(</span><span class="n">reads</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depth_df</span><span class="p">)</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nf">summary</span><span class="p">(</span><span class="n">depth_aov</span><span class="p">)</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="nf">qqnorm</span><span class="p">(</span><span class="nf">residuals</span><span class="p">(</span><span class="n">depth_aov</span><span class="p">))</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nf">qqline</span><span class="p">(</span><span class="nf">residuals</span><span class="p">(</span><span class="n">depth_aov</span><span class="p">))</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="nf">shapiro.test</span><span class="p">(</span><span class="nf">residuals</span><span class="p">(</span><span class="n">depth_aov</span><span class="p">))</span>
+</span></code></pre></div>
+<p>A common non-parametric alternative is the <strong>Kruskal-Wallis test</strong>. It is based on ranks and does not assume normally distributed residuals:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nf">kruskal.test</span><span class="p">(</span><span class="n">reads</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">depth_df</span><span class="p">)</span>
+</span></code></pre></div>
+<p>With only six mice per group, it is important not to decide whether the data are "normal" from a single test alone. We should also examine the raw observations, the boxplot and the model diagnostics.</p>
+<p>In this dataset, <strong>both tests give a non-significant result and lead to the same practical conclusion</strong>: we do not have sufficient evidence that sequencing depth differs among the three mouse groups.</p>
+<p>The ANOVA null hypothesis is that the three group means are equal. The Kruskal-Wallis null hypothesis is that the groups have the same underlying distribution of ranks.</p>
+<p>A <strong>p-value below the chosen significance threshold</strong>, commonly 0.05, provides evidence against the corresponding null hypothesis. A non-significant result does <strong>not</strong> prove that sequencing depths are identical.</p>
+</details>
+</div>
+<hr />
+<h3 id="23-rarefaction-curves">2.3 Rarefaction curves<a class="headerlink" href="#23-rarefaction-curves" title="Permanent link">&para;</a></h3>
+<p>We have seen that sequencing depth differs between mice.</p>
+<p>Why does this matter for diversity?</p>
+<p>A sample with more sequencing reads has had more opportunities to detect <strong>rare ASVs</strong>. Therefore, a deeply sequenced sample could appear richer simply because we looked at it more deeply.</p>
+<p>A <strong>rarefaction curve</strong> shows the relationship between sequencing depth and the expected number of ASVs detected:</p>
+<blockquote>
+<p><strong>As we sample more and more reads from a microbiome, how many ASVs do we expect to detect?</strong></p>
+</blockquote>
+<p>At this stage, we are using rarefaction only as a <strong>diagnostic visualization</strong>. Generating a rarefaction curve does not modify or rarefy the phyloseq object.</p>
+<p><code>vegan</code> expects samples in rows, so we first prepare the count table:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">otu_mat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as</span><span class="p">(</span><span class="nf">otu_table</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span><span class="w"> </span><span class="s">"matrix"</span><span class="p">)</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">taxa_are_rows</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">otu_mat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="n">otu_mat</span><span class="p">)</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Generate the curves:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">rare</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">vegan</span><span class="o">::</span><span class="nf">rarecurve</span><span class="p">(</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="n">otu_mat</span><span class="p">,</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">    </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="p">,</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="n">tidy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Add the experimental-group information:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">rare</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rare</span><span class="w"> </span><span class="o">%&gt;%</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="nf">left_join</span><span class="p">(</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">        </span><span class="nf">data.frame</span><span class="p">(</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">            </span><span class="n">Site</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sample_names</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">            </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span><span class="o">$</span><span class="n">type</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">        </span><span class="p">),</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">        </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Site"</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">    </span><span class="p">)</span>
+</span></code></pre></div>
+<p>Now visualize the curves:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nf">ggplot</span><span class="p">(</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="n">rare</span><span class="p">,</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nf">aes</span><span class="p">(</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sample</span><span class="p">,</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Species</span><span class="p">,</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">        </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Site</span><span class="p">,</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">        </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span><span class="p">)</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">    </span><span class="nf">geom_line</span><span class="p">(</span><span class="n">linewidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.8</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.8</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="w">    </span><span class="nf">geom_vline</span><span class="p">(</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">        </span><span class="n">xintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">25000</span><span class="p">,</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">        </span><span class="n">linetype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dashed"</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="w">        </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Rarefaction curves of the 18 mouse microbiomes"</span><span class="p">,</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="w">        </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"The dashed line marks 25,000 reads"</span><span class="p">,</span>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Number of sampled reads"</span><span class="p">,</span>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Expected number of observed ASVs"</span><span class="p">,</span>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a><span class="w">        </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse group"</span>
+</span><span id="__span-21-21"><a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-21-22"><a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a><span class="w">    </span><span class="nf">theme_classic</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-21-23"><a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"top"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Each curve represents <strong>one mouse</strong>. The curves do not necessarily have the same length because the original samples do not all contain the same number of reads.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercise 4 — Understand the rarefaction curves</p>
+<ul>
+<li>Why do some curves extend farther along the x-axis than others?</li>
+<li>What happens to the number of detected ASVs as more reads are sampled?</li>
+<li>What would it mean if a curve begins to flatten?</li>
+<li>Have the curves begun to flatten around <strong>25,000 reads</strong>?</li>
+<li>What would happen to a mouse with fewer than 25,000 reads if we later chose to rarefy the data to that depth?</li>
+</ul>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Checkpoint — Is our dataset suitable for diversity analysis?</p>
+<p>Based on the sequencing-depth plot, the statistical comparison of read depth and the rarefaction curves:</p>
+<ul>
+<li>Are all samples sequenced equally deeply?</li>
+<li>Have the curves begun to flatten?</li>
+<li>Do any samples appear insufficiently sequenced?</li>
+<li>Is sequencing depth systematically associated with mouse group?</li>
+<li>What limitations should we remember when comparing diversity?</li>
+</ul>
+</div>
+<hr />
+<h2 id="microbial-diversity-analysis">Microbial diversity analysis<a class="headerlink" href="#microbial-diversity-analysis" title="Permanent link">&para;</a></h2>
+<p>We will now examine diversity from several complementary perspectives:</p>
+<ul>
+<li><strong>Alpha diversity</strong> — diversity within each individual mouse;</li>
+<li><strong>Taxonomic composition</strong> — the relative composition of bacterial groups;</li>
+<li><strong>Beta diversity</strong> — differences in complete community composition between mice.</li>
+</ul>
+<h2 id="3-alpha-diversity">3. Alpha diversity<a class="headerlink" href="#3-alpha-diversity" title="Permanent link">&para;</a></h2>
+<p><strong>Alpha diversity</strong> describes diversity <strong>within a single microbial community</strong>.</p>
+<p>As we saw above, samples with more sequencing reads have more opportunities to detect rare ASVs. Before calculating alpha diversity, we therefore examined both the <strong>sequencing depth of the samples</strong> and the <strong>rarefaction curves</strong>.</p>
+<p>In our dataset, the rarefaction curves suggest that the microbial communities have been sampled sufficiently deeply for our exploratory comparisons. We will therefore calculate alpha diversity using the <strong>original phyloseq object (<code>ps</code>)</strong>.</p>
+<p>However, sequencing depth can still influence estimates of alpha diversity. Later, you will have the option to <strong>rarefy the dataset to an equal sequencing depth and repeat the analysis</strong> to see whether this changes the results.</p>
+<p>To measure diversity, there are different metrics available; each captures different properties of a microbial community.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What does it consider?</th>
+<th>Main question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Observed ASVs</strong></td>
+<td>Richness</td>
+<td>How many different ASVs were detected?</td>
+</tr>
+<tr>
+<td><strong>Pielou's evenness</strong></td>
+<td>Evenness</td>
+<td>How evenly are reads distributed among the detected ASVs?</td>
+</tr>
+<tr>
+<td><strong>Shannon diversity</strong></td>
+<td>Richness + evenness</td>
+<td>How diverse is the community considering both the number and distribution of ASVs?</td>
+</tr>
+<tr>
+<td><strong>Faith's PD</strong></td>
+<td>Phylogenetic relationships</td>
+<td>How much phylogenetic diversity is represented?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="31-observed-asvs">3.1 Observed ASVs<a class="headerlink" href="#31-observed-asvs" title="Permanent link">&para;</a></h3>
+<p>Observed ASVs is a measure of <strong>richness</strong>: the number of different ASVs detected in each mouse. It does not consider how abundant or evolutionarily distinct those ASVs are.</p>
+<p>We can calculate Observed richness for each mouse using <code>estimate_richness()</code>:</p>
+<p><div class="language-r highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">alpha</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">estimate_richness</span><span class="p">(</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="n">ps</span><span class="p">,</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="n">measures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Observed"</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">)</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">alpha</span><span class="o">$</span><span class="n">sample</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sample_names</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="n">metadata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="n">alpha</span><span class="o">$</span><span class="n">type</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">metadata</span><span class="p">[</span><span class="n">alpha</span><span class="o">$</span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="s">"type"</span><span class="p">]</span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="nf">head</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+</span></code></pre></div>
+Now visualize Observed richness across the three mouse groups:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Observed</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="nf">geom_boxplot</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="nf">geom_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse group"</span><span class="p">,</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Observed ASVs"</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="32-pielous-evenness">3.2 Pielou's evenness<a class="headerlink" href="#32-pielous-evenness" title="Permanent link">&para;</a></h3>
+<p>Pielou's evenness focuses on how evenly reads are distributed among the detected ASVs. Values closer to 1 indicate a more even community.</p>
+<p>Pielou's evenness is calculated from Shannon diversity and Observed richness. We therefore first calculate Shannon diversity for each mouse and then use it to calculate Pielou's evenness:</p>
+<p><div class="language-r highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">alpha</span><span class="o">$</span><span class="n">Shannon</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">estimate_richness</span><span class="p">(</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="n">ps</span><span class="p">,</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="n">measures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Shannon"</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="p">)</span><span class="o">$</span><span class="n">Shannon</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="n">alpha</span><span class="o">$</span><span class="n">Pielou</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">alpha</span><span class="o">$</span><span class="n">Shannon</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="n">alpha</span><span class="o">$</span><span class="n">Observed</span><span class="p">)</span>
+</span></code></pre></div>
+Now visualize Pielou's evenness across the three mouse groups:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Pielou</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nf">geom_boxplot</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="nf">geom_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse group"</span><span class="p">,</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Pielou's evenness"</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="33-shannon-diversity">3.3 Shannon diversity<a class="headerlink" href="#33-shannon-diversity" title="Permanent link">&para;</a></h3>
+<p>Shannon diversity combines richness and evenness. It increases when more ASVs are present and when their abundances are more evenly distributed.</p>
+<p>We already calculated Shannon diversity above because it is required to calculate Pielou's evenness.</p>
+<p>Now visualize Shannon diversity across the three mouse groups:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Shannon</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="nf">geom_boxplot</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="nf">geom_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse group"</span><span class="p">,</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Shannon diversity"</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="34-faiths-phylogenetic-diversity">3.4 Faith's phylogenetic diversity<a class="headerlink" href="#34-faiths-phylogenetic-diversity" title="Permanent link">&para;</a></h3>
+<p>Observed richness treats every ASV as a different feature. Faith's phylogenetic diversity additionally uses the <strong>phylogenetic tree</strong> and measures the total branch length represented in each community.</p>
+<p>We can calculate Faith's phylogenetic diversity for each mouse using the ASV table and the phylogenetic tree:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">otu_alpha</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as</span><span class="p">(</span><span class="nf">otu_table</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span><span class="w"> </span><span class="s">"matrix"</span><span class="p">)</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="kr">if</span><span class="w"> </span><span class="p">(</span><span class="nf">taxa_are_rows</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="n">otu_alpha</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="n">otu_alpha</span><span class="p">)</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="p">}</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="n">faith</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">picante</span><span class="o">::</span><span class="nf">pd</span><span class="p">(</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">    </span><span class="n">otu_alpha</span><span class="p">,</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">    </span><span class="nf">phy_tree</span><span class="p">(</span><span class="n">ps</span><span class="p">),</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="w">    </span><span class="n">include.root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="p">)</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="n">alpha</span><span class="o">$</span><span class="n">Faith_PD</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">faith</span><span class="p">[</span><span class="n">alpha</span><span class="o">$</span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="s">"PD"</span><span class="p">]</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nf">ggplot</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Faith_PD</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="nf">geom_boxplot</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="nf">geom_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse group"</span><span class="p">,</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Faith's phylogenetic diversity"</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"none"</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Exercise 5 — Explore alpha diversity</p>
+<p>Compare the three mouse groups using the four metrics.</p>
+<ul>
+<li>What patterns do you observe for <strong>Observed ASVs</strong>?</li>
+<li>What patterns do you observe for <strong>Pielou's evenness</strong>?</li>
+<li>What patterns do you observe for <strong>Shannon diversity</strong>?</li>
+<li>What patterns do you observe for <strong>Faith's PD</strong>?</li>
+<li>Do all four metrics show the same pattern?</li>
+<li>Why might different metrics give different views of the same microbial community?</li>
+</ul>
+</div>
+<h3 id="35-optional-does-rarefaction-change-the-alpha-diversity-results">3.5 Optional — Does rarefaction change the alpha-diversity results?<a class="headerlink" href="#35-optional-does-rarefaction-change-the-alpha-diversity-results" title="Permanent link">&para;</a></h3>
+<p>We calculated alpha diversity using the original read counts because our sequencing depth exploration and rarefaction curves suggested that the samples were sufficiently sequenced.</p>
+<p>However, another approach is to rarefy all samples to the same sequencing depth. Rarefaction randomly subsamples the same number of reads from each sample, reducing differences in sampling effort but also discarding reads.</p>
+<p>We can rarefy the dataset to the sequencing depth of the sample with the fewest reads:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nf">set.seed</span><span class="p">(</span><span class="m">123</span><span class="p">)</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="n">ps_rare</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rarefy_even_depth</span><span class="p">(</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="n">ps</span><span class="p">,</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="w">    </span><span class="n">sample.size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps</span><span class="p">)),</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="w">    </span><span class="n">rngseed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="w">    </span><span class="n">replace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">    </span><span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>This creates a new phyloseq object, <code>ps_rare</code>, in which all samples have the same number of reads. The original <code>ps</code> object remains unchanged.</p>
+<div class="admonition question">
+<p class="admonition-title">Optional exercise — Compare with the rarefied dataset</p>
+<p>Recalculate the alpha-diversity metrics using <code>ps_rare</code> instead of <code>ps</code>.</p>
+<ul>
+<li>Do the overall patterns among the three mouse groups change?</li>
+<li>Which alpha-diversity metric might be particularly sensitive to sequencing depth, and why?</li>
+<li>What are the advantages and disadvantages of rarefying the data?</li>
+</ul>
+</div>
+<h3 id="36-statistical-analyses-for-alpha-diversity">3.6 Statistical analyses for alpha diversity<a class="headerlink" href="#36-statistical-analyses-for-alpha-diversity" title="Permanent link">&para;</a></h3>
+<p>For alpha diversity, we are comparing diversity values among <strong>three independent groups of mice</strong>. Because we do not assume that the diversity values are normally distributed, we will use the Kruskal–Wallis test, a non-parametric test for comparing three or more independent groups.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nf">kruskal.test</span><span class="p">(</span><span class="n">Observed</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="nf">kruskal.test</span><span class="p">(</span><span class="n">Pielou</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span>
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="nf">kruskal.test</span><span class="p">(</span><span class="n">Shannon</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="nf">kruskal.test</span><span class="p">(</span><span class="n">Faith_PD</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The Kruskal-Wallis test asks whether there is evidence that the distributions differ among the three groups. If an overall test provides evidence of a difference, we can explore pairwise comparisons. For example:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nf">pairwise.wilcox.test</span><span class="p">(</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="n">alpha</span><span class="o">$</span><span class="n">Shannon</span><span class="p">,</span>
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="n">alpha</span><span class="o">$</span><span class="n">type</span><span class="p">,</span>
+</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="n">p.adjust.method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"BH"</span>
+</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Exercise 6 — Alpha-diversity statistics</p>
+<ul>
+<li>Which visual patterns are supported by the statistical tests?</li>
+<li>Are there patterns that looked different visually but are not supported statistically?</li>
+<li>If an overall test suggests a difference, which pairs of mouse groups differ from one another?</li>
+</ul>
+</div>
+<hr />
+<h2 id="4-normalize-the-data">4. Normalize the data<a class="headerlink" href="#4-normalize-the-data" title="Permanent link">&para;</a></h2>
+<p>So far, our ASV table contains the original read counts for each sample.</p>
+<p>For analyses where we want to compare the <strong>relative abundance of ASVs or bacterial taxa</strong>, we convert the read counts in each sample to relative abundance.</p>
+<p>This creates a new phyloseq object, <code>ps_norm</code>, which we will use for the next analyses:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">ps_norm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">transform_sample_counts</span><span class="p">(</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">ps</span><span class="p">,</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Each value now represents the <strong>proportion of reads within that sample</strong> assigned to an ASV. The values in each sample sum to 1 rather than to the original sequencing depth.</p>
+<p>Check the result:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nf">sample_sums</span><span class="p">(</span><span class="n">ps_norm</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Relative abundance ≠ absolute abundance</p>
+<p>If a bacterial group represents 20% of the sequencing reads in a sample, this does <strong>not</strong> tell us the absolute number of bacterial cells that were present.</p>
+<p>Relative-abundance normalization also does not remove the compositional nature of microbiome data: when the relative abundance of one taxon increases, the proportions of other taxa must collectively decrease.</p>
+</div>
+<h2 id="5-taxonomic-composition">5. Taxonomic composition<a class="headerlink" href="#5-taxonomic-composition" title="Permanent link">&para;</a></h2>
+<p>We will now examine <strong>which bacterial groups are present</strong> in our samples. We can now group ASVs according to their taxonomy. We will start at the <strong>phylum level</strong>.</p>
+<h3 id="51-group-asvs-at-the-phylum-level">5.1 Group ASVs at the phylum level<a class="headerlink" href="#51-group-asvs-at-the-phylum-level" title="Permanent link">&para;</a></h3>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">ps_phylum</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tax_glom</span><span class="p">(</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="n">taxrank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Phylum"</span><span class="p">,</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="n">NArm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><code>tax_glom()</code> combines ASVs that have the same taxonomic lineage up to the selected rank. Their abundances are summed, so the object now represents phylum-level groups rather than individual ASVs. Two ASVs carrying the same lower-rank label are only merged when their classifications at the preceding ranks also agree.</p>
+<p>We use <code>NArm = FALSE</code> so that sequences without a Phylum assignment are not silently discarded. Remember that placeholder labels such as <code>"uncultured"</code> are not automatically well-defined biological taxa. This is why the complete taxonomic lineages must always be inspected.</p>
+<h3 id="52-visualize-the-bacterial-composition">5.2 Visualize the bacterial composition<a class="headerlink" href="#52-visualize-the-bacterial-composition" title="Permanent link">&para;</a></h3>
+<p>Because <code>ps_phylum</code> was created from <code>ps_norm</code>, the y-axis represents <strong>relative abundance</strong>:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nf">plot_bar</span><span class="p">(</span><span class="n">ps_phylum</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sample_id"</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Phylum"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse"</span><span class="p">,</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Relative abundance"</span><span class="p">,</span>
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">        </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Phylum"</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-35-7"><a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-35-8"><a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Each bar represents <strong>one mouse</strong>.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercise 7 — Explore taxonomic composition</p>
+<p>Look at the figure before trying to draw conclusions.</p>
+<ul>
+<li>Which bacterial phyla appear to dominate the samples?</li>
+<li>Do mice from the same experimental group appear similar?</li>
+<li>Do you notice any patterns among WT, IL-10-deficient and MUC2-deficient mice?</li>
+<li>Is there variation between individual mice?</li>
+<li>Would looking at a different taxonomic level change what you can see?</li>
+</ul>
+<p>At this stage, simply describe what you <strong>observe</strong>.</p>
+</div>
+<h3 id="53-explore-other-taxonomic-levels">5.3 Explore other taxonomic levels<a class="headerlink" href="#53-explore-other-taxonomic-levels" title="Permanent link">&para;</a></h3>
+<p>You are not restricted to phylum.</p>
+<p>For example, you could replace:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="n">taxrank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Phylum"</span>
+</span></code></pre></div>
+<p>with another available taxonomic rank.</p>
+<p>Check the available ranks with:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nf">rank_names</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Make the plot your own</p>
+<p>The plots in this practical are deliberately simple.</p>
+<p>For your poster, you can explore different labels and themes using <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>.</p>
+<p>For example:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="o">+</span><span class="w"> </span><span class="nf">theme_classic</span><span class="p">()</span>
+</span></code></pre></div>
+<p>or:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="o">+</span><span class="w"> </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Gut microbiome composition"</span><span class="p">)</span>
+</span></code></pre></div>
+<p>First make sure you understand the analysis. <strong>Then</strong> improve the appearance of the figure.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Try it — Explore different taxonomic ranks</p>
+<p>Repeat the taxonomic composition analysis using other available taxonomic ranks.</p>
+<p>For example, try:</p>
+<ul>
+<li>Domain</li>
+<li>Class</li>
+<li>Order</li>
+<li>Family</li>
+<li>Genus</li>
+</ul>
+<p>As you move towards more specific taxonomic ranks, look carefully at the legend.</p>
+<p><strong>What happens to the number of different taxonomic groups?</strong></p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Too many taxa to visualize?</p>
+<p>At lower taxonomic ranks, especially <strong>Family</strong> and <strong>Genus</strong>, there may be too many taxa to display clearly.</p>
+<p>One option is to show only the <strong>15 most abundant taxa</strong> and combine everything else into a category called <strong>Other</strong>.</p>
+<details class="example">
+<summary>Show code: Keep the top 15 genera and group the rest as Other</summary>
+<p>First, agglomerate ASVs that share the same Genus assignment:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">ps_genus</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tax_glom</span><span class="p">(</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">    </span><span class="n">taxrank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Genus"</span><span class="p">,</span>
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="w">    </span><span class="n">NArm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span>
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">What does <code>NArm = FALSE</code> mean?</p>
+<p><code>NArm</code> controls what happens to ASVs that <strong>do not have an assignment at the selected taxonomic rank</strong>.</p>
+<ul>
+<li><code>NArm = TRUE</code> removes taxa for which the selected rank is <code>NA</code>.</li>
+<li><code>NArm = FALSE</code> keeps them.</li>
+</ul>
+<p>We use <code>NArm = FALSE</code> here because we do not want to silently discard sequences simply because they could not be classified to Genus level.</p>
+<p>This is especially important at lower taxonomic ranks, where some ASVs may not have sufficiently confident assignments.</p>
+</div>
+<p>The object is already in relative abundance because it was created from <code>ps_norm</code>:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="n">ps_genus_rel</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ps_genus</span>
+</span></code></pre></div>
+<p>Identify the 15 most abundant genus-level groups across the complete dataset:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">top15</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">    </span><span class="nf">sort</span><span class="p">(</span><span class="nf">taxa_sums</span><span class="p">(</span><span class="n">ps_genus_rel</span><span class="p">),</span><span class="w"> </span><span class="n">decreasing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="p">)[</span><span class="m">1</span><span class="o">:</span><span class="m">15</span><span class="p">]</span>
+</span></code></pre></div>
+<p>Save their complete taxonomic classification <strong>before</strong> changing any labels:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="n">top15_taxonomy</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">    </span><span class="nf">tax_table</span><span class="p">(</span><span class="n">ps_genus_rel</span><span class="p">)[</span><span class="n">top15</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="p">)</span>
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a>
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="n">top15_taxonomy</span>
+</span></code></pre></div>
+<p>This table allows you to inspect the complete lineage of each of the 15 most abundant groups:</p>
+<p><strong>Domain → Phylum → Class → Order → Family → Genus</strong></p>
+<p>Now rename everything outside the top 15 as <code>"Other"</code>:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="nf">tax_table</span><span class="p">(</span><span class="n">ps_genus_rel</span><span class="p">)[</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="o">!</span><span class="p">(</span><span class="nf">taxa_names</span><span class="p">(</span><span class="n">ps_genus_rel</span><span class="p">)</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">top15</span><span class="p">),</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="s">"Genus"</span>
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s">"Other"</span>
+</span></code></pre></div>
+<p>Agglomerate the relabelled object again:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="n">ps_genus_top15</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tax_glom</span><span class="p">(</span>
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="n">ps_genus_rel</span><span class="p">,</span>
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">    </span><span class="n">taxrank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Genus"</span><span class="p">,</span>
+</span><span id="__span-45-4"><a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a><span class="w">    </span><span class="n">NArm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span>
+</span><span id="__span-45-5"><a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><code>tax_glom()</code> respects the complete lineage up to Genus, so rows from different higher-level lineages may remain separate internally even though they are all labelled <code>"Other"</code>. In the stacked bar plot, however, all rows carrying that label are displayed using the same <code>"Other"</code> fill category.</p>
+<p>Finally, plot the result:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="nf">plot_bar</span><span class="p">(</span>
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">    </span><span class="n">ps_genus_top15</span><span class="p">,</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"sample_id"</span><span class="p">,</span>
+</span><span id="__span-46-4"><a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="w">    </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Genus"</span>
+</span><span id="__span-46-5"><a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-46-6"><a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a><span class="w">    </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-46-7"><a id="__codelineno-46-7" name="__codelineno-46-7" href="#__codelineno-46-7"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Mouse"</span><span class="p">,</span>
+</span><span id="__span-46-8"><a id="__codelineno-46-8" name="__codelineno-46-8" href="#__codelineno-46-8"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Relative abundance"</span><span class="p">,</span>
+</span><span id="__span-46-9"><a id="__codelineno-46-9" name="__codelineno-46-9" href="#__codelineno-46-9"></a><span class="w">        </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Genus"</span>
+</span><span id="__span-46-10"><a id="__codelineno-46-10" name="__codelineno-46-10" href="#__codelineno-46-10"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-46-11"><a id="__codelineno-46-11" name="__codelineno-46-11" href="#__codelineno-46-11"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-46-12"><a id="__codelineno-46-12" name="__codelineno-46-12" href="#__codelineno-46-12"></a><span class="w">    </span><span class="nf">theme</span><span class="p">(</span>
+</span><span id="__span-46-13"><a id="__codelineno-46-13" name="__codelineno-46-13" href="#__codelineno-46-13"></a><span class="w">        </span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+</span><span id="__span-46-14"><a id="__codelineno-46-14" name="__codelineno-46-14" href="#__codelineno-46-14"></a><span class="w">    </span><span class="p">)</span>
+</span></code></pre></div>
+<p>The legend now shows the <strong>15 most abundant genus-level groups plus "Other"</strong>.</p>
+<p>To inspect their full taxonomic lineages again:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="n">top15_taxonomy</span>
+</span></code></pre></div>
+</details>
+<p>Try changing <code>"Genus"</code> to another taxonomic rank. What happens as you move from Phylum → Class → Order → Family → Genus?</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Homework — Taxonomic resolution</p>
+<p><strong>1. Look at your taxonomic composition plots at different ranks.</strong></p>
+<p>Examine the legends from <strong>Phylum → Class → Order → Family → Genus</strong>.</p>
+<p>Do all taxonomic assignments reach the same level of resolution?</p>
+<p><strong>2. How many of our 497 ASVs are classified at each taxonomic rank?</strong></p>
+<p>Determine how many ASVs have an assignment at:</p>
+<ul>
+<li>Phylum</li>
+<li>Class</li>
+<li>Order</li>
+<li>Family</li>
+<li>Genus</li>
+</ul>
+<p>What happens as you move towards more specific taxonomic ranks?</p>
+</div>
+<details class="success">
+<summary>Homework answer — How well were our ASVs classified?</summary>
+<p>There are two related but different questions we can ask:</p>
+<ol>
+<li><strong>How many ASVs received an assignment at each taxonomic rank?</strong></li>
+<li><strong>How many distinct taxonomic groups are represented at each rank?</strong></li>
+</ol>
+<p>These are not the same thing. Many different ASVs can receive the same taxonomic assignment.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="n">tax_df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">tax_table</span><span class="p">(</span><span class="n">ps</span><span class="p">))</span>
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="n">resolution</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span>
+</span><span id="__span-48-4"><a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="w">    </span><span class="n">rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">colnames</span><span class="p">(</span><span class="n">tax_df</span><span class="p">),</span>
+</span><span id="__span-48-5"><a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a>
+</span><span id="__span-48-6"><a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a><span class="w">    </span><span class="n">assigned_ASVs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sapply</span><span class="p">(</span>
+</span><span id="__span-48-7"><a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a><span class="w">        </span><span class="n">tax_df</span><span class="p">,</span>
+</span><span id="__span-48-8"><a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a><span class="w">        </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+</span><span id="__span-48-9"><a id="__codelineno-48-9" name="__codelineno-48-9" href="#__codelineno-48-9"></a><span class="w">    </span><span class="p">),</span>
+</span><span id="__span-48-10"><a id="__codelineno-48-10" name="__codelineno-48-10" href="#__codelineno-48-10"></a>
+</span><span id="__span-48-11"><a id="__codelineno-48-11" name="__codelineno-48-11" href="#__codelineno-48-11"></a><span class="w">    </span><span class="n">distinct_groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sapply</span><span class="p">(</span>
+</span><span id="__span-48-12"><a id="__codelineno-48-12" name="__codelineno-48-12" href="#__codelineno-48-12"></a><span class="w">        </span><span class="n">tax_df</span><span class="p">,</span>
+</span><span id="__span-48-13"><a id="__codelineno-48-13" name="__codelineno-48-13" href="#__codelineno-48-13"></a><span class="w">        </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">""</span><span class="p">]))</span>
+</span><span id="__span-48-14"><a id="__codelineno-48-14" name="__codelineno-48-14" href="#__codelineno-48-14"></a><span class="w">    </span><span class="p">)</span>
+</span><span id="__span-48-15"><a id="__codelineno-48-15" name="__codelineno-48-15" href="#__codelineno-48-15"></a><span class="p">)</span>
+</span><span id="__span-48-16"><a id="__codelineno-48-16" name="__codelineno-48-16" href="#__codelineno-48-16"></a>
+</span><span id="__span-48-17"><a id="__codelineno-48-17" name="__codelineno-48-17" href="#__codelineno-48-17"></a><span class="n">resolution</span><span class="o">$</span><span class="n">total_ASVs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ntaxa</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+</span><span id="__span-48-18"><a id="__codelineno-48-18" name="__codelineno-48-18" href="#__codelineno-48-18"></a>
+</span><span id="__span-48-19"><a id="__codelineno-48-19" name="__codelineno-48-19" href="#__codelineno-48-19"></a><span class="n">resolution</span><span class="o">$</span><span class="n">percent_assigned</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span>
+</span><span id="__span-48-20"><a id="__codelineno-48-20" name="__codelineno-48-20" href="#__codelineno-48-20"></a><span class="w">    </span><span class="m">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">resolution</span><span class="o">$</span><span class="n">assigned_ASVs</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">resolution</span><span class="o">$</span><span class="n">total_ASVs</span><span class="p">,</span>
+</span><span id="__span-48-21"><a id="__codelineno-48-21" name="__codelineno-48-21" href="#__codelineno-48-21"></a><span class="w">    </span><span class="m">1</span>
+</span><span id="__span-48-22"><a id="__codelineno-48-22" name="__codelineno-48-22" href="#__codelineno-48-22"></a><span class="p">)</span>
+</span><span id="__span-48-23"><a id="__codelineno-48-23" name="__codelineno-48-23" href="#__codelineno-48-23"></a>
+</span><span id="__span-48-24"><a id="__codelineno-48-24" name="__codelineno-48-24" href="#__codelineno-48-24"></a><span class="n">resolution</span>
+</span></code></pre></div>
+<p>For this dataset, the number of ASVs assigned at each rank is:</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th style="text-align: right;">Assigned ASVs</th>
+<th style="text-align: right;">Total ASVs</th>
+<th style="text-align: right;">% assigned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+<tr>
+<td>Phylum</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">99.8</td>
+</tr>
+<tr>
+<td>Class</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">99.8</td>
+</tr>
+<tr>
+<td>Order</td>
+<td style="text-align: right;">494</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">99.4</td>
+</tr>
+<tr>
+<td>Family</td>
+<td style="text-align: right;">484</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">97.4</td>
+</tr>
+<tr>
+<td>Genus</td>
+<td style="text-align: right;">441</td>
+<td style="text-align: right;">497</td>
+<td style="text-align: right;">88.7</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>distinct_groups</code> column tells us something different: <strong>how many different non-missing taxonomic labels occur at each rank</strong>.</p>
+<p>For example, although <strong>441 ASVs have a Genus-level assignment</strong>, they correspond to only <strong>64 distinct non-missing Genus labels</strong>.</p>
+<p>Therefore:</p>
+<p><strong>441 assigned ASVs ≠ 441 genera</strong></p>
+<p>Multiple ASVs can have the same taxonomic classification. For example, several different ASVs may all be classified as <em>Blautia</em>.</p>
+<p>This is also why <code>tax_glom(ps, taxrank = "Genus")</code> changes the structure of the dataset: ASVs sharing the same taxonomic lineage through Genus are combined into the same taxonomic group.</p>
+<p>As we move towards more specific taxonomic ranks, fewer ASVs are usually classified.</p>
+<p>This reflects the limited taxonomic resolution of short-read 16S sequencing and the information available in the reference database.</p>
+<p>Note that a non-missing taxonomic label does not necessarily mean that the organism has been identified precisely. Labels such as <code>uncultured</code> may still occur.</p>
+</details>
+<div class="admonition warning">
+<p class="admonition-title">Always inspect your taxonomic assignments</p>
+<p>A non-missing taxonomic assignment does <strong>not necessarily mean that we have a clean, informative biological name</strong>.</p>
+<p>After summarizing classification success, always inspect the actual taxonomic labels.</p>
+<details class="example">
+<summary>Inspect the taxonomic assignments</summary>
+<p>For example, look at every unique Genus-level assignment:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Genus</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Count the distinct non-missing Genus-level labels:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="nf">length</span><span class="p">(</span>
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">    </span><span class="nf">unique</span><span class="p">(</span>
+</span><span id="__span-50-3"><a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="w">        </span><span class="n">tax_df</span><span class="o">$</span><span class="n">Genus</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Genus</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">tax_df</span><span class="o">$</span><span class="n">Genus</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">""</span><span class="p">]</span>
+</span><span id="__span-50-4"><a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a><span class="w">    </span><span class="p">)</span>
+</span><span id="__span-50-5"><a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>You can repeat this for other ranks:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Phylum</span><span class="p">)</span>
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Class</span><span class="p">)</span>
+</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Order</span><span class="p">)</span>
+</span><span id="__span-51-4"><a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Family</span><span class="p">)</span>
+</span><span id="__span-51-5"><a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a><span class="nf">unique</span><span class="p">(</span><span class="n">tax_df</span><span class="o">$</span><span class="n">Genus</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Or count the number of distinct groups at every rank at once:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="nf">sapply</span><span class="p">(</span>
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="w">    </span><span class="n">tax_df</span><span class="p">,</span>
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a><span class="w">    </span><span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">""</span><span class="p">]))</span>
+</span><span id="__span-52-4"><a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a><span class="p">)</span>
+</span></code></pre></div>
+</details>
+<p>When inspecting the results, you may encounter labels such as:</p>
+<ul>
+<li><code>NA</code></li>
+<li><code>"uncultured"</code></li>
+<li>names ending in <code>_group</code></li>
+<li>names based on uncultured or incompletely characterized lineages</li>
+<li>family-level names appearing in the Genus column</li>
+<li>database-specific placeholder names</li>
+</ul>
+<p>These labels are important to notice.</p>
+<p>For example, in our Genus column we find labels such as <code>"uncultured"</code>, <code>"Lachnospiraceae_NK4A136_group"</code>, <code>"Muribaculaceae"</code> and <code>"Rikenellaceae_RC9_gut_group"</code>.</p>
+<p>Therefore, <strong>"assigned at Genus level" does not automatically mean "identified as a well-characterized named genus."</strong></p>
+<p>Taxonomic classification depends on the reference database, the sequenced 16S region, sequence similarity and the confidence of the classifier. Always inspect the actual assignments before interpreting the biological resolution of your dataset.</p>
+</div>
+<hr />
+<h2 id="6-beta-diversity">6. Beta diversity<a class="headerlink" href="#6-beta-diversity" title="Permanent link">&para;</a></h2>
+<p>Alpha diversity asks: <strong>How diverse is each individual mouse?</strong></p>
+<p>Beta diversity asks: <strong>How different are the microbial communities between mice?</strong> </p>
+<p>For our analyses, we will use the normalized object, <code>ps_norm</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Uses abundance?</th>
+<th>Uses phylogeny?</th>
+<th>Main emphasis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bray-Curtis</strong></td>
+<td>Yes</td>
+<td>No</td>
+<td>Differences in ASV abundance</td>
+</tr>
+<tr>
+<td><strong>Unweighted UniFrac</strong></td>
+<td>No</td>
+<td>Yes</td>
+<td>Presence/absence of phylogenetic lineages</td>
+</tr>
+<tr>
+<td><strong>Weighted UniFrac</strong></td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Abundance-weighted phylogenetic differences</td>
+</tr>
+</tbody>
+</table>
+<h3 id="61-calculate-the-distance-matrices">6.1 Calculate the distance matrices<a class="headerlink" href="#61-calculate-the-distance-matrices" title="Permanent link">&para;</a></h3>
+<p><strong>Bray-Curtis</strong> considers differences in abundance but not phylogenetic relationships:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="n">bray</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">phyloseq</span><span class="o">::</span><span class="nf">distance</span><span class="p">(</span>
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"bray"</span>
+</span><span id="__span-53-4"><a id="__codelineno-53-4" name="__codelineno-53-4" href="#__codelineno-53-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Unweighted UniFrac</strong> considers presence/absence together with phylogenetic relationships:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="n">unifrac_unweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">UniFrac</span><span class="p">(</span>
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="w">    </span><span class="n">weighted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span>
+</span><span id="__span-54-4"><a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Weighted UniFrac</strong> combines abundance with phylogenetic relationships:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="n">unifrac_weighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">UniFrac</span><span class="p">(</span>
+</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-55-3"><a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a><span class="w">    </span><span class="n">weighted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span>
+</span><span id="__span-55-4"><a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="62-visualize-bray-curtis-with-pcoa">6.2 Visualize Bray-Curtis with PCoA<a class="headerlink" href="#62-visualize-bray-curtis-with-pcoa" title="Permanent link">&para;</a></h3>
+<p>A distance matrix contains pairwise differences between all samples. <strong>Principal Coordinates Analysis (PCoA)</strong> represents these relationships in fewer dimensions.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="n">ord_bray</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ordinate</span><span class="p">(</span>
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"PCoA"</span><span class="p">,</span>
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a><span class="w">    </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bray</span>
+</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a><span class="p">)</span>
+</span><span id="__span-56-6"><a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a>
+</span><span id="__span-56-7"><a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a><span class="nf">plot_ordination</span><span class="p">(</span>
+</span><span id="__span-56-8"><a id="__codelineno-56-8" name="__codelineno-56-8" href="#__codelineno-56-8"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-56-9"><a id="__codelineno-56-9" name="__codelineno-56-9" href="#__codelineno-56-9"></a><span class="w">    </span><span class="n">ord_bray</span><span class="p">,</span>
+</span><span id="__span-56-10"><a id="__codelineno-56-10" name="__codelineno-56-10" href="#__codelineno-56-10"></a><span class="w">    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"type"</span>
+</span><span id="__span-56-11"><a id="__codelineno-56-11" name="__codelineno-56-11" href="#__codelineno-56-11"></a><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-56-12"><a id="__codelineno-56-12" name="__codelineno-56-12" href="#__codelineno-56-12"></a><span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-56-13"><a id="__codelineno-56-13" name="__codelineno-56-13" href="#__codelineno-56-13"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Each point represents <strong>one mouse</strong>.</p>
+<h3 id="63-visualize-the-other-beta-diversity-metrics">6.3 Visualize the other beta-diversity metrics<a class="headerlink" href="#63-visualize-the-other-beta-diversity-metrics" title="Permanent link">&para;</a></h3>
+<h4 id="unweighted-unifrac">Unweighted UniFrac<a class="headerlink" href="#unweighted-unifrac" title="Permanent link">&para;</a></h4>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="n">ord_unweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ordinate</span><span class="p">(</span>
+</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"PCoA"</span><span class="p">,</span>
+</span><span id="__span-57-4"><a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a><span class="w">    </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unifrac_unweighted</span>
+</span><span id="__span-57-5"><a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a><span class="p">)</span>
+</span><span id="__span-57-6"><a id="__codelineno-57-6" name="__codelineno-57-6" href="#__codelineno-57-6"></a>
+</span><span id="__span-57-7"><a id="__codelineno-57-7" name="__codelineno-57-7" href="#__codelineno-57-7"></a><span class="nf">plot_ordination</span><span class="p">(</span><span class="n">ps_norm</span><span class="p">,</span><span class="w"> </span><span class="n">ord_unweighted</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-57-8"><a id="__codelineno-57-8" name="__codelineno-57-8" href="#__codelineno-57-8"></a><span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-57-9"><a id="__codelineno-57-9" name="__codelineno-57-9" href="#__codelineno-57-9"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span>
+</span></code></pre></div>
+<h4 id="weighted-unifrac">Weighted UniFrac<a class="headerlink" href="#weighted-unifrac" title="Permanent link">&para;</a></h4>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">ord_weighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ordinate</span><span class="p">(</span>
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="w">    </span><span class="n">ps_norm</span><span class="p">,</span>
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="w">    </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"PCoA"</span><span class="p">,</span>
+</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="w">    </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unifrac_weighted</span>
+</span><span id="__span-58-5"><a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a><span class="p">)</span>
+</span><span id="__span-58-6"><a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a>
+</span><span id="__span-58-7"><a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a><span class="nf">plot_ordination</span><span class="p">(</span><span class="n">ps_norm</span><span class="p">,</span><span class="w"> </span><span class="n">ord_weighted</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-58-8"><a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a><span class="w">    </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+</span><span id="__span-58-9"><a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a><span class="w">    </span><span class="nf">theme_minimal</span><span class="p">()</span>
+</span></code></pre></div>
+<div class="admonition question">
+<p class="admonition-title">Exercise 8 — Compare the beta-diversity metrics</p>
+<ul>
+<li>Do all three metrics show the same pattern?</li>
+<li>Does considering <strong>abundance</strong> change what you see?</li>
+<li>Does considering <strong>phylogenetic relationships</strong> change what you see?</li>
+<li>Is within-group variability similar for all three mouse groups?</li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">There is no universally 'best' beta-diversity metric</p>
+<p>These metrics use different information and answer slightly different ecological questions. Do not choose a metric simply because its PCoA produces the clearest-looking separation.</p>
+</div>
+<h3 id="64-statistical-analysis-for-beta-diversity">6.4 Statistical analysis for beta diversity<a class="headerlink" href="#64-statistical-analysis-for-beta-diversity" title="Permanent link">&para;</a></h3>
+<p>We can use <strong>PERMANOVA</strong> (<em>Permutational Multivariate Analysis of Variance</em>) to ask whether microbial community composition is associated with mouse group.</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="n">meta_beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span><span class="nf">sample_data</span><span class="p">(</span><span class="n">ps_norm</span><span class="p">))</span>
+</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="n">meta_beta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meta_beta</span><span class="p">[</span><span class="nf">labels</span><span class="p">(</span><span class="n">bray</span><span class="p">),</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">drop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">]</span>
+</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a>
+</span><span id="__span-59-4"><a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="nf">stopifnot</span><span class="p">(</span><span class="nf">identical</span><span class="p">(</span><span class="nf">rownames</span><span class="p">(</span><span class="n">meta_beta</span><span class="p">),</span><span class="w"> </span><span class="nf">labels</span><span class="p">(</span><span class="n">bray</span><span class="p">)))</span>
+</span></code></pre></div>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="nf">adonis2</span><span class="p">(</span><span class="n">bray</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meta_beta</span><span class="p">,</span><span class="w"> </span><span class="n">permutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">999</span><span class="p">)</span>
+</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="nf">adonis2</span><span class="p">(</span><span class="n">unifrac_unweighted</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meta_beta</span><span class="p">,</span><span class="w"> </span><span class="n">permutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">999</span><span class="p">)</span>
+</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="nf">adonis2</span><span class="p">(</span><span class="n">unifrac_weighted</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meta_beta</span><span class="p">,</span><span class="w"> </span><span class="n">permutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">999</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Examine both the <strong>p-value</strong> and the <strong>R² value</strong>, which describes the proportion of variation in the distance matrix associated with mouse group.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercise 9 — PERMANOVA</p>
+<ul>
+<li>Is there statistical evidence that community composition is associated with mouse group?</li>
+<li>What proportion of variation is associated with group?</li>
+<li>Do all three beta-diversity metrics give the same result?</li>
+<li>How do the statistical results compare with the PCoA plots?</li>
+</ul>
+</div>
+<details class="info">
+<summary>Optional — PERMDISP</summary>
+<p>PERMANOVA can be influenced by differences in <strong>within-group dispersion</strong>. We can investigate this using <strong>PERMDISP</strong>. For Bray-Curtis:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="n">dispersion_bray</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">betadisper</span><span class="p">(</span><span class="n">bray</span><span class="p">,</span><span class="w"> </span><span class="n">meta_beta</span><span class="o">$</span><span class="n">type</span><span class="p">)</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="nf">plot</span><span class="p">(</span><span class="n">dispersion_bray</span><span class="p">)</span>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="nf">permutest</span><span class="p">(</span><span class="n">dispersion_bray</span><span class="p">,</span><span class="w"> </span><span class="n">permutations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">999</span><span class="p">)</span>
+</span></code></pre></div>
+<p>You can repeat this for another distance matrix by replacing <code>bray</code>.</p>
+</details>
+<hr />
+<h2 id="7-putting-everything-together">7. Putting everything together<a class="headerlink" href="#7-putting-everything-together" title="Permanent link">&para;</a></h2>
+<p>You have now looked at the microbiome from several different perspectives:</p>
+<p><strong>Sequencing depth and rarefaction curves</strong></p>
+<blockquote>
+<p>Did we sequence the samples deeply enough to make meaningful diversity comparisons?</p>
+</blockquote>
+<p><strong>Alpha diversity</strong></p>
+<blockquote>
+<p>How diverse is the microbial community within each mouse?</p>
+</blockquote>
+<p><strong>Taxonomic composition</strong></p>
+<blockquote>
+<p>Which bacterial groups were detected, and what patterns can we see across mice?</p>
+</blockquote>
+<p><strong>Beta diversity</strong></p>
+<blockquote>
+<p>How different are the complete microbial communities between mice?</p>
+</blockquote>
+<div class="admonition question">
+<p class="admonition-title">Exercise 10 — Final interpretation</p>
+<p>Return to the prediction or hypothesis you wrote at the beginning.</p>
+<p>Discuss your results in pairs.</p>
+<ul>
+<li>What patterns did you observe in taxonomic composition?</li>
+<li>What did the alpha-diversity metrics show?</li>
+<li>What did the beta-diversity metrics show?</li>
+<li>Did all metrics tell the same story?</li>
+<li>Which observations were supported statistically?</li>
+<li>How much variation was present between individual mice?</li>
+<li>Does the evidence support your original prediction?</li>
+<li>What additional information or experiments would you want before making stronger biological conclusions?</li>
+</ul>
+<p>There is not necessarily one single observation that summarizes the complete dataset. Try to combine the different pieces of evidence.</p>
+</div>
+<hr />
+<h2 id="8-important-limitations">8. Important limitations<a class="headerlink" href="#8-important-limitations" title="Permanent link">&para;</a></h2>
+<p>Before interpreting the experiment, consider some of its limitations.</p>
+<div class="admonition warning">
+<p class="admonition-title">Things to keep in mind</p>
+<p><strong>Sample size</strong></p>
+<p>There are only six mice per group. How might this affect the conclusions that can be drawn?</p>
+<p><strong>Relative abundance</strong></p>
+<p>16S rRNA gene sequencing primarily provides information about the relative composition of the microbial community. What information about absolute bacterial abundance is missing?</p>
+<p><strong>Rarefaction</strong></p>
+<p>Rarefaction (subsampling) standardizes sequencing depth, but it also discards reads. What are the consequences of that trade-off?</p>
+<p><strong>Taxonomic resolution</strong></p>
+<p>Short-read 16S rRNA gene sequencing may not reliably distinguish microorganisms at species or strain level. How does this limit biological interpretation?</p>
+<p><strong>Taxonomy is not function</strong></p>
+<p>Knowing which bacterial taxa are present does not automatically tell us what those microorganisms are doing.</p>
+<p><strong>Association is not causation</strong></p>
+<p>Think carefully about which conclusions are supported by this experiment and which would require additional experiments.</p>
+</div>
+<hr />
+<h2 id="9-going-further-with-your-figures">9. Going further with your figures<a class="headerlink" href="#9-going-further-with-your-figures" title="Permanent link">&para;</a></h2>
+<p>For this practical, the plotting code has deliberately been kept simple so that the <strong>biological analysis remains the main focus</strong>.</p>
+<p>For your final poster, however, you may want to improve the appearance of your figures.</p>
+<p>Most of the figures in this practical use <code>ggplot2</code>, which means you can modify them by adding additional layers.</p>
+<p>For example:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="o">+</span><span class="w"> </span><span class="nf">theme_classic</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Change labels:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="o">+</span><span class="w"> </span><span class="nf">labs</span><span class="p">(</span>
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="w">    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Your title"</span><span class="p">,</span>
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Your x-axis label"</span><span class="p">,</span>
+</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a><span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Your y-axis label"</span>
+</span><span id="__span-63-5"><a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Modify text:</p>
+<div class="language-r highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="o">+</span><span class="w"> </span><span class="nf">theme</span><span class="p">(</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="w">    </span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">45</span><span class="p">,</span><span class="w"> </span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>You can explore additional options in:</p>
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code> documentation</a></li>
+<li><a href="https://joey711.github.io/phyloseq/"><code>phyloseq</code> documentation</a></li>
+<li><a href="https://vegandevs.github.io/vegan/"><code>vegan</code> documentation</a></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">A good plotting workflow</p>
+<ol>
+<li>Make sure the analysis is scientifically appropriate.</li>
+<li>Create a simple figure.</li>
+<li>Understand what the figure is showing.</li>
+<li>Only then modify labels, themes, colours and layout for your poster.</li>
+</ol>
+<p><strong>Do not choose an analysis method simply because it produces the prettiest plot.</strong></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.instant", "content.action.edit", "content.action.view", "navigation.expand", "navigation.sections", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "toc.follow", "search.suggest", "search.higlihgt", "content.tabs.link", "content.code.annotation", "navigation.path", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
