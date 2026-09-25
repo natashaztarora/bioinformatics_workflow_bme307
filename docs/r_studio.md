@@ -463,26 +463,13 @@ We will now examine diversity from several complementary perspectives:
 
 **Alpha diversity** describes diversity **within a single microbial community**.
 
-### 3.1 Before we look at alpha diversity...
+As we saw above, samples with more sequencing reads have more opportunities to detect rare ASVs. Before calculating alpha diversity, we therefore examined both the **sequencing depth of the samples** and the **rarefaction curves**.
 
-As we saw from the rarefaction curves, samples with more sequencing reads have more opportunities to detect rare ASVs. This can influence estimates of alpha diversity. To compare diversity across mice at the same sampling depth, we will therefore **rarefy the dataset to the lowest read depth in our dataset**.
+In our dataset, the rarefaction curves suggest that the microbial communities have been sampled sufficiently deeply for our exploratory comparisons. We will therefore calculate alpha diversity using the **original phyloseq object (`ps`)**.
 
-Rarefaction randomly subsamples the same number of reads from each sample. Note that this leads to comparable sampling effort, but it also discards reads and may remove rare ASVs.
+However, sequencing depth can still influence estimates of alpha diversity. Later, you will have the option to **rarefy the dataset to an equal sequencing depth and repeat the analysis** to see whether this changes the results.
 
-```r
-set.seed(123)
-
-ps_rare <- rarefy_even_depth(
-    ps,
-    sample.size = LOWEST_READ_DEPTH,
-    rngseed = 123,
-    replace = FALSE,
-    verbose = FALSE
-)
-
-This creates a new phyloseq object, ps_rare, in which all samples have the same number of reads. The original ps object remains unchanged.
-
-To measure diversity, there are different metrics available; each of these captures different properties of a microbial community. 
+To measure diversity, there are different metrics available; each captures different properties of a microbial community.
 
 | Metric | What does it consider? | Main question |
 | --- | --- | --- |
@@ -491,33 +478,27 @@ To measure diversity, there are different metrics available; each of these captu
 | **Shannon diversity** | Richness + evenness | How diverse is the community considering both the number and distribution of ASVs? |
 | **Faith's PD** | Phylogenetic relationships | How much phylogenetic diversity is represented? |
 
-First calculate Observed richness and Shannon diversity from the rarefied object (ps_rare), then add the sample metadata:
+
+### 3.1 Observed ASVs
+
+Observed ASVs is a measure of **richness**: the number of different ASVs detected in each mouse. It does not consider how abundant or evolutionarily distinct those ASVs are.
+
+We can calculate Observed richness for each mouse using `estimate_richness()`:
 
 ```r
 alpha <- estimate_richness(
-    ps_rare,
-    measures = c("Observed", "Shannon")
+    ps,
+    measures = "Observed"
 )
 
-alpha$sample <- sample_names(ps_rare)
+alpha$sample <- sample_names(ps)
 
-metadata <- data.frame(sample_data(ps_rare))
+metadata <- data.frame(sample_data(ps))
 alpha$type <- metadata[alpha$sample, "type"]
 
-table(alpha$type, useNA = "ifany")
+head(alpha)
 ```
-
-Pielou's evenness is derived from Shannon diversity and Observed richness:
-
-```r
-alpha$Pielou <- alpha$Shannon / log(alpha$Observed)
-```
-
-Although Pielou is presented before Shannon below to match the teaching sequence, its calculation necessarily uses the Shannon value.
-
-### 3.2 Observed ASVs
-
-Observed ASVs is a measure of **richness**: the number of different ASVs detected in each mouse. It does not consider how abundant or evolutionarily distinct those ASVs are.
+Now visualize Observed richness across the three mouse groups:
 
 ```r
 ggplot(alpha, aes(x = type, y = Observed, fill = type)) +
@@ -531,9 +512,21 @@ ggplot(alpha, aes(x = type, y = Observed, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.3 Pielou's evenness
+### 3.2 Pielou's evenness
 
 Pielou's evenness focuses on how evenly reads are distributed among the detected ASVs. Values closer to 1 indicate a more even community.
+
+Pielou's evenness is calculated from Shannon diversity and Observed richness. We therefore first calculate Shannon diversity for each mouse and then use it to calculate Pielou's evenness:
+
+```r
+alpha$Shannon <- estimate_richness(
+    ps,
+    measures = "Shannon"
+)$Shannon
+
+alpha$Pielou <- alpha$Shannon / log(alpha$Observed)
+```
+Now visualize Pielou's evenness across the three mouse groups:
 
 ```r
 ggplot(alpha, aes(x = type, y = Pielou, fill = type)) +
@@ -547,9 +540,13 @@ ggplot(alpha, aes(x = type, y = Pielou, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.4 Shannon diversity
+### 3.3 Shannon diversity
 
 Shannon diversity combines richness and evenness. It increases when more ASVs are present and when their abundances are more evenly distributed.
+
+We already calculated Shannon diversity above because it is required to calculate Pielou's evenness.
+
+Now visualize Shannon diversity across the three mouse groups:
 
 ```r
 ggplot(alpha, aes(x = type, y = Shannon, fill = type)) +
@@ -563,20 +560,22 @@ ggplot(alpha, aes(x = type, y = Shannon, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.5 Faith's phylogenetic diversity
+### 3.4 Faith's phylogenetic diversity
 
 Observed richness treats every ASV as a different feature. Faith's phylogenetic diversity additionally uses the **phylogenetic tree** and measures the total branch length represented in each community.
 
-```r
-otu_alpha <- as(otu_table(ps_rare), "matrix")
+We can calculate Faith's phylogenetic diversity for each mouse using the ASV table and the phylogenetic tree:
 
-if (taxa_are_rows(ps_rare)) {
+```r
+otu_alpha <- as(otu_table(ps), "matrix")
+
+if (taxa_are_rows(ps)) {
     otu_alpha <- t(otu_alpha)
 }
 
 faith <- picante::pd(
     otu_alpha,
-    phy_tree(ps_rare),
+    phy_tree(ps),
     include.root = TRUE
 )
 
@@ -606,10 +605,39 @@ ggplot(alpha, aes(x = type, y = Faith_PD, fill = type)) +
     - Do all four metrics show the same pattern?
     - Why might different metrics give different views of the same microbial community?
 
+### 3.5 Optional — Does rarefaction change the alpha-diversity results?
 
-### 3.6 Statistical analysis for alpha diversity
+We calculated alpha diversity using the original read counts because our sequencing depth exploration and rarefaction curves suggested that the samples were sufficiently sequenced.
 
-For alpha diversity, we are comparing diversity values among **three independent groups of mice**. We will use the **Kruskal-Wallis test**.
+However, another approach is to rarefy all samples to the same sequencing depth. Rarefaction randomly subsamples the same number of reads from each sample, reducing differences in sampling effort but also discarding reads.
+
+We can rarefy the dataset to the sequencing depth of the sample with the fewest reads:
+
+```r
+set.seed(123)
+
+ps_rare <- rarefy_even_depth(
+    ps,
+    sample.size = min(sample_sums(ps)),
+    rngseed = 123,
+    replace = FALSE,
+    verbose = FALSE
+)
+```
+
+This creates a new phyloseq object, `ps_rare`, in which all samples have the same number of reads. The original `ps` object remains unchanged.
+
+!!! question "Optional exercise — Compare with the rarefied dataset"
+
+    Recalculate the alpha-diversity metrics using `ps_rare` instead of `ps`.
+
+    - Do the overall patterns among the three mouse groups change?
+    - Which alpha-diversity metric might be particularly sensitive to sequencing depth, and why?
+    - What are the advantages and disadvantages of rarefying the data?
+
+### 3.6 Statistical analyses for alpha diversity
+
+For alpha diversity, we are comparing diversity values among **three independent groups of mice**. Because we do not assume that the diversity values are normally distributed, we will use the Kruskal–Wallis test, a non-parametric test for comparing three or more independent groups.
 
 ```r
 kruskal.test(Observed ~ type, data = alpha)
@@ -632,7 +660,8 @@ pairwise.wilcox.test(
 
     - Which visual patterns are supported by the statistical tests?
     - Are there patterns that looked different visually but are not supported statistically?
-    - If an overall test suggests a difference, which pairwise comparisons would you investigate?
+    - If an overall test suggests a difference, which pairs of mouse groups differ from one another?
+
 
 ---
 ## 4. Normalize the data
