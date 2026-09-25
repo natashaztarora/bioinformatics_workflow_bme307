@@ -24,8 +24,11 @@ To investigate this question, we will explore the data from several complementar
 
 1. **Sequencing depth and rarefaction curves** — How deeply was each mouse sequenced, and is the sequencing depth sufficient to compare the samples?
 2. **Alpha diversity** — How diverse is the microbial community within each mouse? How many ASVs are detected in each mouse? How evenly are reads distributed among those ASVs?
-3. **Taxonomic composition** — What does the microbial composition look like across the mice?
-4. **Beta diversity** — How different are the microbial communities between mice and between experimental groups of mice?
+3. **Normalization** — Convert read counts to relative abundance so that we can compare the relative composition of microbial communities across samples.
+
+4. **Taxonomic composition** — Which bacterial groups are present, and what does their relative composition look like across the mice?
+
+5. **Beta diversity** — How different are the microbial communities between mice and between experimental groups of mice?
 
 Throughout the analysis, remember that there is an important distinction between:
 
@@ -455,13 +458,31 @@ We will now examine diversity from several complementary perspectives:
 - **Taxonomic composition** — the relative composition of bacterial groups;
 - **Beta diversity** — differences in complete community composition between mice.
 
-The main alpha- and beta-diversity analyses below use the **full count object**, `ps`. Optional boxes show how to repeat them using a rarefied object so that the results can be compared.
 
 ## 3. Alpha diversity
 
 **Alpha diversity** describes diversity **within a single microbial community**.
 
-There is no single definition of diversity. Different metrics capture different properties of a microbial community. In the main analysis, we calculate alpha diversity from the complete, unrarefied count object, `ps`.
+### 3.1 Before we look at alpha diversity...
+
+As we saw from the rarefaction curves, samples with more sequencing reads have more opportunities to detect rare ASVs. This can influence estimates of alpha diversity. To compare diversity across mice at the same sampling depth, we will therefore **rarefy the dataset to the lowest read depth in our dataset**.
+
+Rarefaction randomly subsamples the same number of reads from each sample. Note that this leads to comparable sampling effort, but it also discards reads and may remove rare ASVs.
+
+```r
+set.seed(123)
+
+ps_rare <- rarefy_even_depth(
+    ps,
+    sample.size = LOWEST_READ_DEPTH,
+    rngseed = 123,
+    replace = FALSE,
+    verbose = FALSE
+)
+
+This creates a new phyloseq object, ps_rare, in which all samples have the same number of reads. The original ps object remains unchanged.
+
+To measure diversity, there are different metrics available; each of these captures different properties of a microbial community. 
 
 | Metric | What does it consider? | Main question |
 | --- | --- | --- |
@@ -470,17 +491,17 @@ There is no single definition of diversity. Different metrics capture different 
 | **Shannon diversity** | Richness + evenness | How diverse is the community considering both the number and distribution of ASVs? |
 | **Faith's PD** | Phylogenetic relationships | How much phylogenetic diversity is represented? |
 
-First calculate Observed richness and Shannon diversity from the full object, then add the sample metadata:
+First calculate Observed richness and Shannon diversity from the rarefied object (ps_rare), then add the sample metadata:
 
 ```r
 alpha <- estimate_richness(
-    ps,
+    ps_rare,
     measures = c("Observed", "Shannon")
 )
 
-alpha$sample <- sample_names(ps)
+alpha$sample <- sample_names(ps_rare)
 
-metadata <- data.frame(sample_data(ps))
+metadata <- data.frame(sample_data(ps_rare))
 alpha$type <- metadata[alpha$sample, "type"]
 
 table(alpha$type, useNA = "ifany")
@@ -494,7 +515,7 @@ alpha$Pielou <- alpha$Shannon / log(alpha$Observed)
 
 Although Pielou is presented before Shannon below to match the teaching sequence, its calculation necessarily uses the Shannon value.
 
-### 3.1 Observed ASVs
+### 3.2 Observed ASVs
 
 Observed ASVs is a measure of **richness**: the number of different ASVs detected in each mouse. It does not consider how abundant or evolutionarily distinct those ASVs are.
 
@@ -510,7 +531,7 @@ ggplot(alpha, aes(x = type, y = Observed, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.2 Pielou's evenness
+### 3.3 Pielou's evenness
 
 Pielou's evenness focuses on how evenly reads are distributed among the detected ASVs. Values closer to 1 indicate a more even community.
 
@@ -526,7 +547,7 @@ ggplot(alpha, aes(x = type, y = Pielou, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.3 Shannon diversity
+### 3.4 Shannon diversity
 
 Shannon diversity combines richness and evenness. It increases when more ASVs are present and when their abundances are more evenly distributed.
 
@@ -542,20 +563,20 @@ ggplot(alpha, aes(x = type, y = Shannon, fill = type)) +
     theme(legend.position = "none")
 ```
 
-### 3.4 Faith's phylogenetic diversity
+### 3.5 Faith's phylogenetic diversity
 
 Observed richness treats every ASV as a different feature. Faith's phylogenetic diversity additionally uses the **phylogenetic tree** and measures the total branch length represented in each community.
 
 ```r
-otu_alpha <- as(otu_table(ps), "matrix")
+otu_alpha <- as(otu_table(ps_rare), "matrix")
 
-if (taxa_are_rows(ps)) {
+if (taxa_are_rows(ps_rare)) {
     otu_alpha <- t(otu_alpha)
 }
 
 faith <- picante::pd(
     otu_alpha,
-    phy_tree(ps),
+    phy_tree(ps_rare),
     include.root = TRUE
 )
 
@@ -585,47 +606,8 @@ ggplot(alpha, aes(x = type, y = Faith_PD, fill = type)) +
     - Do all four metrics show the same pattern?
     - Why might different metrics give different views of the same microbial community?
 
-??? info "Optional — Repeat alpha diversity after rarefaction"
 
-    The main analysis above uses the full count object. To investigate how standardizing sequencing depth affects the results, create a separate rarefied object containing 25,000 reads per mouse:
-
-    ```r
-    ps_rare <- rarefy_even_depth(
-        ps,
-        sample.size = 25000,
-        rngseed = 42,
-        replace = FALSE,
-        trimOTUs = TRUE,
-        verbose = FALSE
-    )
-    ```
-
-    Rarefaction randomly subsamples every retained sample to the same number of reads. This can reduce differences in sampling effort, but it also discards reads and may remove rare ASVs.
-
-    To repeat the alpha-diversity analysis, rerun the code above with these changes:
-
-    - replace `ps` with `ps_rare`;
-    - save the results as `alpha_rare` rather than overwriting `alpha`;
-    - use `sample_names(ps_rare)`, `sample_data(ps_rare)` and `phy_tree(ps_rare)`;
-    - use `alpha_rare` in the four plotting commands.
-
-    For example, begin with:
-
-    ```r
-    alpha_rare <- estimate_richness(
-        ps_rare,
-        measures = c("Observed", "Shannon")
-    )
-
-    alpha_rare$sample <- sample_names(ps_rare)
-    metadata_rare <- data.frame(sample_data(ps_rare))
-    alpha_rare$type <- metadata_rare[alpha_rare$sample, "type"]
-    alpha_rare$Pielou <- alpha_rare$Shannon / log(alpha_rare$Observed)
-    ```
-
-    Then calculate Faith's PD using `otu_table(ps_rare)` and `phy_tree(ps_rare)`. Compare the full-data and rarefied results. Do the biological patterns or conclusions change?
-
-### 3.5 Statistical analysis for alpha diversity
+### 3.6 Statistical analysis for alpha diversity
 
 For alpha diversity, we are comparing diversity values among **three independent groups of mice**. We will use the **Kruskal-Wallis test**.
 
@@ -653,18 +635,13 @@ pairwise.wilcox.test(
     - If an overall test suggests a difference, which pairwise comparisons would you investigate?
 
 ---
+## 4. Normalize the data
 
-## 4. Taxonomic composition
+So far, our ASV table contains the original read counts for each sample.
 
-We will now examine **which bacterial groups are present** in our samples.
+For analyses where we want to compare the **relative abundance of ASVs or bacterial taxa**, we convert the read counts in each sample to relative abundance.
 
-The ASV table contains hundreds of individual ASVs. Looking at all of them simultaneously would make the overall composition difficult to interpret.
-
-For taxonomic composition plots, we first normalize each sample to relative abundance and then group ASVs according to their taxonomy.
-
-### 4.1 Normalize the data
-
-Convert the counts in each sample to **relative abundance**:
+This creates a new phyloseq object, `ps_norm`, which we will use for the next analyses:
 
 ```r
 ps_norm <- transform_sample_counts(
@@ -680,17 +657,19 @@ Check the result:
 ```r
 sample_sums(ps_norm)
 ```
-
 !!! warning "Relative abundance ≠ absolute abundance"
 
     If a bacterial group represents 20% of the sequencing reads in a sample, this does **not** tell us the absolute number of bacterial cells that were present.
 
     Relative-abundance normalization also does not remove the compositional nature of microbiome data: when the relative abundance of one taxon increases, the proportions of other taxa must collectively decrease.
 
-We can now group ASVs according to their taxonomy. We will start at the **phylum level**.
 
 
-### 4.2 Group ASVs at the phylum level
+## 5. Taxonomic composition
+
+We will now examine **which bacterial groups are present** in our samples. We can now group ASVs according to their taxonomy. We will start at the **phylum level**.
+
+### 5.1 Group ASVs at the phylum level
 
 ```r
 ps_phylum <- tax_glom(
@@ -705,7 +684,7 @@ ps_phylum <- tax_glom(
 We use `NArm = FALSE` so that sequences without a Phylum assignment are not silently discarded. Remember that placeholder labels such as `"uncultured"` are not automatically well-defined biological taxa. This is why the complete taxonomic lineages must always be inspected.
 
 
-### 4.3 Visualize the bacterial composition
+### 5.2 Visualize the bacterial composition
 
 Because `ps_phylum` was created from `ps_norm`, the y-axis represents **relative abundance**:
 
@@ -735,7 +714,7 @@ Each bar represents **one mouse**.
     At this stage, simply describe what you **observe**.
 
 
-### 4.4 Explore other taxonomic levels
+### 5.3 Explore other taxonomic levels
 
 
 You are not restricted to phylum.
@@ -1049,42 +1028,28 @@ rank_names(ps)
 
 ---
 
-## 5. Beta diversity
+## 6. Beta diversity
 
 Alpha diversity asks: **How diverse is each individual mouse?**
 
-Beta diversity asks: **How different are the microbial communities between mice?**
+Beta diversity asks: **How different are the microbial communities between mice?** 
 
-The main analysis below uses the complete, unrarefied count object, `ps`.
+For our analyses, we will use the normalized object, `ps_norm`.
+
 
 | Metric | Uses abundance? | Uses phylogeny? | Main emphasis |
 | --- | --- | --- | --- |
-| **Jaccard** | No | No | Shared versus unshared ASVs |
 | **Bray-Curtis** | Yes | No | Differences in ASV abundance |
 | **Unweighted UniFrac** | No | Yes | Presence/absence of phylogenetic lineages |
 | **Weighted UniFrac** | Yes | Yes | Abundance-weighted phylogenetic differences |
 
-### 5.1 Calculate the distance matrices
-
-```r
-ps_beta <- ps
-```
-
-**Jaccard** uses presence/absence and does not use phylogenetic relationships:
-
-```r
-jaccard <- phyloseq::distance(
-    ps_beta,
-    method = "jaccard",
-    binary = TRUE
-)
-```
+### 6.1 Calculate the distance matrices
 
 **Bray-Curtis** considers differences in abundance but not phylogenetic relationships:
 
 ```r
 bray <- phyloseq::distance(
-    ps_beta,
+    ps_norm,
     method = "bray"
 )
 ```
@@ -1093,7 +1058,7 @@ bray <- phyloseq::distance(
 
 ```r
 unifrac_unweighted <- UniFrac(
-    ps_beta,
+    ps_norm,
     weighted = FALSE
 )
 ```
@@ -1102,24 +1067,24 @@ unifrac_unweighted <- UniFrac(
 
 ```r
 unifrac_weighted <- UniFrac(
-    ps_beta,
+    ps_norm,
     weighted = TRUE
 )
 ```
 
-### 5.2 Visualize Bray-Curtis with PCoA
+### 6.2 Visualize Bray-Curtis with PCoA
 
 A distance matrix contains pairwise differences between all samples. **Principal Coordinates Analysis (PCoA)** represents these relationships in fewer dimensions.
 
 ```r
 ord_bray <- ordinate(
-    ps_beta,
+    ps_norm,
     method = "PCoA",
     distance = bray
 )
 
 plot_ordination(
-    ps_beta,
+    ps_norm,
     ord_bray,
     color = "type"
 ) +
@@ -1129,32 +1094,19 @@ plot_ordination(
 
 Each point represents **one mouse**.
 
-### 5.3 Visualize the other beta-diversity metrics
+### 6.3 Visualize the other beta-diversity metrics
 
-#### Jaccard
-
-```r
-ord_jaccard <- ordinate(
-    ps_beta,
-    method = "PCoA",
-    distance = jaccard
-)
-
-plot_ordination(ps_beta, ord_jaccard, color = "type") +
-    geom_point(size = 4) +
-    theme_minimal()
-```
 
 #### Unweighted UniFrac
 
 ```r
 ord_unweighted <- ordinate(
-    ps_beta,
+    ps_norm,
     method = "PCoA",
     distance = unifrac_unweighted
 )
 
-plot_ordination(ps_beta, ord_unweighted, color = "type") +
+plot_ordination(ps_norm, ord_unweighted, color = "type") +
     geom_point(size = 4) +
     theme_minimal()
 ```
@@ -1163,19 +1115,19 @@ plot_ordination(ps_beta, ord_unweighted, color = "type") +
 
 ```r
 ord_weighted <- ordinate(
-    ps_beta,
+    ps_norm,
     method = "PCoA",
     distance = unifrac_weighted
 )
 
-plot_ordination(ps_beta, ord_weighted, color = "type") +
+plot_ordination(ps_norm, ord_weighted, color = "type") +
     geom_point(size = 4) +
     theme_minimal()
 ```
 
 !!! question "Exercise 8 — Compare the beta-diversity metrics"
 
-    - Do all four metrics show the same pattern?
+    - Do all three metrics show the same pattern?
     - Does considering **abundance** change what you see?
     - Does considering **phylogenetic relationships** change what you see?
     - Is within-group variability similar for all three mouse groups?
@@ -1184,37 +1136,13 @@ plot_ordination(ps_beta, ord_weighted, color = "type") +
 
     These metrics use different information and answer slightly different ecological questions. Do not choose a metric simply because its PCoA produces the clearest-looking separation.
 
-??? info "Optional — Repeat beta diversity after rarefaction"
 
-    To investigate how standardizing sequencing depth affects beta diversity, use the rarefied object created in the optional alpha-diversity box:
-
-    ```r
-    ps_beta_rare <- ps_rare
-    ```
-
-    If you did not create it earlier, first run:
-
-    ```r
-    ps_rare <- rarefy_even_depth(
-        ps,
-        sample.size = 25000,
-        rngseed = 42,
-        replace = FALSE,
-        trimOTUs = TRUE,
-        verbose = FALSE
-    )
-    ```
-
-    Then repeat Sections 5.1–5.3 using `ps_beta_rare` instead of `ps_beta`. Give the new distance matrices and ordinations names such as `bray_rare` and `ord_bray_rare` so that the full-data results are not overwritten.
-
-    Rarefaction may be particularly relevant for presence/absence metrics because samples with more reads have more opportunities to detect rare ASVs. Compare the full-data and rarefied PCoA plots. Do the patterns change?
-
-### 5.4 Statistical analysis for beta diversity
+### 6.4 Statistical analysis for beta diversity
 
 We can use **PERMANOVA** (*Permutational Multivariate Analysis of Variance*) to ask whether microbial community composition is associated with mouse group.
 
 ```r
-meta_beta <- data.frame(sample_data(ps_beta))
+meta_beta <- data.frame(sample_data(ps_norm))
 meta_beta <- meta_beta[labels(bray), , drop = FALSE]
 
 stopifnot(identical(rownames(meta_beta), labels(bray)))
@@ -1222,7 +1150,6 @@ stopifnot(identical(rownames(meta_beta), labels(bray)))
 
 ```r
 adonis2(bray ~ type, data = meta_beta, permutations = 999)
-adonis2(jaccard ~ type, data = meta_beta, permutations = 999)
 adonis2(unifrac_unweighted ~ type, data = meta_beta, permutations = 999)
 adonis2(unifrac_weighted ~ type, data = meta_beta, permutations = 999)
 ```
@@ -1233,7 +1160,7 @@ Examine both the **p-value** and the **R² value**, which describes the proporti
 
     - Is there statistical evidence that community composition is associated with mouse group?
     - What proportion of variation is associated with group?
-    - Do all four beta-diversity metrics give the same result?
+    - Do all three beta-diversity metrics give the same result?
     - How do the statistical results compare with the PCoA plots?
 
 ??? info "Optional — PERMDISP"
@@ -1250,7 +1177,7 @@ Examine both the **p-value** and the **R² value**, which describes the proporti
 
 ---
 
-## 6. Putting everything together
+## 7. Putting everything together
 
 You have now looked at the microbiome from several different perspectives:
 
@@ -1291,7 +1218,7 @@ You have now looked at the microbiome from several different perspectives:
 
 ---
 
-## 7. Important limitations
+## 8. Important limitations
 
 Before interpreting the experiment, consider some of its limitations.
 
@@ -1303,15 +1230,15 @@ Before interpreting the experiment, consider some of its limitations.
 
     **Relative abundance**
 
-    16S sequencing primarily provides information about the relative composition of the microbial community. What information about absolute bacterial abundance is missing?
+    16S rRNA gene sequencing primarily provides information about the relative composition of the microbial community. What information about absolute bacterial abundance is missing?
 
     **Rarefaction**
 
-    Rarefaction standardizes sequencing depth, but it also discards reads. What are the consequences of that trade-off?
+    Rarefaction (subsampling) standardizes sequencing depth, but it also discards reads. What are the consequences of that trade-off?
 
     **Taxonomic resolution**
 
-    Short-read 16S sequencing may not reliably distinguish microorganisms at species or strain level. How does this limit biological interpretation?
+    Short-read 16S rRNA gene sequencing may not reliably distinguish microorganisms at species or strain level. How does this limit biological interpretation?
 
     **Taxonomy is not function**
 
@@ -1324,7 +1251,7 @@ Before interpreting the experiment, consider some of its limitations.
 
 ---
 
-## 8. Going further with your figures
+## 9. Going further with your figures
 
 For this practical, the plotting code has deliberately been kept simple so that the **biological analysis remains the main focus**.
 
