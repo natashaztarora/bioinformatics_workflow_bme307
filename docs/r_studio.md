@@ -664,7 +664,7 @@ pairwise.wilcox.test(
 
 
 ---
-## 4. Normalize the data
+## 4. Normalize the data: convert counts to relative abundance
 
 So far, our ASV table contains the original read counts for each sample.
 
