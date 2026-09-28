@@ -465,7 +465,7 @@ We will now examine diversity from several complementary perspectives:
 
 As we saw above, samples with more sequencing reads have more opportunities to detect rare ASVs. Before calculating alpha diversity, we therefore examined both the **sequencing depth of the samples** and the **rarefaction curves**.
 
-In our dataset, the rarefaction curves suggest that the microbial communities have been sampled sufficiently deeply for our exploratory comparisons. We will therefore calculate alpha diversity using the **original phyloseq object (`ps`)**.
+In our dataset, the rarefaction curves suggest that the microbial communities have been sampled reasonably deeply. We will therefore calculate alpha diversity using the **original phyloseq object (`ps`)**.
 
 However, sequencing depth can still influence estimates of alpha diversity. Later, you will have the option to **rarefy the dataset to an equal sequencing depth and repeat the analysis** to see whether this changes the results.
 
@@ -1063,7 +1063,7 @@ Alpha diversity asks: **How diverse is each individual mouse?**
 
 Beta diversity asks: **How different are the microbial communities between mice?** 
 
-For our analyses, we will use the normalized object, `ps_norm`.
+For our beta-diversity analyses, we will use the relative-abundance object, ps_norm. For Bray–Curtis and weighted UniFrac, the relative abundances of ASVs contribute to the calculation of distances between samples. Unweighted UniFrac, in contrast, considers only whether an ASV is present or absent. Converting counts to relative abundance does not change which ASVs are present, so using ps_norm does not affect the unweighted UniFrac distances.
 
 
 | Metric | Uses abundance? | Uses phylogeny? | Main emphasis |
